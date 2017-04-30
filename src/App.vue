@@ -20,7 +20,7 @@ export default {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
@@ -29,8 +29,7 @@ export default {
 .footer {
   font-size: 12px;
   color: #B3B3B2;
-  padding: 40px 0 16px;
   text-align: center;
-  font-weight: bold;
+  margin-top: 40px;
 }
 </style>
