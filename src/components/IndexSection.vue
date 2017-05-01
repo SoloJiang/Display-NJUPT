@@ -11,7 +11,7 @@
   export default {
     data () {
       return {
-        imgs: ['', '', '', '', '']
+        imgs: ['', '', '', '', '', '', '', '', '']
       }
     }
   }
@@ -26,8 +26,8 @@
     overflow-x: auto
     -webkit-overflow-scrolling: touch
     margin-top: 20px
-    &::-webkit-scrollbar
-      visibility: hidden
+  ::-webkit-scrollbar
+    visibility: hidden
   .href-body
     margin-left: 12px
     display: inline-block

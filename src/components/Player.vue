@@ -1,10 +1,10 @@
 <template>
   <div class="player">
-    <div class="imgs" ref="imgList" @touchstart="clear()" @touchend="playerStart()">
+    <div class="imgs" ref="imgList">
       <img v-for="(item, index) in imgs" :key="index" src="../assets/temple.jpeg" class="img" />
     </div>
     <ul class="img-btns">
-      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}"></li>
+      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}" @touchstart="changeIndex(index)"></li>
     </ul>
   </div>
 </template>
@@ -16,46 +16,45 @@
     data () {
       return {
         imgs: ['../assets/temple.jpeg', '../assets/temple.jpeg', '../assets/temple.jpeg'],
-        player: null,
-        activeIndex: 0
+        activeIndex: 0,
+        timeout: null
       }
     },
     methods: {
       slider () {
         let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
-        const transZRegex = /\.*translateX\((.*)%\)/i
-        let translateX = transZRegex.exec(imgList.style.transform) || 0
-        if (translateX) {
-          translateX = parseInt(translateX[1], 10)
-          this.activeIndex = -translateX / 100
-          let len = this.imgs.length
-          if (this.activeIndex + 1 === len) {
-            imgList.style.transform = 'translateX(0)'
-            this.activeIndex = 0
-          } else {
-            translateX -= 100
-            imgList.style.transform = `translateX(${translateX}%)`
-            this.activeIndex ++
-          }
+        let translateX
+        let len = this.imgs.length
+        if (this.activeIndex + 1 === len) {
+          translateX = 0
+          this.activeIndex = 0
         } else {
-          imgList.style.transform = 'translateX(-100%)'
-          this.activeIndex ++
+          this.activeIndex++
+          translateX = -this.activeIndex * this.clientWidth
         }
+        imgList.style.transform = `translateX(${translateX}px)`
       },
-      playerStart () {
-        this.player = setInterval(() => {
+      timeCount () {
+        this.timeout = setTimeout(() => {
+          this.$refs.imgList.classList.add('img-transition')
           this.slider()
+          this.timeCount()
         }, 3000)
       },
-      clear () {
-        clearInterval(this.player)
-      },
-      movePlayer () {
-        console.log(2)
+      changeIndex (index) {
+        if (this.activeIndex !== index) {
+          clearTimeout(this.timeout)
+          this.activeIndex = index
+          let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
+          let translateX = -this.activeIndex * this.clientWidth
+          imgList.style.transform = `translateX(${translateX}px)`
+          this.timeCount()
+        }
       }
     },
     mounted () {
-      this.playerStart()
+      this.clientWidth = this.$refs.imgList.clientWidth
+      this.timeCount()
     }
   }
 </script>
@@ -68,7 +67,8 @@
     height: 31vh
     max-width: 100%
     white-space: nowrap
-    transition: all 1s
+  .img-transition
+    transition: all .5s
   .img
     width: 100%
     height: 100%
