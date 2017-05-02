@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6a140dae-7217-4bda-bbbb-45f9b720dfbe" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/IndexSection.vue" afterPath="$PROJECT_DIR$/src/components/IndexSection.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/Player.vue" afterPath="$PROJECT_DIR$/src/components/Player.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -56,8 +54,8 @@
       <file leaf-file-name="Player.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/Player.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1998">
-              <caret line="74" column="63" lean-forward="false" selection-start-line="74" selection-start-column="63" selection-end-line="74" selection-end-column="63" />
+            <state relative-caret-position="58">
+              <caret line="3" column="93" lean-forward="true" selection-start-line="3" selection-start-column="93" selection-end-line="3" selection-end-column="179" />
               <folding />
             </state>
           </provider>
@@ -404,12 +402,12 @@
       <workItem from="1492582433405" duration="1794000" />
       <workItem from="1493482516499" duration="1838000" />
       <workItem from="1493485311673" duration="25000" />
-      <workItem from="1493485362732" duration="41683000" />
+      <workItem from="1493485362732" duration="42840000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49551000" />
+    <option name="totallyTimeSpent" value="50708000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -801,8 +799,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Player.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1998">
-          <caret line="74" column="63" lean-forward="false" selection-start-line="74" selection-start-column="63" selection-end-line="74" selection-end-column="63" />
+        <state relative-caret-position="58">
+          <caret line="3" column="93" lean-forward="true" selection-start-line="3" selection-start-column="93" selection-end-line="3" selection-end-column="179" />
           <folding />
         </state>
       </provider>

@@ -1,7 +1,7 @@
 <template>
   <div class="player">
-    <div class="imgs" ref="imgList" @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()">
-      <img v-for="(item, index) in imgs" :key="index" src="../assets/temple.jpeg" class="img" />
+    <div class="imgs" ref="imgList">
+      <img v-for="(item, index) in imgs" :key="index" src="../assets/temple.jpeg" class="img"  @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()"/>
     </div>
     <ul class="img-btns">
       <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}" @touchstart="changeIndex(index)" @click="changeIndex(index)"></li>
@@ -69,12 +69,10 @@
       endMove () {
         let imgList = this.$refs.imgList
         imgList.classList.add('img-transition')
-        if (Math.abs(this.changeX) > this.clientWidth / 2) {
-          if (this.changeX > 0 && this.activeIndex !== this.imgs.length - 1) {
-            this.activeIndex ++
-          } else if (this.changeX < 0 && this.activeIndex !== 0) {
-            this.activeIndex --
-          }
+        if (this.changeX > 0 && this.activeIndex !== this.imgs.length - 1) {
+          this.activeIndex ++
+        } else if (this.changeX < 0 && this.activeIndex !== 0) {
+          this.activeIndex --
         }
         let translateX = -this.activeIndex * this.clientWidth
         imgList.style.transform = `translateX(${translateX}px)`
