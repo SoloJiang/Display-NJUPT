@@ -1,10 +1,10 @@
 <template>
   <div class="player">
-    <div class="imgs" ref="imgList">
+    <div class="imgs" ref="imgList" @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()">
       <img v-for="(item, index) in imgs" :key="index" src="../assets/temple.jpeg" class="img" />
     </div>
     <ul class="img-btns">
-      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}" @touchstart="changeIndex(index)"></li>
+      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}" @touchstart="changeIndex(index)" @click="changeIndex(index)"></li>
     </ul>
   </div>
 </template>
@@ -17,7 +17,10 @@
       return {
         imgs: ['../assets/temple.jpeg', '../assets/temple.jpeg', '../assets/temple.jpeg'],
         activeIndex: 0,
-        timeout: null
+        timeout: null,
+        clientX: null,
+        clientWidth: null,
+        changeX: null
       }
     },
     methods: {
@@ -50,6 +53,32 @@
           imgList.style.transform = `translateX(${translateX}px)`
           this.timeCount()
         }
+      },
+      getClientX (e) {
+        clearTimeout(this.timeout)
+        this.$refs.imgList.classList.remove('img-transition')
+        this.clientX = e.touches[0].clientX
+      },
+      moveList (e) {
+        let changeX = this.clientX - e.touches[0].clientX
+        this.changeX = changeX
+        let translateX = -this.activeIndex * this.clientWidth - changeX
+        let imgList = this.$refs.imgList
+        imgList.style.transform = `translateX(${translateX}px)`
+      },
+      endMove () {
+        let imgList = this.$refs.imgList
+        imgList.classList.add('img-transition')
+        if (Math.abs(this.changeX) > this.clientWidth / 2) {
+          if (this.changeX > 0 && this.activeIndex !== this.imgs.length - 1) {
+            this.activeIndex ++
+          } else if (this.changeX < 0 && this.activeIndex !== 0) {
+            this.activeIndex --
+          }
+        }
+        let translateX = -this.activeIndex * this.clientWidth
+        imgList.style.transform = `translateX(${translateX}px)`
+        this.timeCount()
       }
     },
     mounted () {
