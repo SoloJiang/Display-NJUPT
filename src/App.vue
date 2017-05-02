@@ -30,6 +30,6 @@ export default {
   font-size: 12px;
   color: #B3B3B2;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 35px;
 }
 </style>
