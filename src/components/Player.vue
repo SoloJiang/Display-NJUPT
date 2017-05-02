@@ -3,8 +3,8 @@
     <div class="imgs" ref="imgList">
       <img v-for="(item, index) in imgs" :key="index" src="../assets/temple.jpeg" class="img"  @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()"/>
     </div>
-    <ul class="img-btns">
-      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}" @touchstart="changeIndex(index)" @click="changeIndex(index)"></li>
+    <ul class="img-btns" ref="ulList" @touchstart="changeIndex($event)" @click="changeIndex($event)">
+      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}"></li>
     </ul>
   </div>
 </template>
@@ -38,20 +38,32 @@
         imgList.style.transform = `translateX(${translateX}px)`
       },
       timeCount () {
+        console.log('begin')
         this.timeout = setTimeout(() => {
           this.$refs.imgList.classList.add('img-transition')
           this.slider()
           this.timeCount()
         }, 3000)
       },
-      changeIndex (index) {
-        if (this.activeIndex !== index) {
-          clearTimeout(this.timeout)
-          this.activeIndex = index
-          let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
-          let translateX = -this.activeIndex * this.clientWidth
-          imgList.style.transform = `translateX(${translateX}px)`
-          this.timeCount()
+      changeIndex (e) {
+        let index
+        let target = e.target
+        if (target.localName === 'li') {
+          this.$refs.ulList.childNodes.forEach((item, Index) => {
+            if (item === e.target) {
+              index = Index
+            }
+          })
+          if (this.activeIndex !== index) {
+            clearTimeout(this.timeout)
+            console.log('end')
+            this.activeIndex = index
+            this.$refs.imgList.classList.add('img-transition')
+            let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
+            let translateX = -this.activeIndex * this.clientWidth
+            imgList.style.transform = `translateX(${translateX}px)`
+            this.timeCount()
+          }
         }
       },
       getClientX (e) {
@@ -105,6 +117,7 @@
     display: table-cell
     text-align: center
     width: 100%
+    -webkit-tap-highlight-color: transparent
   .img-btn
     list-style: none
     width: 10px
