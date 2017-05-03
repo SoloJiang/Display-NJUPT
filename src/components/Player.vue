@@ -1,7 +1,8 @@
 <template>
   <div class="player">
     <div class="imgs" ref="imgList">
-      <img v-for="(item, index) in imgs" :key="index" src="../assets/temple.jpeg" class="img"  @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()"/>
+      <img v-for="(item, index) in imgs" :key="index" :src="item" class="img"
+           @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()"/>
     </div>
     <ul class="img-btns" ref="ulList" @touchstart="changeIndex($event)" @click="changeIndex($event)">
       <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}"></li>
@@ -15,7 +16,7 @@
   export default {
     data () {
       return {
-        imgs: ['../assets/temple.jpeg', '../assets/temple.jpeg', '../assets/temple.jpeg'],
+        imgs: [],
         activeIndex: 0,
         timeout: null,
         clientX: null,
@@ -35,7 +36,7 @@
           this.activeIndex++
           translateX = -this.activeIndex * this.clientWidth
         }
-        imgList.style.transform = `translateX(${translateX}px)`
+        imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
       },
       timeCount () {
         console.log('begin')
@@ -61,7 +62,7 @@
             this.$refs.imgList.classList.add('img-transition')
             let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
             let translateX = -this.activeIndex * this.clientWidth
-            imgList.style.transform = `translateX(${translateX}px)`
+            imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
             this.timeCount()
           }
         }
@@ -76,20 +77,24 @@
         this.changeX = changeX
         let translateX = -this.activeIndex * this.clientWidth - changeX
         let imgList = this.$refs.imgList
-        imgList.style.transform = `translateX(${translateX}px)`
+        imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
       },
       endMove () {
         let imgList = this.$refs.imgList
         imgList.classList.add('img-transition')
         if (this.changeX > 0 && this.activeIndex !== this.imgs.length - 1) {
-          this.activeIndex ++
+          this.activeIndex++
         } else if (this.changeX < 0 && this.activeIndex !== 0) {
-          this.activeIndex --
+          this.activeIndex--
         }
         let translateX = -this.activeIndex * this.clientWidth
-        imgList.style.transform = `translateX(${translateX}px)`
+        imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
         this.timeCount()
       }
+    },
+    created () {
+      let banner = require('../assets/banner.png')
+      this.imgs = [banner, banner, banner]
     },
     mounted () {
       this.clientWidth = this.$refs.imgList.clientWidth
@@ -102,31 +107,31 @@
   .player
     position: relative
     overflow: hidden
-  .imgs
-    height: 31vh
-    max-width: 100%
-    white-space: nowrap
-  .img-transition
-    transition: all .5s
-  .img
-    width: 100%
-    height: 100%
-  .img-btns
-    position: absolute
-    bottom: 10px
-    display: table-cell
-    text-align: center
-    width: 100%
-    -webkit-tap-highlight-color: transparent
-  .img-btn
-    list-style: none
-    width: 10px
-    height: 10px
-    border-radius: 50%
-    background-color: #fff
-    opacity: .5
-    display: inline-block
-    margin-left: 8px
-  .active
-    opacity: 1
+    .imgs
+      height: 36vh
+      max-width: 100%
+      white-space: nowrap
+    .img-transition
+      transition: all .5s
+    .img
+      width: 100%
+      height: 100%
+    .img-btns
+      position: absolute
+      bottom: 10px
+      display: table-cell
+      text-align: center
+      width: 100%
+      -webkit-tap-highlight-color: transparent
+    .img-btn
+      list-style: none
+      width: 10px
+      height: 10px
+      border-radius: 50%
+      background-color: #fff
+      opacity: .5
+      display: inline-block
+      margin-left: 8px
+    .active
+      opacity: 1
 </style>

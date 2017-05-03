@@ -27,9 +27,10 @@ export default {
   background: #FDFEDB;
 }
 .footer {
-  font-size: 12px;
+  font-size: 14px;
   color: #B3B3B2;
   text-align: center;
-  margin-top: 35px;
+  margin-top: -36px;
+  line-height: 36px;
 }
 </style>
