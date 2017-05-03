@@ -5,7 +5,7 @@
     </select>
     <div class="search-body">
       <label>
-        <img src="../assets/search.png" class="search-img"/>
+        <img src="../assets/pageHome/search.png" class="search-img"/>
         <input type="text" class="search-input" placeholder="展品搜索" v-model="searchInput">
       </label>
       <div class="cancel-box" @click="cancelInput">
@@ -43,7 +43,7 @@
       height: 44px
       font-size: 14px
       appearance: none
-      background: url("../assets/arrow.png") no-repeat scroll right center transparent
+      background: url("../assets/pageHome/arrow.png") no-repeat scroll right center transparent
       background-size: 25% 20%
       border: none
       -webkit-tap-highlight-color: transparent

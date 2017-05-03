@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <div class="footer">2017&copy;展览馆万事通</div>
   </div>
 </template>
 
@@ -25,12 +24,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   background: #FDFEDB;
-}
-.footer {
-  font-size: 14px;
-  color: #B3B3B2;
-  text-align: center;
-  margin-top: -36px;
-  line-height: 36px;
 }
 </style>

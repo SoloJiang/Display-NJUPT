@@ -7,6 +7,7 @@ import router from './router'
 import Axios from 'axios'
 import 'babel-polyfill'
 
+Vue.config.productionTip = false
 Vue.prototype.$http = Axios
 
 new Vue({

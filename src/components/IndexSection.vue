@@ -15,12 +15,12 @@
       }
     },
     created () {
-      let img1 = require('../assets/1.png')
-      let img2 = require('../assets/2.png')
-      let img3 = require('../assets/3.png')
-      let img4 = require('../assets/4.png')
-      let img5 = require('../assets/5.png')
-      let img6 = require('../assets/6.png')
+      let img1 = require('../assets/pageHome/1.png')
+      let img2 = require('../assets/pageHome/2.png')
+      let img3 = require('../assets/pageHome/3.png')
+      let img4 = require('../assets/pageHome/4.png')
+      let img5 = require('../assets/pageHome/5.png')
+      let img6 = require('../assets/pageHome/6.png')
       this.imgs = [img1, img2, img3, img4, img5, img6]
     }
   }
@@ -29,31 +29,31 @@
 <style lang="sass" scoped>
   .section
     display: flex
-    flex-direction: column
-    flex-wrap: wrap
-    height: 254px
-    overflow-x: auto
-    -webkit-overflow-scrolling: touch
     margin-top: 20px
     padding-bottom: 36px
+    height: 254px
+    flex-direction: column
+    flex-wrap: wrap
+    overflow-x: auto
+    -webkit-overflow-scrolling: touch
   ::-webkit-scrollbar
     visibility: hidden
   .href-body
-    margin-left: 8px
-    display: inline-block
     position: relative
+    display: inline-block
+    margin-left: 8px
   .href-img
+    margin-top: 4px
     width: 160px
     height: 110px
-    margin-top: 4px
   .href-tip
-    width: 160px
     position: absolute
     top: 90px
-    color: #fff
-    font-size: 12px
-    height: 24px
     line-height: 24px
+    width: 160px
+    height: 24px
+    font-size: 12px
     text-align: center
+    color: #fff
     background-color: rgba(0, 0, 0, .6)
 </style>

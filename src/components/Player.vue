@@ -39,7 +39,7 @@
         imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
       },
       timeCount () {
-        console.log('begin')
+//        console.log('begin')
         this.timeout = setTimeout(() => {
           this.$refs.imgList.classList.add('img-transition')
           this.slider()
@@ -93,7 +93,7 @@
       }
     },
     created () {
-      let banner = require('../assets/banner.png')
+      let banner = require('../assets/pageHome/banner.png')
       this.imgs = [banner, banner, banner]
     },
     mounted () {
@@ -108,8 +108,8 @@
     position: relative
     overflow: hidden
     .imgs
-      height: 36vh
       max-width: 100%
+      height: 36vh
       white-space: nowrap
     .img-transition
       transition: all .5s
@@ -117,21 +117,21 @@
       width: 100%
       height: 100%
     .img-btns
+      display: table-cell
       position: absolute
       bottom: 10px
-      display: table-cell
       text-align: center
       width: 100%
       -webkit-tap-highlight-color: transparent
     .img-btn
-      list-style: none
+      display: inline-block
+      margin-left: 8px
       width: 10px
       height: 10px
+      list-style: none
       border-radius: 50%
       background-color: #fff
       opacity: .5
-      display: inline-block
-      margin-left: 8px
     .active
       opacity: 1
 </style>
