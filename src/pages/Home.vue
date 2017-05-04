@@ -8,9 +8,9 @@
 </template>
 
 <script>
-  import Player from 'components/Player.vue'
-  import IndexSearch from 'components/IndexSearch.vue'
-  import IndexSection from 'components/IndexSection.vue'
+  import Player from 'components/Player'
+  import IndexSearch from 'components/IndexSearch'
+  import IndexSection from 'components/IndexSection'
 
   export default {
     components: {

@@ -1,34 +1,47 @@
 <template>
   <div class="footer">
-    <span>2017&copy;展览馆万事通</span>
+    <span class="rights" :style="{color: fontColor}">2017 &copy; 展览馆万事通</span>
     <div class="home-btn">
-      <img src="../assets/icon-home.png" width="30" height="28">
+      <i class="icon-home" :style="{color: iconColor}"></i>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'footer'
+    name: 'footer',
+    props: {
+      fontColor: {
+        type: String
+      },
+      iconColor: {
+        type: String
+      }
+    }
   }
 </script>
 
 <style lang="sass" scoped>
+  @import "../assets/fonts/icon"
   .footer
     position: fixed
     bottom: 0
     left: 0
-    line-height: 50px
     width: 100%
     height: 50px
-    font-size: 14px
     text-align: center
-    color: rgb(178, 178, 178)
     background: rgba(255, 255, 255, 0.4)
+    .rights
+      line-height: 50px
+      font-size: 14px
+      color: rgb(188, 188, 188)
     .home-btn
       position: absolute
-      right: 20px
       top: 0
+      right: 20px
       padding: 10px
-      height: 30px
+      .icon-home
+        font-size: 26px
+        color: rgb(128, 128, 128)
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.7)
 </style>
