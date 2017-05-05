@@ -1,5 +1,8 @@
 <template>
   <div class="footer">
+    <div class="back-btn">
+      <i class="icon-angle-left" :style="{color: iconColor}"></i>
+    </div>
     <span class="rights" :style="{color: fontColor}">2017 &copy; 展览馆万事通</span>
     <div class="home-btn">
       <i class="icon-home" :style="{color: iconColor}"></i>
@@ -31,10 +34,20 @@
     height: 50px
     text-align: center
     background: rgba(255, 255, 255, 0.4)
+    .back-btn
+      position: absolute
+      top: 0
+      left: 16px
+      padding: 10px 20px
+      .icon-angle-left
+        font-size: 26px
+        color: rgb(128, 128, 128)
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
     .rights
       line-height: 50px
       font-size: 14px
       color: rgb(188, 188, 188)
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
     .home-btn
       position: absolute
       top: 0
@@ -43,5 +56,5 @@
       .icon-home
         font-size: 26px
         color: rgb(128, 128, 128)
-        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.7)
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
 </style>

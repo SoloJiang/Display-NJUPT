@@ -22,7 +22,5 @@ export default {
   font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
-  background: #FDFEDB;
 }
 </style>

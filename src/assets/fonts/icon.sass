@@ -1,13 +1,14 @@
-$path: '../assets/fonts/icomoon'
+$icomoon-font-path: "../assets/fonts" !default
+
 @font-face
   font-family: 'icomoon'
-  src: url('#{$path}.eot?gtsm0j')
-  src: url('#{$path}.eot?gtsm0j#iefix') format('embedded-opentype'), url('#{$path}.ttf?gtsm0j') format('truetype'), url('#{$path}.woff?gtsm0j') format('woff'), url('#{$path}.svg?gtsm0j#icomoon') format('svg')
+  src: url('#{$icomoon-font-path}/icomoon.eot?w8gqlr')
+  src: url('#{$icomoon-font-path}/icomoon.eot?w8gqlr#iefix') format('embedded-opentype'), url('#{$icomoon-font-path}/icomoon.ttf?w8gqlr') format('truetype'), url('#{$icomoon-font-path}/icomoon.woff?w8gqlr') format('woff'), url('#{$icomoon-font-path}/icomoon.svg?w8gqlr#icomoon') format('svg')
   font-weight: normal
   font-style: normal
 
 [class^="icon-"], [class*=" icon-"]
-  /* use !important to prevent issues with browser extensions that change . */
+  /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important
   speak: none
   font-style: normal
@@ -20,6 +21,21 @@ $path: '../assets/fonts/icomoon'
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
 
+.icon-heart:before
+  content: "\e902"
+
+.icon-love:before
+  content: "\e902"
+
+.icon-like:before
+  content: "\e902"
+
+.icon-heart-o:before
+  content: "\e903"
+
+.icon-angle-left:before
+  content: "\e904"
+
 .icon-angle-right:before
   content: "\e901"
 
@@ -29,15 +45,14 @@ $path: '../assets/fonts/icomoon'
 .icon-pencil:before
   content: "\e905"
 
+.icon-qrcode:before
+  content: "\e938"
+
 .icon-phone:before
   content: "\e942"
 
 .icon-alarm:before
   content: "\e950"
 
-.icon-heart:before
-  content: "\e9da"
 
-.icon-share2:before
-  content: "\ea82"
 

@@ -4,8 +4,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from 'pages/Home'
-import profile from 'pages/Profile'
-import museumAdvice from 'pages/museumAdvice'
+import Profile from 'pages/Profile'
+import Advice from 'pages/Advice'
+import Guide from 'pages/Guide'
+import Essence from 'pages/Essence'
 Vue.use(Router)
 
 export default new Router({
@@ -18,11 +20,19 @@ export default new Router({
     },
     {
       path: '/profile',
-      component: profile
+      component: Profile
     },
     {
       path: '/advice',
-      component: museumAdvice
+      component: Advice
+    },
+    {
+      path: '/guide',
+      component: Guide
+    },
+    {
+      path: '/essence',
+      component: Essence
     }
   ]
 })

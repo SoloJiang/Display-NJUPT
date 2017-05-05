@@ -7,4 +7,4 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 src/assets/ui.psd
-src/assets/icomoon
+src/assets/icomoon/

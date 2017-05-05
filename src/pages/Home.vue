@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="home">
     <player></player>
     <index-search></index-search>
     <index-section></index-section>
@@ -22,6 +22,11 @@
 </script>
 
 <style scoped>
+  #home {
+    min-height: 100vh;
+    background: #FDFEDB;
+  }
+
   .footer {
     font-size: 14px;
     color: #B3B3B2;

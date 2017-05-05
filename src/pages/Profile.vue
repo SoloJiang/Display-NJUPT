@@ -2,29 +2,14 @@
   <div id="profile">
     <div class="header-wrapper">
       <div class="avatar">
-        <img src="../assets/pageProfile/avatar.png" alt="avatar">
-        <div class="desc">王杰 @ 中山陵博物馆</div>
+        <img :src="avatarUrl" alt="avatar">
+        <div class="desc">{{ username }} @ {{ currentHall }}</div>
       </div>
     </div>
     <div class="content">
-      <div class="advice">
-        <span class="content-icon"><i class="icon-pencil"></i></span>
-        <span class="content-desc">意见建议</span>
-        <i class="icon-angle-right"></i>
-      </div>
-      <div class="donate">
-        <span class="content-icon"><i class="icon-heart"></i></span>
-        <span class="content-desc">捐赠</span>
-        <i class="icon-angle-right"></i>
-      </div>
-      <div class="reserve">
-        <span class="content-icon"><i class="icon-alarm"></i></span>
-        <span class="content-desc">预约</span>
-        <i class="icon-angle-right"></i>
-      </div>
-      <div class="qr">
-        <span class="content-icon"><i class="icon-share2"></i></span>
-        <span class="content-desc">二维码分享</span>
+      <div v-for="item in items" :key="item.id">
+        <span class="content-icon"><i :class="'icon-' + item.icon"></i></span>
+        <span class="content-desc">{{ item.desc }}</span>
         <i class="icon-angle-right"></i>
       </div>
     </div>
@@ -37,11 +22,49 @@
   import footer from 'components/Footer'
   export default {
     name: 'profile',
+    props: {
+      username: {
+        type: String,
+        default: '王杰'
+      },
+      currentHall: {
+        type: String,
+        default: '中山陵博物馆'
+      }
+    },
+    data () {
+      return {
+        avatarUrl: null,
+        items: [
+          {
+            id: 1,
+            desc: '意见建议',
+            icon: 'pencil'
+          },
+          {
+            id: 2,
+            desc: '捐赠',
+            icon: 'heart-o'
+          },
+          {
+            id: 3,
+            desc: '预约',
+            icon: 'alarm'
+          },
+          {
+            id: 4,
+            desc: '二维码分享',
+            icon: 'qrcode'
+          }
+        ]
+      }
+    },
     components: {
       'v-footer': footer
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '个人中心'
+      this.avatarUrl = require('../assets/pageProfile/avatar.png')
     }
   }
 </script>
@@ -49,9 +72,6 @@
 <style lang="sass" scoped>
   @import "../assets/fonts/icon"
   #profile
-    width: 100%
-    min-height: 100vh
-    background: #fff
     .header-wrapper
       width: 100%
       height: 30vh
