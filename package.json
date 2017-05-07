@@ -15,11 +15,8 @@
   "dependencies": {
     "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
-    "better-scroll": "^0.1.15",
     "node-sass": "^4.5.2",
     "sass": "^0.5.0",
-    "velocity": "^0.7.2",
-    "velocity-animate": "^1.5.0",
     "vue": "^2.1.0",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.4.0",
