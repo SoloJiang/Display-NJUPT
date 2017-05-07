@@ -1,10 +1,10 @@
 <template>
   <div class="footer">
-    <div class="back-btn">
+    <div class="back-btn" @click="back">
       <i class="icon-angle-left" :style="{color: iconColor}"></i>
     </div>
     <span class="rights" :style="{color: fontColor}">2017 &copy; 展览馆万事通</span>
-    <div class="home-btn">
+    <div class="home-btn" @click="home">
       <i class="icon-home" :style="{color: iconColor}"></i>
     </div>
   </div>
@@ -20,6 +20,14 @@
       iconColor: {
         type: String
       }
+    },
+    methods: {
+      back () {
+        this.$router.back()
+      },
+      home () {
+        this.$router.push('/')
+      }
     }
   }
 </script>
@@ -33,7 +41,7 @@
     width: 100%
     height: 50px
     text-align: center
-    background: rgba(255, 255, 255, 0.4)
+    background: rgba(255, 255, 255, 0.6)
     .back-btn
       position: absolute
       top: 0

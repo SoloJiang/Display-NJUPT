@@ -17,6 +17,9 @@
       Player,
       IndexSearch,
       IndexSection
+    },
+    created () {
+      document.getElementsByTagName('title')[0].innerHTML = '展览馆'
     }
   }
 </script>

@@ -8,6 +8,10 @@ import Profile from 'pages/Profile'
 import Advice from 'pages/Advice'
 import Guide from 'pages/Guide'
 import Essence from 'pages/Essence'
+import Hall from 'pages/Hall'
+import Tourism from 'pages/Tourism'
+import Overview from 'pages/Overview'
+
 Vue.use(Router)
 
 export default new Router({
@@ -16,6 +20,10 @@ export default new Router({
   routes: [
     {
       path: '/',
+      component: Home
+    },
+    {
+      path: '/home',
       component: Home
     },
     {
@@ -33,6 +41,18 @@ export default new Router({
     {
       path: '/essence',
       component: Essence
+    },
+    {
+      path: '/hall',
+      component: Hall
+    },
+    {
+      path: '/tourism',
+      component: Tourism
+    },
+    {
+      path: '/overview',
+      component: Overview
     }
   ]
 })
