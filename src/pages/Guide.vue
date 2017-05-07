@@ -44,8 +44,8 @@
   #museum-guide
     width: 100%
     min-height: 100vh
-    background: url("../assets/pageMuseum/reel-background.png") 50% no-repeat
-    background-size: 200% 100%
+    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
+    background-size: 300% 120%
     .reel
       padding: 0 10vh
       height: 92vh

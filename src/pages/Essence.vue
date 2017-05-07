@@ -65,8 +65,8 @@
         img
           width: 100%
         .desc
-          text-align: center
           font-size: 14px
           color: #fff
+          text-align: center
           background: rgb(159, 159, 159)
 </style>

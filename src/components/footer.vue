@@ -41,7 +41,7 @@
     width: 100%
     height: 50px
     text-align: center
-    background: rgba(255, 255, 255, 0.6)
+    background: rgba(255, 255, 255, 0.4)
     .back-btn
       position: absolute
       top: 0

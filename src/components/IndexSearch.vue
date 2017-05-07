@@ -5,7 +5,7 @@
     </select>
     <div class="search-body">
       <label>
-        <img src="../assets/pageHome/search.png" class="search-img"/>
+        <i class="icon-search"></i>
         <input type="text" class="search-input" placeholder="展品搜索" v-model="searchInput">
       </label>
       <div class="cancel-box" @click="cancelInput">
@@ -32,6 +32,8 @@
 </script>
 
 <style lang="sass" scoped>
+  @import "../assets/fonts/icon"
+
   .search
     padding: 16px
     max-width: 100%
@@ -57,12 +59,15 @@
       background-color: #fff
       border: 1px solid rgba(7, 17, 27, 0.6)
       display: inline-block
-      padding: 6px 10px
-      padding-right: 0
-    .search-img
-      margin: 4px 0 0 10px
+      padding: 6px 0 6px 10px
+    .icon-search
+      display: inline-block
+      margin-top: 5px
       height: 24px
-      width: auto
+      font-size: 24px
+      &::before
+        display: inline-block
+        transform: rotate(20deg)
     .search-input
       position: relative
       top: -6px

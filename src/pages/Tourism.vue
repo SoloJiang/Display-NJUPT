@@ -2,15 +2,22 @@
   <div id="tourism">
     <div class="navbar">
       <ul>
-        <li class="nav-item active"><span class="desc">全部</span></li>
-        <li class="nav-item"><span class="desc">旅游资讯</span></li>
-        <li class="nav-item"><span class="desc">旅游热点</span></li>
-        <li class="nav-item"><span class="desc">旅游信息</span></li>
+        <li @click="all" class="nav-item active"><span class="desc">全部</span></li>
+        <li @click="news" class="nav-item"><span class="desc">旅游资讯</span></li>
+        <li @click="hotSpots" class="nav-item"><span class="desc">旅游热点</span></li>
+        <li @click="information" class="nav-item"><span class="desc">旅游信息</span></li>
       </ul>
     </div>
     <div class="info-wrapper" ref="infoWrapper">
-      <ul>
-        <li v-for="item in imgs" class="info-item">
+      <transition-group
+        name="staggered-fade"
+        tag="ul"
+        v-bind:css="false"
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:leave="leave"
+      >
+        <li v-for="(item, index) in computedList" :key="item" :data-index="index" class="info-item">
           <img :src="item">
           <div class="text-wrapper">
             <p>轻扫落叶 漫步山林</p>
@@ -18,7 +25,7 @@
             <p>22:06:40</p>
           </div>
         </li>
-      </ul>
+      </transition-group>
     </div>
     <v-footer></v-footer>
   </div>
@@ -27,12 +34,72 @@
 <script>
   import footer from 'components/Footer'
   import BScroll from 'better-scroll'
-
+  import Velocity from 'velocity-animate'
   export default {
     name: 'tourism',
     data () {
       return {
-        imgs: []
+        imgs: [],
+        selectList: 'tourism',
+        navList: document.getElementsByClassName('nav-item')
+      }
+    },
+    computed: {
+      computedList: function () {
+        let vm = this
+        return this.imgs.filter(function (item) {
+          return item.indexOf(vm.selectList) !== -1
+        })
+      }
+    },
+    methods: {
+      all: function () {
+        this.selectList = 'tourism'
+        this.activeNavItem(0)
+      },
+      news: function () {
+        this.selectList = 'tourism-1'
+        this.activeNavItem(1)
+      },
+      hotSpots: function () {
+        this.selectList = 'tourism-2'
+        this.activeNavItem(2)
+      },
+      information: function () {
+        this.selectList = 'tourism-3'
+        this.activeNavItem(3)
+      },
+      activeNavItem: function (index) {
+        for (let i = 0; i < this.navList.length; i++) {
+          this.navList[i].classList.remove('active')
+        }
+        this.navList[index].classList.add('active')
+      },
+
+      // animate methods
+      beforeEnter: function (el) {
+        el.style.opacity = 0
+        el.style.height = 0
+      },
+      enter: function (el, done) {
+        let delay = el.dataset.index * 150
+        setTimeout(function () {
+          Velocity(
+            el,
+            { opacity: 1, height: '130px' },
+            { complete: done }
+          )
+        }, delay)
+      },
+      leave: function (el, done) {
+        let delay = el.dataset.index * 150
+        setTimeout(function () {
+          Velocity(
+            el,
+            { opacity: 0, height: 0 },
+            { complete: done }
+          )
+        }, delay)
       }
     },
     created () {
@@ -70,9 +137,9 @@
         .nav-item
           padding: 9px 0
           width: calc(100% / 4)
-          text-align: center
           list-style-type: none
           color: rgb(125, 124, 122)
+          text-align: center
           &.active
             color: rgb(116, 57, 41)
           &:last-child

@@ -54,7 +54,7 @@
     width: 160px
     height: 24px
     font-size: 12px
-    text-align: center
     color: #fff
+    text-align: center
     background-color: rgba(0, 0, 0, .6)
 </style>

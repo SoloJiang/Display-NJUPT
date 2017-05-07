@@ -31,10 +31,10 @@
   }
 
   .footer {
+    margin-top: -36px;
+    line-height: 36px;
     font-size: 14px;
     color: #B3B3B2;
     text-align: center;
-    margin-top: -36px;
-    line-height: 36px;
   }
 </style>

@@ -120,8 +120,8 @@
       display: table-cell
       position: absolute
       bottom: 10px
-      text-align: center
       width: 100%
+      text-align: center
       -webkit-tap-highlight-color: transparent
     .img-btn
       display: inline-block

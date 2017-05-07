@@ -32,8 +32,8 @@
   #museum-advice
     width: 100%
     min-height: 100vh
-    background: url("../assets/pageMuseum/reel-background.png") 50% no-repeat
-    background-size: 200% 100%
+    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
+    background-size: 300% 120%
     .reel
       padding: 0 10vh
       height: 92vh
@@ -42,8 +42,8 @@
       color: rgb(137, 53, 62)
       .title
         padding-top: 10vh
-        text-align: center
         font-size: 16px
+        text-align: center
       .desc
         font-size: 14px
         margin-top: 50px
@@ -59,15 +59,15 @@
         margin-top: 14px
         line-height: 34px
         height: 34px
-        text-align: center
         font-size: 16px
         color: #fff
+        text-align: center
         background: rgb(130, 86, 65)
         border-radius: 3px
       .tel
         margin-top: 20px
-        text-align: center
         color: rgb(108, 108, 108)
+        text-align: center
         .icon-phone::before
           display: inline-block
           padding: 2px

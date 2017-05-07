@@ -121,8 +121,8 @@
       line-height: 50px
       height: 50px
       font-size: 16px
-      text-align: center
       color: #fff
+      text-align: center
       border-radius: 4px
       background: rgb(130, 85, 62)
 </style>
