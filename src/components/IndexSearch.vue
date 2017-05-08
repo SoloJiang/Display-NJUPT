@@ -1,31 +1,30 @@
 <template>
   <div class="search">
-    <select class="option">
-      <option v-for="(item, index) in cities" :keys="index">{{item}}</option>
-    </select>
     <div class="search-body">
       <label>
         <i class="icon-search"></i>
         <input type="text" class="search-input" placeholder="展品搜索" v-model="searchInput">
       </label>
-      <div class="cancel-box" @click="cancelInput">
-        <div class="search-cancel">取消</div>
+      <div class="cancel-box" @click="searchInput">
+        <div class="search-cancel">搜索</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  /* eslint-disable spaced-comment */
+
   export default {
     data () {
       return {
-        cities: ['南京', '上海', '武汉'],
-        searchInput: ''
+        searchInput: '',
+        cities: []
       }
     },
     methods: {
-      cancelInput () {
-        this.searchInput = ''
+      searchInput () {
+        //发送搜索请求
       }
     }
   }
@@ -38,31 +37,18 @@
     padding: 16px
     max-width: 100%
     border-bottom: 1px solid rgba(7, 17, 27, 0.05)
-    .option
-      display: inline-block
-      margin-left: 10px
-      width: 46px
-      height: 44px
-      font-size: 14px
-      appearance: none
-      background: url("../assets/pageHome/arrow.png") no-repeat scroll right center transparent
-      background-size: 25% 20%
-      border: none
-      -webkit-tap-highlight-color: transparent
-      &:active, &:focus
-        outline: none
     .search-body
       position: relative
-      float: right
-      width: 72%
-      height: 32px
+      width: 90%
+      left: 5%
+      box-sizing: border-box
+      height: 40px
       background-color: #fff
       border: 1px solid rgba(7, 17, 27, 0.6)
       display: inline-block
       padding: 6px 0 6px 10px
     .icon-search
       display: inline-block
-      margin-top: 5px
       height: 24px
       font-size: 24px
       &::before
@@ -83,7 +69,7 @@
     .cancel-box
       display: inline-block
       float: right
-      margin-top: -6px
+      margin-top: -10px
       padding: 10px
       .search-cancel
         line-height: 26px
