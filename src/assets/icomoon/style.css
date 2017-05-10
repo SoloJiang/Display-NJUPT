@@ -1,10 +1,9 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?d51cj9');
-  src:  url('fonts/icomoon.eot?d51cj9#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?d51cj9') format('truetype'),
-    url('fonts/icomoon.woff?d51cj9') format('woff'),
-    url('fonts/icomoon.svg?d51cj9#icomoon') format('svg');
+  src:
+    url('fonts/icomoon.ttf?r2lisd') format('truetype'),
+    url('fonts/icomoon.woff?r2lisd') format('woff'),
+    url('fonts/icomoon.svg?r2lisd#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,6 +26,12 @@
 .icon-search:before {
   content: "\e907";
 }
+.icon-location:before {
+  content: "\e903";
+}
+.icon-map:before {
+  content: "\e903";
+}
 .icon-dots-three-horizontal:before {
   content: "\e902";
 }
@@ -36,20 +41,8 @@
 .icon-home:before {
   content: "\e900";
 }
-.icon-pencil:before {
-  content: "\e905";
-}
-.icon-qrcode:before {
-  content: "\e938";
-}
 .icon-phone:before {
   content: "\e942";
-}
-.icon-alarm:before {
-  content: "\e950";
-}
-.icon-heart-o:before {
-  content: "\e903";
 }
 .icon-angle-left:before {
   content: "\e904";

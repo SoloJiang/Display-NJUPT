@@ -40,7 +40,6 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/fonts/icon"
 
   #overview
     display: flex

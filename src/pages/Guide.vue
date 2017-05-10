@@ -40,7 +40,6 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/fonts/icon"
   #museum-guide
     width: 100%
     min-height: 100vh

@@ -3,8 +3,10 @@
     <div class="reel">
       <div class="title">四季南邮</div>
       <div class="desc">您有什么意见或建议请告诉我们</div>
-      <textarea name="advice" class="advice-input" placeholder="您的宝贵意见，就是我们前进的动力"></textarea>
-      <div class="advice-submit">提交</div>
+      <form action="#">
+        <textarea name="advice" class="advice-input" placeholder="您的宝贵意见，就是我们前进的动力"></textarea>
+        <div class="advice-submit">提交</div>
+      </form>
       <div class="tel">
         <i class="icon-phone"></i>
         4000211314
@@ -28,7 +30,6 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/fonts/icon"
   #museum-advice
     width: 100%
     min-height: 100vh
@@ -59,9 +60,10 @@
         margin-top: 14px
         line-height: 34px
         height: 34px
-        font-size: 16px
+        font-size: 14px
         color: #fff
         text-align: center
+        letter-spacing: 6px
         background: rgb(130, 86, 65)
         border-radius: 3px
       .tel

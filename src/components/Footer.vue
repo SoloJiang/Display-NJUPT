@@ -33,7 +33,6 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/fonts/icon"
   .footer
     position: fixed
     bottom: 0

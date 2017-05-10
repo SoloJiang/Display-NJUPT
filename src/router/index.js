@@ -11,6 +11,9 @@ import Essence from 'pages/Essence'
 import Hall from 'pages/Hall'
 import Tourism from 'pages/Tourism'
 import Overview from 'pages/Overview'
+import Donate from 'pages/Donate'
+import HallSelect from 'pages/HallSelect'
+import CitySelect from 'pages/CitySelect'
 
 Vue.use(Router)
 
@@ -53,6 +56,18 @@ export default new Router({
     {
       path: '/overview',
       component: Overview
+    },
+    {
+      path: '/donate',
+      component: Donate
+    },
+    {
+      path: '/hallselect',
+      component: HallSelect
+    },
+    {
+      path: '/cityselect',
+      component: CitySelect
     }
   ]
 })

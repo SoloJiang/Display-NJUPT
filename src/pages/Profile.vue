@@ -8,7 +8,6 @@
     </div>
     <div class="content">
       <div v-for="item in items" :key="item.id">
-        <span class="content-icon"><i :class="'icon-' + item.icon"></i></span>
         <span class="content-desc">{{ item.desc }}</span>
         <i class="icon-angle-right"></i>
       </div>
@@ -38,23 +37,19 @@
         items: [
           {
             id: 1,
-            desc: '意见建议',
-            icon: 'pencil'
+            desc: '意见建议'
           },
           {
             id: 2,
-            desc: '捐赠',
-            icon: 'heart-o'
+            desc: '捐赠'
           },
           {
             id: 3,
-            desc: '预约',
-            icon: 'alarm'
+            desc: '预约'
           },
           {
             id: 4,
-            desc: '二维码分享',
-            icon: 'qrcode'
+            desc: '二维码分享'
           }
         ]
       }
@@ -70,7 +65,6 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/fonts/icon"
   #profile
     .header-wrapper
       width: 100%
@@ -89,14 +83,6 @@
           color: rgb(255, 255, 255)
     .content
       padding: 14px 20px 0 20px
-      .content-icon
-        i[class ^= 'icon-']
-          display: inline-block
-          margin: 16px 10px 0 10px
-          vertical-align: top
-          width: 16px
-          height: 16px
-          font-size: 16px
       .content-desc
         display: inline-block
         line-height: 50px

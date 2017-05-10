@@ -31,7 +31,6 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/fonts/icon"
 
   .search
     padding: 16px

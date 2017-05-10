@@ -5,22 +5,21 @@
 </template>
 
 <script>
-export default {
-  name: 'app',
-  components: {
+  export default {
+    name: 'app',
+    components: {}
   }
-}
 </script>
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
+<style lang="sass">
+  @import "./assets/fonts/icon"
 
-#app {
-  font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  *
+    margin: 0
+    padding: 0
+
+  #app
+    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
 </style>
