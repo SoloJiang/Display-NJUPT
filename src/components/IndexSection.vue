@@ -1,8 +1,8 @@
 <template>
   <div class="section">
-    <div  v-for="(item, index) in sections" :keys="index" class="href-body">
-      <img :src="item" class="href-img">
-      <div class="href-tip">展馆概况</div>
+    <div  v-for="(item, index) in sections" :keys="item.id" class="href-body">
+      <img :src="baseUrl+item.thumb" class="href-img">
+      <div class="href-tip">{{item.title}}</div>
     </div>
   </div>
 </template>
@@ -11,18 +11,14 @@
   export default {
     data () {
       return {
-        sections: [],
-        router: null
+        router: null,
+        baseUrl: this._Global.url
       }
     },
-    created () {
-      let img1 = require('../assets/pageHome/1.png')
-      let img2 = require('../assets/pageHome/2.png')
-      let img3 = require('../assets/pageHome/3.png')
-      let img4 = require('../assets/pageHome/4.png')
-      let img5 = require('../assets/pageHome/5.png')
-      let img6 = require('../assets/pageHome/6.png')
-      this.sections = [img1, img2, img3, img4, img5, img6]
+    props: {
+      sections: {
+        type: Array
+      }
     }
   }
 </script>

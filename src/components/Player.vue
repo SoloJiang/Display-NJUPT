@@ -1,22 +1,20 @@
 <template>
   <div class="player">
     <div class="imgs" ref="imgList">
-      <img v-for="(item, index) in imgs" :key="index" :src="item" class="img"
+      <img v-for="(item, index) in banners" :key="index" :src="baseUrl+item.thumb" class="img"
            @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()"/>
     </div>
     <ul class="img-btns" ref="ulList" @touchstart="changeIndex($event)" @click="changeIndex($event)">
-      <li v-for="(item, index) in imgs" :key="index" class="img-btn" :class="{active: index === activeIndex}"></li>
+      <li v-for="(item, index) in banners" :key="index" class="img-btn" :class="{active: index === activeIndex}"></li>
     </ul>
   </div>
 </template>
 
 <script>
   /* eslint-disable no-trailing-spaces */
-
   export default {
     data () {
       return {
-        imgs: [],
         activeIndex: 0,
         timeout: null,
         clientX: null,
@@ -24,11 +22,19 @@
         changeX: null
       }
     },
+    props: {
+      banners: {
+        type: Array
+      },
+      baseUrl: {
+        type: String
+      }
+    },
     methods: {
       slider () {
         let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
         let translateX
-        let len = this.imgs.length
+        let len = this.banners.length
         if (this.activeIndex + 1 === len) {
           translateX = 0
           this.activeIndex = 0
@@ -82,7 +88,7 @@
       endMove () {
         let imgList = this.$refs.imgList
         imgList.classList.add('img-transition')
-        if (this.changeX > 0 && this.activeIndex !== this.imgs.length - 1) {
+        if (this.changeX > 0 && this.activeIndex !== this.banners.length - 1) {
           this.activeIndex++
         } else if (this.changeX < 0 && this.activeIndex !== 0) {
           this.activeIndex--
@@ -92,10 +98,7 @@
         this.timeCount()
       }
     },
-    created () {
-      let banner = require('../assets/pageHome/banner.png')
-      this.imgs = [banner, banner, banner]
-    },
+    created () {},
     mounted () {
       this.clientWidth = this.$refs.imgList.clientWidth
       this.timeCount()
