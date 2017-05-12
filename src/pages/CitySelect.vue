@@ -4,19 +4,119 @@
       <i class="icon-search"></i>
       <input type="text" class="input-search" placeholder="输入城市名或拼音查询">
     </div>
+    <div class="current">
+      <span class="pos">当前：{{currentCity}}</span>
+      <div class="county">
+        <select name="county">
+          <option value="">选择区县</option>
+          <option value="Qixia">栖霞区</option>
+        </select>
+      </div>
+    </div>
+    <div class="city">
+      <div class="current-city">
+        <div class="title">定位城市</div>
+        <div class="city-item">
+          <i class="icon-location"></i> {{currentCity}}
+        </div>
+      </div>
+      <div class="hot-city">
+        <div class="title">热门城市</div>
+        <div class="hot-city-list">
+          <div v-for="item in hotCity['hot']" class="city-item">
+            {{item.name}}
+          </div>
+        </div>
+      </div>
+      <div class="city-wrapper" ref="cityWrapper">
+        <div class="city-slide">
+          <div v-for="(group, index) in city" :key="index" class="city-list city-list-hook">
+            <div class="alpha">{{index}}</div>
+            <div v-for="item in group" class="city-item">
+              {{item.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navbar">
+      <ul>
+        <li v-for="(item, index) in city" @click="selectAlpha(index)"
+              :class="{'active': currentIndex === convertAlpha(index)}" class="nav-item">
+        {{index}}
+      </li>
+      </ul>
+    </div>
     <v-footer></v-footer>
   </div>
 </template>
 
 <script>
   import footer from 'components/Footer'
+  import BScroll from 'better-scroll'
+  import cityData from '../assets/pageSelect/china-city-data.json'
+  import hotCityData from '../assets/pageSelect/hot-city-data.json'
+
   export default {
     name: 'citySelect',
-    components: {
-      'v-footer': footer
+    data () {
+      return {
+        currentCity: '南京',
+        city: cityData,
+        hotCity: hotCityData,
+        heightList: [],
+        scrollY: 0
+      }
+    },
+    methods: {
+      _initScroll () {
+        this.scroll = new BScroll(this.$refs.cityWrapper, {
+          probeType: 3,
+          click: true
+        })
+        this.scroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y))
+        })
+      },
+      _calculateHeight () {
+        let cityList = this.$refs.cityWrapper.getElementsByClassName('city-list-hook')
+        let height = 0
+        this.heightList.push(height)
+        for (let i = 0; i < cityList.length; i++) {
+          height += cityList[i].clientHeight
+          this.heightList.push(height)
+        }
+      },
+      selectAlpha (index) {
+        let cityList = this.$refs.cityWrapper.getElementsByClassName('city-list-hook')
+        let el = cityList[this.convertAlpha(index)]
+        this.scroll.scrollToElement(el, 500)
+      },
+      convertAlpha (index) {
+        const alphaArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z']
+        return alphaArr.indexOf(index)
+      }
+    },
+    computed: {
+      currentIndex () {
+        for (let i = 0; i < this.heightList.length; i++) {
+          let height1 = this.heightList[i]
+          let height2 = this.heightList[i + 1]
+          if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+            return i
+          }
+        }
+      }
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
+      this.$nextTick(() => {
+        this._initScroll()
+        this._calculateHeight()
+      })
+    },
+    components: {
+      'v-footer': footer
     }
   }
 </script>
@@ -26,19 +126,114 @@
     margin-right: 22px
     .searchbar
       position: relative
-      margin-left: 10px
+      padding-left: 10px
+      border-bottom: 1px solid rgba(7, 17, 27, 0.2)
       .icon-search
         position: absolute
-        top: 14px
+        top: 15px
         left: 80px
         font-size: 20px
       .input-search
         margin: 10px 0
-        width: 100%
+        padding-left: 30%
+        width: 70%
         height: 30px
         font-size: 12px
-        text-align: center
         border: 1px solid rgba(7, 17, 27, 0.5)
         border-radius: 3px
         background: rgb(244, 244, 244)
+    .current
+      font-size: 12px
+      border-bottom: 1px solid rgba(7, 17, 27, 0.2)
+      .pos
+        padding-left: 10px
+        height: 30px
+        line-height: 30px
+      .county
+        float: right
+        select
+          padding-left: 10px
+          width: 72px
+          height: 30px
+          line-height: 30px
+          font-size: 12px
+          color: #999
+          appearance: none
+          border: none
+          background: url("../assets/pageSelect/angle3.png") no-repeat scroll right center transparent
+          background-size: 14%
+    .city
+      background: rgb(244, 244, 244)
+      .current-city
+        padding-left: 10px
+        .title
+          line-height: 40px
+          font-size: 12px
+          color: #999
+        .city-item
+          width: 90px
+          height: 30px
+          line-height: 30px
+          font-size: 12px
+          text-align: center
+          border: 1px solid rgba(7, 17, 27, 0.2)
+          border-radius: 3px
+          background: #fff
+          .icon-location
+            font-size: 14px
+      .hot-city
+        padding-left: 10px
+        .title
+          line-height: 40px
+          font-size: 12px
+          color: #999
+        .hot-city-list
+          display: flex
+          flex-wrap: wrap
+          .city-item
+            margin-left: 10px
+            margin-bottom: 10px
+            width: 90px
+            height: 30px
+            line-height: 30px
+            font-size: 12px
+            text-align: center
+            border: 1px solid rgba(7, 17, 27, 0.2)
+            border-radius: 3px
+            background: #fff
+      .city-wrapper
+        max-height: calc(100vh - 322px - 50px)
+        overflow: hidden
+        .city-list
+          color: rgba(7, 17, 27, 0.4)
+          background: #fff
+          .alpha
+            padding-left: 10px
+            height: 34px
+            line-height: 34px
+            background: rgb(244, 244, 244)
+          .city-item
+            margin-left: 10px
+            height: 34px
+            line-height: 34px
+            font-size: 14px
+            color: #000
+            border-bottom: 1px solid rgba(7, 17, 27, 0.2)
+            &:last-child
+              border: none
+    .navbar
+      display: flex
+      position: absolute
+      top: 20vh
+      right: 0px
+      flex-direction: column
+      color: rgba(7, 17, 27, 0.7)
+      .nav-item
+        padding: 3px 5px
+        font-size: 12px
+        color: rgb(132, 89, 69)
+        list-style: none
+        &.active
+          font-weight: 700
+          text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
 </style>

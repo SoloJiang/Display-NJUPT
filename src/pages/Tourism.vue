@@ -16,6 +16,7 @@
         v-on:before-enter="beforeEnter"
         v-on:enter="enter"
         v-on:leave="leave"
+        class="fade-group"
       >
         <li v-for="(item, index) in computedList" :key="item" :data-index="index" class="info-item">
           <img :src="item">

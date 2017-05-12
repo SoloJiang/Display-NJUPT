@@ -12,7 +12,7 @@
           <div class="line-right"></div>
         </div>
       </div>
-      <div class="desc-wrapper">
+      <div class="desc-wrapper" ref="descWrapper">
         <div class="card-1">
           <i class="icon-quote"></i>
           中山陵位于江苏南京市区，是伟大的革命先行者孙中山先生的陵墓，灵柩于1929年6月1日奉安于此。
@@ -26,7 +26,6 @@
 
 <script>
   import footer from 'components/Footer'
-//  没文本数据，滑动功能偷懒没做orz...
 
   export default {
     name: 'overview',
@@ -47,6 +46,7 @@
     min-height: 100vh
     flex-wrap: wrap
     align-items: center
+    /*overflow: hidden*/
     background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
     background-size: 300% 120%
     .nav-wrapper
@@ -94,7 +94,7 @@
           border-top: 1px solid rgba(150, 150, 150, 0.8)
     .desc-wrapper
       margin: 4vh 0 0 3.5vh
-      width: 100%
+      width: 400%
       height: 100px
       .card-1
         display: inline-block
