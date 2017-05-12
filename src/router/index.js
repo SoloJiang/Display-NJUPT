@@ -26,7 +26,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/home',
+      path: '/index',
       component: Home
     },
     {
@@ -69,5 +69,8 @@ export default new Router({
       path: '/cityselect',
       component: CitySelect
     }
-  ]
+  ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })

@@ -5,7 +5,7 @@
         <i class="icon-search"></i>
         <input type="text" class="search-input" placeholder="展品搜索" v-model="searchInput">
       </label>
-      <div class="cancel-box" @click="searchInput">
+      <div class="cancel-box">
         <div class="search-cancel">搜索</div>
       </div>
     </div>
