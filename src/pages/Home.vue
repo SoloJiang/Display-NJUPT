@@ -11,7 +11,7 @@
   import Player from 'components/Player'
   import IndexSearch from 'components/IndexSearch'
   import IndexSection from 'components/IndexSection'
-
+  import axios from 'axios'
   export default {
     data () {
       return {
@@ -28,9 +28,11 @@
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '展览馆'
       let exhibitionId = this.$route.query.exhibition_id
-      this.$http.all([this.getBanners(exhibitionId), this.getSections(exhibitionId)])
-        .then(this.$http.spread(function (acct, perms) {
+      axios.all([this.getBanners(exhibitionId), this.getSections(exhibitionId)])
+        .then(axios.spread((banners, sections) => {
           // Both requests are now complete
+          this.banners = banners.data
+          this.sections = sections.data
         }))
     },
     methods: {
