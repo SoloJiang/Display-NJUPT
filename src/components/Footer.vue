@@ -40,7 +40,7 @@
     width: 100%
     height: 50px
     text-align: center
-    background: rgba(255, 255, 255, 0.4)
+    background: rgba(255, 255, 255, 0.8)
     .back-btn
       position: absolute
       top: 0
@@ -53,7 +53,7 @@
     .rights
       line-height: 50px
       font-size: 14px
-      color: rgb(188, 188, 188)
+      color: #808080
       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
     .home-btn
       position: absolute

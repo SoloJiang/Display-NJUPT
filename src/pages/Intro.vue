@@ -1,16 +1,22 @@
 <template>
   <div id="intro" v-bind:style="{ backgroundImage: `url(${background})` }">
-    <div class="title">中山陵</div>
+    <div class="title">{{title}}</div>
     <div class="roller"></div>
     <div class="container">
       <div class="card">
         <i class="icon-quote"></i>
         <div class="content">
-          中山陵位于江苏南京市区，是伟大的革命先行者孙中山先生的陵墓，灵柩于1929年6月1日奉安于此。
+          {{intro}}
         </div>
         <i class="icon-dots-three-horizontal"></i>
       </div>
-      <div class="card" v-for="card in cards"></div>
+      <div class="card card-list" v-for="card in cards" :key="card.id">
+        <div class="box">
+          <div class="smallTtile">{{card.title}}</div>
+          <div class="smallContent">{{card.content}}</div>
+        </div>
+        <img :src="baseUrl+card.thumb" class="card-img"/>
+      </div>
       <div class="space"></div>
     </div>
     <v-footer></v-footer>
@@ -24,7 +30,11 @@
     data () {
       return {
         background: null,
-        cards: ['', '']
+        content: null,
+        cards: [],
+        title: null,
+        intro: null,
+        baseUrl: this._Global.url
       }
     },
     created () {
@@ -35,12 +45,18 @@
     },
 // eslint-disable-next-line no-dupe-keys
     created () {
-      this.background = require('../assets/pageMuseum/reel-background.png')
-//      let exhibitionId = this.$route.query.exhibition_id
-//      this.$http.post(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
-//        .then(res => {
-//          this.background = res.data.background
-//        })
+      let exhibitionId = this.$route.query.exhibition_id
+      Promise.all([this.$http.post(`Exhibition/getIntro?exhibition_id=${exhibitionId}`),
+        this.$http.get(`Exhibition/getMediaViewLists?exhibition_id=${exhibitionId}`)])
+        .then(resArr => {
+          this.background = this._Global.url + resArr[0].data.background
+          if (this.background === '') {
+            this.background = require('../assets/pageMuseum/reel-background.png')
+          }
+          this.intro = resArr[0].data.intro
+          this.title = resArr[0].data.title
+          this.cards = resArr[1].data
+        })
     }
   }
 </script>
@@ -100,7 +116,7 @@
     height: 180px
     width: 280px
     background: #fff
-    border-radius: 10px
+    border-radius: 4px
     box-shadow: 0 0 2px #C3C3C3
     font-size: 14px
     margin-left: 20px
@@ -127,4 +143,30 @@
     width: 10px
     height: 180px
     margin-left: 20px
+  .card-list
+    width: 520px
+    padding: 4px
+  .card-img
+    position: relative
+    right: -44px
+    width: 230px
+    height: 100%
+  .box
+    position: relative
+    display: inline-block
+    width: 230px
+    height: 168px
+    left: 30px
+    overflow: hidden
+    text-overflow: ellipsis
+    top: 12px
+  .smallTitle
+    color: red
+    font-weight: bold
+    width: 220px
+    border-bottom: 1px solid #A7C7C1
+    padding-bottom: 4px
+  .smallContent
+    width: 220px
+    line-height: 170%
 </style>
