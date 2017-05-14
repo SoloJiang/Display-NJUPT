@@ -1,61 +1,71 @@
 <template>
-  <div id="city-select">
-    <div class="searchbar">
-      <i class="icon-search"></i>
-      <input type="text" class="input-search" placeholder="输入城市名或拼音查询">
-    </div>
-    <div class="current">
-      <span class="pos">当前：{{currentCity}}</span>
-      <div class="county">
-        <select name="county">
-          <option value="">选择区县</option>
-          <option value="Qixia">栖霞区</option>
-        </select>
+  <transition name="fade">
+    <div id="city-select">
+      <div class="searchbar">
+        <i class="icon-search"></i>
+        <input v-model="cityInput" type="text" class="input-search" placeholder="输入城市名">
       </div>
-    </div>
-    <div class="city">
-      <div class="current-city">
-        <div class="title">定位城市</div>
-        <div class="city-item">
-          <i class="icon-location"></i> {{currentCity}}
+      <div class="current">
+        <span class="pos">当前：{{currentCity}}</span>
+        <div class="county">
+          <select name="county">
+            <option value="">选择区县</option>
+            <option value="Qixia">栖霞区</option>
+          </select>
         </div>
       </div>
-      <div class="hot-city">
-        <div class="title">热门城市</div>
-        <div class="hot-city-list">
-          <div v-for="item in hotCity['hot']" class="city-item">
-            {{item.name}}
+      <div class="city">
+        <div class="current-city">
+          <div class="title">定位城市</div>
+          <div @click="rawSelectCity(currentCity)" class="city-item">
+            <i class="icon-location"></i> {{currentCity}}
           </div>
         </div>
-      </div>
-      <div class="city-wrapper" ref="cityWrapper">
-        <div class="city-slide">
-          <div v-for="(group, index) in city" :key="index" class="city-list city-list-hook">
-            <div class="alpha">{{index}}</div>
-            <div v-for="item in group" class="city-item">
+        <div class="hot-city">
+          <div class="title">热门城市</div>
+          <div class="hot-city-list">
+            <div v-for="item in hotCity['hot']"
+                 @click="rawSelectCity(item.name)"
+                 class="city-item">
               {{item.name}}
             </div>
           </div>
         </div>
+        <div class="city-wrapper" ref="cityWrapper">
+          <div class="city-slide">
+            <div v-for="(group, index) in city" :key="index" class="city-list city-list-hook">
+              <div class="alpha">{{index}}</div>
+              <div v-for="item in group"
+                   @click="selectCity(item.name, $event)"
+                   class="city-item">
+                {{item.name}}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="navbar">
+        <ul>
+          <li v-for="(item, index) in city"
+              @click="selectAlpha(index)"
+              :class="{'active': currentIndex === convertAlpha(index)}"
+              class="nav-item">
+            {{index}}
+          </li>
+        </ul>
+      </div>
+      <result v-show="showResult" :input="cityInput" :city="city"></result>
+      <v-footer></v-footer>
     </div>
-    <div class="navbar">
-      <ul>
-        <li v-for="(item, index) in city" @click="selectAlpha(index)"
-              :class="{'active': currentIndex === convertAlpha(index)}" class="nav-item">
-        {{index}}
-      </li>
-      </ul>
-    </div>
-    <v-footer></v-footer>
-  </div>
+  </transition>
 </template>
 
 <script>
   import footer from 'components/Footer'
+  import CityResult from 'components/CityResult'
   import BScroll from 'better-scroll'
-  import cityData from '../assets/pageSelect/china-city-data.json'
-  import hotCityData from '../assets/pageSelect/hot-city-data.json'
+  import cityData from 'assets/pageSelect/china-city-data.json'
+  import hotCityData from 'assets/pageSelect/hot-city-data.json'
 
   export default {
     name: 'citySelect',
@@ -65,7 +75,8 @@
         city: cityData,
         hotCity: hotCityData,
         heightList: [],
-        scrollY: 0
+        scrollY: 0,
+        cityInput: ''
       }
     },
     methods: {
@@ -95,6 +106,15 @@
       convertAlpha (index) {
         const alphaArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z']
         return alphaArr.indexOf(index)
+      },
+      rawSelectCity (city) {
+        window.sessionStorage.setItem('city', city)
+        this.$router.push('/hallselect')
+      },
+      selectCity (city, event) {
+        if (!event._constructed) return
+        window.sessionStorage.setItem('city', city)
+        this.$router.push('/hallselect')
       }
     },
     computed: {
@@ -106,6 +126,10 @@
             return i
           }
         }
+      },
+      showResult () {
+        if (this.cityInput !== '') return true
+        return false
       }
     },
     created () {
@@ -116,7 +140,8 @@
       })
     },
     components: {
-      'v-footer': footer
+      'v-footer': footer,
+      'result': CityResult
     }
   }
 </script>
@@ -130,13 +155,13 @@
       border-bottom: 1px solid rgba(7, 17, 27, 0.2)
       .icon-search
         position: absolute
-        top: 15px
-        left: 80px
+        top: 16px
+        left: 19vh
         font-size: 20px
       .input-search
         margin: 10px 0
-        padding-left: 30%
-        width: 70%
+        padding-left: 22vh
+        width: calc(100% - 22vh)
         height: 30px
         font-size: 12px
         border: 1px solid rgba(7, 17, 27, 0.5)
@@ -147,15 +172,15 @@
       border-bottom: 1px solid rgba(7, 17, 27, 0.2)
       .pos
         padding-left: 10px
-        height: 30px
-        line-height: 30px
+        height: 40px
+        line-height: 40px
       .county
         float: right
         select
           padding-left: 10px
           width: 72px
-          height: 30px
-          line-height: 30px
+          height: 40px
+          line-height: 40px
           font-size: 12px
           color: #999
           appearance: none
@@ -171,7 +196,7 @@
           font-size: 12px
           color: #999
         .city-item
-          width: 90px
+          width: calc(100% / 3 - 12px)
           height: 30px
           line-height: 30px
           font-size: 12px
@@ -191,9 +216,9 @@
           display: flex
           flex-wrap: wrap
           .city-item
-            margin-left: 10px
+            margin-right: 10px
             margin-bottom: 10px
-            width: 90px
+            width: calc(100% / 3 - 12px)
             height: 30px
             line-height: 30px
             font-size: 12px
@@ -201,8 +226,10 @@
             border: 1px solid rgba(7, 17, 27, 0.2)
             border-radius: 3px
             background: #fff
+            &:nth-of-type(3n)
+              margin-right: 0
       .city-wrapper
-        max-height: calc(100vh - 322px - 50px)
+        max-height: calc(100vh - 382px)
         overflow: hidden
         .city-list
           color: rgba(7, 17, 27, 0.4)
@@ -224,7 +251,7 @@
     .navbar
       display: flex
       position: absolute
-      top: 20vh
+      top: 8vh
       right: 0px
       flex-direction: column
       color: rgba(7, 17, 27, 0.7)
@@ -236,4 +263,12 @@
         &.active
           font-weight: 700
           text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
+    @media screen and (max-width: 320px)
+      .navbar
+        top: 10vh
+  .fade-enter-active, .fade-leave-active
+    transition: all .5s
+    opacity: 1
+  .fade-enter, .fade-leave-to
+    opacity: 0
 </style>

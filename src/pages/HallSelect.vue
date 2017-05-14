@@ -1,33 +1,49 @@
 <template>
-  <div id="hall-select">
-    <div class="reel">
-      <h2 class="title">四季南邮</h2>
-      <form action="#" class="form-donate">
-        <label>选择默认展览馆</label>
-        <div class="flex-container">
-          <select name="city" class="select-city">
-            <option value="南京">南京</option>
-          </select>
-          <select name="hall" class="select-hall">
-            <option value="四季南邮">四季南邮</option>
-          </select>
-        </div>
-        <div class="advice-submit">提交</div>
-      </form>
+  <transition name="fade">
+    <div id="hall-select">
+      <div class="reel">
+        <h2 class="title">四季南邮</h2>
+        <form action="#" class="form-donate">
+          <label>选择默认展览馆</label>
+          <div class="flex-container">
+            <div @click="selectCity" class="select-city">{{city}}</div>
+            <select name="hall" class="select-hall">
+              <option value="四季南邮">四季南邮</option>
+            </select>
+          </div>
+          <div class="advice-submit">提交</div>
+        </form>
+      </div>
+      <v-footer></v-footer>
     </div>
-    <v-footer></v-footer>
-  </div>
+  </transition>
 </template>
 
 <script>
   import footer from 'components/Footer'
+
   export default {
     name: 'hallSelect',
-    components: {
-      'v-footer': footer
+    data () {
+      return {
+        city: '南京'
+      }
+    },
+    methods: {
+      selectCity () {
+        this.$router.push('/cityselect')
+      }
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
+    },
+    mounted () {
+      if (window.sessionStorage.getItem('city')) {
+        this.city = window.sessionStorage.getItem('city')
+      }
+    },
+    components: {
+      'v-footer': footer
     }
   }
 </script>
@@ -59,13 +75,16 @@
           display: flex
           align-items: center
           .select-city
-            width: 50px
+            padding-right: 20px
+            max-width: 50px
             height: 50px
+            line-height: 50px
+            overflow: hidden
             font-size: 16px
             color: rgb(130, 86, 65)
             appearance: none
             border: 0
-            background: url("../assets/pageSelect/angle1.png") no-repeat scroll 90% 58% transparent
+            background: url("../assets/pageSelect/angle1.png") no-repeat scroll right center transparent
             background-size: 16% 14%
           .select-hall
             margin-left: 5px
@@ -89,4 +108,9 @@
         letter-spacing: 10px
         background: rgb(130, 86, 65)
         border-radius: 3px
+  .fade-enter-active, .fade-leave-active
+    transition: all .5s
+    opacity: 1
+  .fade-enter, .fade-leave-to
+    opacity: 0
 </style>
