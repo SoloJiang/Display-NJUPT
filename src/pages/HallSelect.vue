@@ -7,9 +7,18 @@
           <label>选择默认展览馆</label>
           <div class="flex-container">
             <div @click="selectCity" class="select-city">{{city}}</div>
-            <select name="hall" class="select-hall">
-              <option value="四季南邮">四季南邮</option>
-            </select>
+            <transition name="fold">
+              <div class="select-hall" :class="{'active': hallSelect}">
+                <div class="current-hall" @click="showSelect">
+                  四季南邮
+                  <img class="angle" src="../assets/pageSelect/angle2.png">
+                </div>
+                <div class="hall"><input type="text" v-model="hallInput" class="input"></div>
+                <div class="hall">四季南邮</div>
+                <div class="hall">四季南邮</div>
+                <div class="hall">四季南邮</div>
+              </div>
+            </transition>
           </div>
           <div class="advice-submit">提交</div>
         </form>
@@ -26,12 +35,23 @@
     name: 'hallSelect',
     data () {
       return {
-        city: '南京'
+        city: '南京',
+        hall: '四季南邮',
+        hallInput: '',
+        hallSelect: false
+      }
+    },
+    computed: {
+      hallList () {
+
       }
     },
     methods: {
       selectCity () {
         this.$router.push('/cityselect')
+      },
+      showSelect () {
+        this.hallSelect = !this.hallSelect
       }
     },
     created () {
@@ -65,6 +85,7 @@
         font-size: 28px
         text-align: center
       .form-donate
+        position: relative
         margin-top: 22px
         text-align: center
         label
@@ -73,7 +94,7 @@
           width: 100%
         .flex-container
           display: flex
-          align-items: center
+          align-items: flex-start
           .select-city
             padding-right: 20px
             max-width: 50px
@@ -87,20 +108,49 @@
             background: url("../assets/pageSelect/angle1.png") no-repeat scroll right center transparent
             background-size: 16% 14%
           .select-hall
-            margin-left: 5px
-            padding-left: 55px
-            height: 34px
+            z-index: 5
+            margin: 7px 0 0 5px
+            height: 36px
+            line-height: 34px
             flex: 1
+            overflow: hidden
             font-size: 14px
             color: rgb(7, 17, 27)
-            appearance: none
-            border: 1px solid rgba(7, 17, 27, 0.5)
-            border-radius: 5px
-            background: url("../assets/pageSelect/angle2.png") no-repeat scroll 90% center transparent
-            background-size: 6% 22%
+            text-align: center
+            &.active
+              height: 300px
+              .current-hall
+                border-bottom: none
+                border-bottom-left-radius: 0
+                border-bottom-right-radius: 0
+            .current-hall
+              position: relative
+              border: 1px solid rgb(214, 214, 214)
+              border-radius: 5px
+              background: #fff
+              .angle
+                position: absolute
+                top: 13px
+                right: 10px
+                width: 10px
+                height: 8px
+            .hall
+              border-left: 1px solid rgb(214, 214, 214)
+              border-right: 1px solid rgb(214, 214, 214)
+              background: #fff
+              input
+                height: 26px
+                border-radius: 5px
+                border: 1px solid rgb(214, 214, 214)
+              &:last-child
+                border-bottom: 1px solid rgb(214, 214, 214)
+                border-bottom-left-radius: 5px
+                border-bottom-right-radius: 5px
       .advice-submit
-        margin-top: 76px
+        position: absolute
+        top: 116px
         line-height: 34px
+        width: 100%
         height: 34px
         font-size: 16px
         color: #fff
@@ -108,9 +158,9 @@
         letter-spacing: 10px
         background: rgb(130, 86, 65)
         border-radius: 3px
-  .fade-enter-active, .fade-leave-active
-    transition: all .5s
-    opacity: 1
-  .fade-enter, .fade-leave-to
-    opacity: 0
+    .fade-enter-active, .fade-leave-active
+      transition: all .5s
+      opacity: 1
+    .fade-enter, .fade-leave-to
+      opacity: 0
 </style>

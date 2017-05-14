@@ -54,7 +54,6 @@
       line-height: 50px
       font-size: 14px
       color: #808080
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
     .home-btn
       position: absolute
       top: 0
