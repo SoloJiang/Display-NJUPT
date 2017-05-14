@@ -45,7 +45,6 @@
         imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
       },
       timeCount () {
-//        console.log('begin')
         this.timeout = setTimeout(() => {
           this.$refs.imgList.classList.add('img-transition')
           this.slider()
@@ -63,7 +62,6 @@
           })
           if (this.activeIndex !== index) {
             clearTimeout(this.timeout)
-            console.log('end')
             this.activeIndex = index
             this.$refs.imgList.classList.add('img-transition')
             let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]

@@ -10,7 +10,7 @@ import Guide from 'pages/Guide'
 import Essence from 'pages/Essence'
 import Hall from 'pages/Hall'
 import Tourism from 'pages/Tourism'
-import Overview from 'pages/Overview'
+import Intro from 'pages/Intro'
 import Donate from 'pages/Donate'
 import HallSelect from 'pages/HallSelect'
 import CitySelect from 'pages/CitySelect'
@@ -54,8 +54,8 @@ export default new Router({
       component: Tourism
     },
     {
-      path: '/overview',
-      component: Overview
+      path: '/intro',
+      component: Intro
     },
     {
       path: '/donate',
