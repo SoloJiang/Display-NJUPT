@@ -56,14 +56,12 @@
         return this.src !== null
       }
     },
-    created () {
-      document.getElementsByTagName('title')[0].innerHTML = '展馆概况'
-    },
     components: {
       'v-footer': footer
     },
 // eslint-disable-next-line no-dupe-keys
     created () {
+      document.getElementsByTagName('title')[0].innerHTML = '展馆概况'
       this.clientWidth = document.body.clientWidth
       let exhibitionId = this.$route.query.exhibition_id
       Promise.all([this.$http.post(`Exhibition/getIntro?exhibition_id=${exhibitionId}`),
