@@ -1,4 +1,4 @@
-/* eslint-disable no-new,no-undef,eqeqeq */
+/* eslint-disable no-new,no-undef,eqeqeq,no-useless-escape */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
@@ -64,6 +64,19 @@ router.beforeEach((to, from, next) => {
 //         window.location = res.data.oauthUrl
 //       })
 // }
+
+Vue.filter('encodeHtml', str => {
+  let s = ''
+  if (str.length === 0) return ''
+  s = str.replace(/&amp;/g, '&')
+  s = s.replace(/&lt;/g, '<')
+  s = s.replace(/&gt;/g, '>')
+  s = s.replace(/&nbsp;/g, ' ')
+  s = s.replace(/&#39;/g, "\'")
+  s = s.replace(/&quot;/g, '"')
+  s = s.replace(/<br>/g, '\n')
+  return s
+})
 
 new Vue({
   el: '#app',

@@ -2,7 +2,7 @@
   <div id="intro" v-bind:style="{ backgroundImage: `url(${background})` }">
     <div class="title">{{title}}</div>
     <div class="roller"></div>
-    <div class="container">
+    <div class="container" @scroll="getOffsetX($event)">
       <div class="card">
         <i class="icon-quote"></i>
         <div class="content">
@@ -13,9 +13,8 @@
       <div class="card card-list" v-for="card in cards" :key="card.id">
         <div class="box">
           <div class="smallTtile">{{card.title}}</div>
-          <div class="smallContent">{{card.content}}</div>
+          <div class="smallContent" v-html="card.content"></div>
         </div>
-        <img :src="baseUrl+card.thumb" class="card-img"/>
       </div>
       <div class="space"></div>
     </div>
@@ -24,6 +23,8 @@
 </template>
 
 <script>
+  /* eslint-disable no-useless-escape */
+
   import footer from 'components/Footer'
   export default {
     name: 'intro',
@@ -34,7 +35,9 @@
         cards: [],
         title: null,
         intro: null,
-        baseUrl: this._Global.url
+        baseUrl: this._Global.url,
+        clientWidth: null,
+        temple: null
       }
     },
     created () {
@@ -45,6 +48,7 @@
     },
 // eslint-disable-next-line no-dupe-keys
     created () {
+      this.clientWidth = document.body.clientWidth
       let exhibitionId = this.$route.query.exhibition_id
       Promise.all([this.$http.post(`Exhibition/getIntro?exhibition_id=${exhibitionId}`),
         this.$http.get(`Exhibition/getMediaViewLists?exhibition_id=${exhibitionId}`)])
@@ -55,8 +59,35 @@
           }
           this.intro = resArr[0].data.intro
           this.title = resArr[0].data.title
+          resArr[1].data.forEach(item => {
+            item.content = this.encodeHtml(item.content)
+          })
           this.cards = resArr[1].data
         })
+    },
+    methods: {
+      getOffsetX (e) {
+        let translateX = e.target.scrollLeft
+        if (translateX < this.clientWidth) {
+          if (translateX === 300) {
+            this.title = this.cards[0].title
+          } else {
+            this.title = this.temple
+          }
+        }
+      },
+      encodeHtml (str) {
+        let s = ''
+        if (str.length === 0) return ''
+        s = str.replace(/&amp;/g, '&')
+        s = s.replace(/&lt;/g, '<')
+        s = s.replace(/&gt;/g, '>')
+        s = s.replace(/&nbsp;/g, ' ')
+        s = s.replace(/&#39;/g, "\'")
+        s = s.replace(/&quot;/g, '"')
+        s = s.replace(/<br>/g, '\n')
+        return s
+      }
     }
   }
 </script>
@@ -146,18 +177,12 @@
   .card-list
     width: 520px
     padding: 4px
-  .card-img
-    position: relative
-    right: -44px
-    width: 230px
-    height: 100%
   .box
     position: relative
     display: inline-block
-    width: 230px
+    width: 500px
     height: 168px
     left: 30px
-    overflow: hidden
     text-overflow: ellipsis
     top: 12px
   .smallTitle
@@ -166,7 +191,4 @@
     width: 220px
     border-bottom: 1px solid #A7C7C1
     padding-bottom: 4px
-  .smallContent
-    width: 220px
-    line-height: 170%
 </style>
