@@ -53,8 +53,7 @@
     .rights
       line-height: 50px
       font-size: 14px
-      color: rgb(188, 188, 188)
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
+      color: rgba(7, 17, 27, 0.8)
     .home-btn
       position: absolute
       top: 0
