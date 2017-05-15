@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <div  v-for="(item, index) in sections" :keys="item.id" class="href-body">
+    <div  v-for="(item, index) in sections" :keys="item.id" class="href-body" @touchstart="routerGo(index)">
       <img :src="baseUrl+item.thumb" class="href-img">
       <div class="href-tip">{{item.title}}</div>
     </div>
@@ -18,6 +18,11 @@
     props: {
       sections: {
         type: Array
+      }
+    },
+    methods: {
+      routerGo (index) {
+        this.$router.push(this.sections[index].name)
       }
     }
   }

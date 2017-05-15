@@ -1,8 +1,12 @@
 <template>
   <div id="intro" v-bind:style="{ backgroundImage: `url(${background})` }">
     <div class="title">{{title}}</div>
+    <div class="voice" @click="play" v-show="voiceShow">
+      <span class="voice-text">{{voice}}</span>
+      <audio ref="player" :src="src" @ended="end"></audio>
+    </div>
     <div class="roller"></div>
-    <div class="container" @scroll="getOffsetX($event)">
+    <div class="container" ref="content" @scroll="getOffsetX($event)">
       <div class="card">
         <i class="icon-quote"></i>
         <div class="content">
@@ -10,15 +14,17 @@
         </div>
         <i class="icon-dots-three-horizontal"></i>
       </div>
-      <div class="card card-list" v-for="card in cards" :key="card.id">
+      <div class="card card-list" v-for="(card, index) in cards" :key="card.id" @click="showContent(index)">
         <div class="box">
-          <div class="smallTtile">{{card.title}}</div>
-          <div class="smallContent" v-html="card.content"></div>
+          <div class="smallTitle">{{card.title}}</div>
+          <div class="smallIntro">{{intro}}</div>
         </div>
+        <img class="smallImg" :src="baseUrl+card.thumb"/>
       </div>
       <div class="space"></div>
     </div>
     <v-footer></v-footer>
+    <div id="mask" v-show="flag" @click="flag = !flag" v-html="detail"></div>
   </div>
 </template>
 
@@ -37,17 +43,25 @@
         intro: null,
         baseUrl: this._Global.url,
         clientWidth: null,
-        temple: null
+        temple: null,
+        start: false,
+        src: null,
+        voice: '语音',
+        flag: false,
+        detail: null
       }
     },
-    created () {
-      document.getElementsByTagName('title')[0].innerHTML = '展馆概况'
+    computed: {
+      voiceShow () {
+        return this.src !== null
+      }
     },
     components: {
       'v-footer': footer
     },
 // eslint-disable-next-line no-dupe-keys
     created () {
+      document.getElementsByTagName('title')[0].innerHTML = '展馆概况'
       this.clientWidth = document.body.clientWidth
       let exhibitionId = this.$route.query.exhibition_id
       Promise.all([this.$http.post(`Exhibition/getIntro?exhibition_id=${exhibitionId}`),
@@ -59,6 +73,7 @@
           }
           this.intro = resArr[0].data.intro
           this.title = resArr[0].data.title
+          this.temple = resArr[0].data.title
           resArr[1].data.forEach(item => {
             item.content = this.encodeHtml(item.content)
           })
@@ -69,10 +84,14 @@
       getOffsetX (e) {
         let translateX = e.target.scrollLeft
         if (translateX < this.clientWidth) {
-          if (translateX === 300) {
-            this.title = this.cards[0].title
-          } else {
-            this.title = this.temple
+          this.title = this.temple
+          this.src = null
+        } else {
+          let num = parseInt((translateX - 300) / 520)
+          if (this.src !== this.cards[num].voice) {
+            this.title = this.cards[num].title
+            this.src = this.cards[num].voice
+            this.voice = '语音'
           }
         }
       },
@@ -87,6 +106,23 @@
         s = s.replace(/&quot;/g, '"')
         s = s.replace(/<br>/g, '\n')
         return s
+      },
+      play () {
+        let player = this.$refs.player
+        if (!this.start) {
+          player.play()
+          this.voice = '播放中'
+        } else {
+          player.pause()
+        }
+        this.start = !this.start
+      },
+      end () {
+        this.voice = '语音'
+      },
+      showContent (index) {
+        this.flag = !this.flag
+        this.detail = this.cards[index].content
       }
     }
   }
@@ -131,6 +167,23 @@
       border-width: 10px
       border-style: solid
       border-color: #fff transparent transparent transparent
+  .voice
+    top: 28%
+    right: 30px
+    position: absolute
+    background: #fff
+    font-size: 14px
+    color: #565556
+    padding: 6px 14px 6px 26px
+    border-radius: 14px
+  .voice-text:before
+    position: absolute
+    content: ''
+    border-width: 5px
+    border-style: solid
+    border-color: transparent transparent transparent #565556
+    left: 16px
+    top: 9px
   .container
     position: absolute
     top: 40%
@@ -175,20 +228,38 @@
     height: 180px
     margin-left: 20px
   .card-list
-    width: 520px
+    width: 500px
     padding: 4px
   .box
     position: relative
     display: inline-block
-    width: 500px
-    height: 168px
+    height: 160px
     left: 30px
+    font-size: 14px
+    overflow: hidden
     text-overflow: ellipsis
-    top: 12px
   .smallTitle
     color: red
     font-weight: bold
-    width: 220px
+    width: 200px
     border-bottom: 1px solid #A7C7C1
-    padding-bottom: 4px
+    padding-bottom: 6px
+  .smallIntro
+    width: 180px
+    margin-top: 6px
+    display: inline-block
+  .smallImg
+    height: 180px
+    width: 240px
+    position: relative
+    right: -56px
+  #mask
+    position: absolute
+    top: 0
+    height: 100vh
+    max-height: 100vh
+    max-width: 100%
+    width: 80%
+    background: #fff
+    padding: 10%
 </style>
