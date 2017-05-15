@@ -14,9 +14,7 @@
                   <img class="angle" src="../assets/pageSelect/angle2.png">
                 </div>
                 <div class="hall"><input type="text" v-model="hallInput" class="input"></div>
-                <div class="hall">四季南邮</div>
-                <div class="hall">四季南邮</div>
-                <div class="hall">四季南邮</div>
+                <div v-for="item in hallList" :key="item" class="hall">{{item.name}}</div>
               </div>
             </transition>
           </div>
@@ -36,14 +34,21 @@
     data () {
       return {
         city: '南京',
-        hall: '四季南邮',
+        currentHall: '四季南邮',
+        halls: [
+          {name: '四季南邮'},
+          {name: '华为研究所'}
+        ],
         hallInput: '',
         hallSelect: false
       }
     },
     computed: {
       hallList () {
-
+        let vm = this
+        return this.halls.filter((el) => {
+          return el.name.indexOf(vm.hallInput) !== -1
+        })
       }
     },
     methods: {
@@ -56,6 +61,7 @@
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
+//      console.log(this.halls)
     },
     mounted () {
       if (window.sessionStorage.getItem('city')) {
@@ -105,7 +111,7 @@
             color: rgb(130, 86, 65)
             appearance: none
             border: 0
-            background: url("../assets/pageSelect/angle1.png") no-repeat scroll right center transparent
+            background: url("../assets/pageSelect/angle1.png") no-repeat scroll 90% center transparent
             background-size: 16% 14%
           .select-hall
             z-index: 5
