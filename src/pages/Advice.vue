@@ -56,6 +56,7 @@
         background: rgba(0, 0, 0, 0)
         border: 1px solid rgba(0, 0, 0, 0.6)
         resize: none
+        font-size: 14px
       .advice-submit
         margin-top: 14px
         line-height: 34px

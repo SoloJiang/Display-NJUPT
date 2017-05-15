@@ -26,7 +26,11 @@ let instance = Axios.create({
 //      getOauthUrl()
       console.log('getOauthUrl')
     }
-    return JSON.parse(data).data
+    data = JSON.parse(data)
+    if (data.totalNum) {
+      window.sessionStorage.setItem('totalNum', data.totalNum)
+    }
+    return data.data
   }
 })
 

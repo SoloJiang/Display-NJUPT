@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <div id="home" v-bind:style="{ backgroundImage: `url(${background})`}">
     <player :banners="banners" :baseUrl="baseUrl"></player>
     <index-search></index-search>
     <index-section :sections="sections"></index-section>
@@ -17,7 +17,8 @@
       return {
         banners: [],
         sections: [],
-        baseUrl: this._Global.url
+        baseUrl: this._Global.url,
+        background: ''
       }
     },
     components: {
@@ -26,13 +27,15 @@
       IndexSection
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '展览馆'
       let exhibitionId = this.$route.query.exhibition_id
-      axios.all([this.getBanners(exhibitionId), this.getSections(exhibitionId)])
-        .then(axios.spread((banners, sections) => {
+      axios.all([this.getBanners(exhibitionId), this.getSections(exhibitionId), this.getIntro(exhibitionId)])
+        .then(axios.spread((banners, sections, intro) => {
           // Both requests are now complete
           this.banners = banners.data
           this.sections = sections.data
+          this.background = this.baseUrl + intro.data.background
+          document.getElementsByTagName('title')[0].innerHTML = intro.data.title
+          window.sessionStorage.setItem('intro', JSON.stringify(intro.data))
         }))
     },
     methods: {
@@ -41,7 +44,16 @@
       },
       getSections (exhibitionId) {
         return this.$http.get(`Index/getMenu?exhibition_id=${exhibitionId}`)
+      },
+      getIntro (exhibitionId) {
+        return this.$http.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+        document.getElementsByTagName('title')[0].innerHTML = intro.title
+      })
     }
   }
 </script>
@@ -50,6 +62,7 @@
   #home {
     min-height: 100vh;
     background: #FDFEDB;
+    background-size: cover
   }
 
   .footer {

@@ -2,13 +2,10 @@
   <div id="tourism">
     <div class="navbar">
       <ul>
-        <li @click="all" class="nav-item active"><span class="desc">全部</span></li>
-        <li @click="news" class="nav-item"><span class="desc">旅游资讯</span></li>
-        <li @click="hotSpots" class="nav-item"><span class="desc">旅游热点</span></li>
-        <li @click="information" class="nav-item"><span class="desc">旅游信息</span></li>
+        <li class="nav-item" v-for="(item, index) in list" v-bind:class="{ active: activeId === index }"><span class="desc" @click="tabItem(index, item.id)">{{item.title}}</span></li>
       </ul>
     </div>
-    <div class="info-wrapper" ref="infoWrapper">
+    <div class="info-wrapper" ref="infoWrapper" @scroll="getMore">
       <transition-group
         name="staggered-fade"
         tag="ul"
@@ -18,12 +15,12 @@
         v-on:leave="leave"
         class="fade-group"
       >
-        <li v-for="(item, index) in computedList" :key="item" :data-index="index" class="info-item">
-          <img :src="item">
+        <li v-for="(item, index) in imgs" :key="item" :data-index="index" class="info-item" @touchstart="routerGo(item.id)">
+          <img :src="baseUrl+item.thumb">
           <div class="text-wrapper">
-            <p>轻扫落叶 漫步山林</p>
-            <p>发布时间：2017-04-25</p>
-            <p>22:06:40</p>
+            <p>{{item.title}}</p>
+            <br>
+            <p>发布时间：{{item.createTime}}</p>
           </div>
         </li>
       </transition-group>
@@ -41,49 +38,29 @@
     data () {
       return {
         imgs: [],
-        selectList: 'tourism',
-        navList: document.getElementsByClassName('nav-item')
-      }
-    },
-    computed: {
-      computedList: function () {
-        let vm = this
-        return this.imgs.filter(function (item) {
-          return item.indexOf(vm.selectList) !== -1
-        })
+        list: [{id: '0', title: '全部'}],
+        navList: document.getElementsByClassName('nav-item'),
+        baseUrl: this._Global.url,
+        p: 1,
+        activeId: 0,
+        totalnum: 0,
+        flag: true
       }
     },
     methods: {
-      all: function () {
-        this.selectList = 'tourism'
-        this.activeNavItem(0)
+      tabItem (index, id) {
+        this.activeId = index
+        this.p = 1
+        this.totalnum = 0
+        this.getInfo(this.p, 6, id)
       },
-      news: function () {
-        this.selectList = 'tourism-1'
-        this.activeNavItem(1)
-      },
-      hotSpots: function () {
-        this.selectList = 'tourism-2'
-        this.activeNavItem(2)
-      },
-      information: function () {
-        this.selectList = 'tourism-3'
-        this.activeNavItem(3)
-      },
-      activeNavItem: function (index) {
-        for (let i = 0; i < this.navList.length; i++) {
-          this.navList[i].classList.remove('active')
-        }
-        this.navList[index].classList.add('active')
-      },
-
       // animate methods
       beforeEnter: function (el) {
         el.style.opacity = 0
         el.style.height = 0
       },
       enter: function (el, done) {
-        let delay = el.dataset.index * 150
+        let delay = el.dataset.index * 10
         setTimeout(function () {
           Velocity(
             el,
@@ -93,7 +70,7 @@
         }, delay)
       },
       leave: function (el, done) {
-        let delay = el.dataset.index * 150
+        let delay = el.dataset.index * 10
         setTimeout(function () {
           Velocity(
             el,
@@ -101,15 +78,47 @@
             { complete: done }
           )
         }, delay)
+      },
+      getInfo (p, num = 6, catId, more) {
+        let exhibitionId = this.$route.query.exhibition_id
+        this.$http.get(`News/lists?exhibition_id=${exhibitionId}&cat_id=${catId}&p=${p}&num=${num}`)
+          .then(res => {
+            this.totalnum = window.sessionStorage.getItem('totalNum')
+            if (!more) {
+              this.imgs = res.data
+            } else {
+              this.imgs = this.imgs.concat(res.data)
+              this.p = this.p + 1
+              this.flag = true
+            }
+          })
+      },
+      getMore () {
+        let that = this
+        let container = this.$refs.infoWrapper
+        if (container) {
+          let scrollMax = container.scrollHeight
+          if (that.flag && that.p * 6 < that.totalnum && scrollMax - container.scrollTop < 520) {
+            this.flag = false
+            this.getInfo(that.p, 6, this.list[this.activeId].id, true)
+          }
+        }
+      },
+      routerGo (id) {
+        this.$router.push(`/news_detail/${id}`)
       }
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '旅游信息查询'
-      let img1 = require('assets/pageTourism/tourism-1.jpg')
-      let img2 = require('assets/pageTourism/tourism-2.jpg')
-      let img3 = require('assets/pageTourism/tourism-3.jpg')
-      this.imgs = [img1, img2, img3, img1, img2, img3]
-
+      this.getInfo(1, 6, 0)
+      let exhibitionId = this.$route.query.exhibition_id
+      this.$http.get(`News/getCat?exhibition_id=${exhibitionId}`)
+        .then(res => {
+          if (res.data.length > 3) {
+            res.data = [res.data[0], res.data[1], res.data[2]]
+          }
+          this.list = this.list.concat(res.data)
+        })
       this.$nextTick(() => {
         this.scroll = new BScroll(this.$refs.infoWrapper, {
           click: true
@@ -153,7 +162,8 @@
             border-right: 1px solid rgb(177, 167, 152)
     .info-wrapper
       max-height: calc(100vh - 40px - 50px)
-      overflow: hidden
+      overflow: scroll
+      font-size: 14px
       .info-item
         display: flex
         margin-bottom: 10px
@@ -164,6 +174,7 @@
         img
           margin-left: 1vh
           height: 92%
+          width: 180px
         .text-wrapper
           margin-left: 1.5vh
           color: #fff

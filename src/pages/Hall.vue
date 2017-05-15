@@ -1,10 +1,10 @@
 <template>
-  <div id="hall">
+  <div id="hall" v-bind:style="{ backgroundImage: `url(${background})`}">
     <div class="hall-list">
       <div v-for="(item, index) in imgs" class="hall-item">
-        <img :src="item">
+        <img :src="baseUrl+item.thumb">
         <div class="navbar">
-          <div class="hall-select" @click="">第{{numberConvert[index]}}展厅</div>
+          <div class="hall-select" @click="routerDetail(item.id)">{{item.title}}</div>
           <div class="hall-essence" @click="">展品荟萃</div>
         </div>
       </div>
@@ -15,13 +15,15 @@
 
 <script>
   import footer from 'components/Footer'
-
+  let encodeHtml = require('../utils/encodeHtml').encodeHtml
   export default {
     name: 'hall',
     data () {
       return {
         imgs: [],
-        numberConvert: ['一', '二', '三', '四', '五', '六', '七', '八', '九']
+        p: 1,
+        baseUrl: this._Global.url,
+        backgound: ''
       }
     },
     components: {
@@ -29,22 +31,37 @@
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '常设展览'
-      let img1 = require('assets/pageHall/hall-1.jpg')
-      let img2 = require('assets/pageHall/hall-2.jpg')
-      let img3 = require('assets/pageHall/hall-3.jpg')
-      this.imgs = [img1, img2, img3, img1, img2, img3]
+      let type = this.$route.query.type
+      this.background = this.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
+      this.getInfo(type, 1, 6)
+    },
+    methods: {
+      getInfo (type, p, num) {
+        let id = this.$route.query.exhibition_id
+        this.$http.get(`Exhibition/hallLists?exhibition_id=${id}&type=${type}&p=${p}&num=${num}`)
+          .then(res => {
+            this.imgs = res.data
+            this.imgs.forEach(item => {
+              item.title = encodeHtml(item.title)
+            })
+          })
+      },
+      routerDetail (id) {
+        this.$router.push(`/exhibit_detail?exhibit_id=${id}`)
+      }
     }
   }
 </script>
 
 <style lang="sass" scoped>
   #hall
+    background-size: cover
+    min-height: 100vh
     .hall-list
       max-height: calc(100vh - 50px - 3vh)
       padding: 0 1vh
       .hall-item
         position: relative
-        margin-top: 1vh
         height: calc((100vh - 50px - 3vh) / 3)
         img
           width: 100%

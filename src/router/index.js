@@ -34,7 +34,7 @@ export default new Router({
       component: Profile
     },
     {
-      path: '/advice',
+      path: '/feedback',
       component: Advice
     },
     {
@@ -46,11 +46,11 @@ export default new Router({
       component: Essence
     },
     {
-      path: '/hall',
+      path: '/hall_lists',
       component: Hall
     },
     {
-      path: '/tourism',
+      path: '/news',
       component: Tourism
     },
     {
@@ -68,6 +68,10 @@ export default new Router({
     {
       path: '/cityselect',
       component: CitySelect
+    },
+    {
+      path: '/news_detail/:id',
+      component: Guide
     }
   ],
   scrollBehavior () {

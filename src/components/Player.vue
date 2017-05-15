@@ -32,7 +32,7 @@
     },
     methods: {
       slider () {
-        let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
+        let imgList = this.$refs.imgList
         let translateX
         let len = this.banners.length
         if (this.activeIndex + 1 === len) {
@@ -42,11 +42,16 @@
           this.activeIndex++
           translateX = -this.activeIndex * this.clientWidth
         }
-        imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
+        if (imgList) {
+          imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
+        }
       },
       timeCount () {
         this.timeout = setTimeout(() => {
-          this.$refs.imgList.classList.add('img-transition')
+          let imgList = this.$refs.imgList
+          if (imgList) {
+            imgList.classList.add('img-transition')
+          }
           this.slider()
           this.timeCount()
         }, 3000)
@@ -64,7 +69,7 @@
             clearTimeout(this.timeout)
             this.activeIndex = index
             this.$refs.imgList.classList.add('img-transition')
-            let imgList = this.$refs.imgList || document.querySelector('.imgs')[0]
+            let imgList = this.$refs.imgList
             let translateX = -this.activeIndex * this.clientWidth
             imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
             this.timeCount()

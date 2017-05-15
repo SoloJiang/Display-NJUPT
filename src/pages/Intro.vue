@@ -32,6 +32,7 @@
   /* eslint-disable no-useless-escape */
 
   import footer from 'components/Footer'
+  const encodeHtml = require('../utils/encodeHtml').encodeHtml
   export default {
     name: 'intro',
     data () {
@@ -75,7 +76,7 @@
           this.title = resArr[0].data.title
           this.temple = resArr[0].data.title
           resArr[1].data.forEach(item => {
-            item.content = this.encodeHtml(item.content)
+            item.content = encodeHtml(item.content)
           })
           this.cards = resArr[1].data
         })
@@ -95,18 +96,6 @@
           }
         }
       },
-      encodeHtml (str) {
-        let s = ''
-        if (str.length === 0) return ''
-        s = str.replace(/&amp;/g, '&')
-        s = s.replace(/&lt;/g, '<')
-        s = s.replace(/&gt;/g, '>')
-        s = s.replace(/&nbsp;/g, ' ')
-        s = s.replace(/&#39;/g, "\'")
-        s = s.replace(/&quot;/g, '"')
-        s = s.replace(/<br>/g, '\n')
-        return s
-      },
       play () {
         let player = this.$refs.player
         if (!this.start) {
@@ -114,6 +103,7 @@
           this.voice = '播放中'
         } else {
           player.pause()
+          this.voice = '语音'
         }
         this.start = !this.start
       },
@@ -193,6 +183,7 @@
     flex-direction: column
     flex-wrap: wrap
     overflow-x: auto
+    overflow-y: hidden
     -webkit-overflow-scrolling: touch
     width: 100%
   .card
@@ -229,15 +220,15 @@
     margin-left: 20px
   .card-list
     width: 500px
-    padding: 4px
   .box
     position: relative
-    display: inline-block
+    display: inline
     height: 160px
     left: 30px
     font-size: 14px
     overflow: hidden
     text-overflow: ellipsis
+    top: 30px
   .smallTitle
     color: red
     font-weight: bold
@@ -246,13 +237,15 @@
     padding-bottom: 6px
   .smallIntro
     width: 180px
-    margin-top: 6px
     display: inline-block
+    position: relative
+    top: -114px
   .smallImg
-    height: 180px
+    height: 172px
     width: 240px
     position: relative
-    right: -56px
+    right: -72px
+    top: -22px
   #mask
     position: absolute
     top: 0

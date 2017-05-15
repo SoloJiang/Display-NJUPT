@@ -117,17 +117,18 @@
             font-size: 14px
             color: rgb(7, 17, 27)
             text-align: center
+            background: transparent
             &.active
               height: 300px
               .current-hall
                 border-bottom: none
                 border-bottom-left-radius: 0
                 border-bottom-right-radius: 0
+                background: #E1E5D0
             .current-hall
               position: relative
               border: 1px solid rgb(214, 214, 214)
               border-radius: 5px
-              background: #fff
               .angle
                 position: absolute
                 top: 13px
@@ -137,7 +138,7 @@
             .hall
               border-left: 1px solid rgb(214, 214, 214)
               border-right: 1px solid rgb(214, 214, 214)
-              background: #fff
+              background: #E1E5D0
               input
                 height: 26px
                 border-radius: 5px

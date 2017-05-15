@@ -22,7 +22,12 @@
     },
     methods: {
       routerGo (index) {
-        this.$router.push(this.sections[index].name)
+        let name = this.sections[index].name
+        if (name.indexOf('https://') > -1 || name.indexOf('http://') > -1) {
+          window.location = name
+        } else {
+          this.$router.push(name)
+        }
       }
     }
   }
@@ -48,6 +53,7 @@
     margin-top: 4px
     width: 160px
     height: 110px
+    background: #5950A4
   .href-tip
     position: absolute
     top: 90px
