@@ -1,8 +1,8 @@
 <template>
   <div id="essence">
-    <div class="essence-wrapper" @scroll="getMore" ref="container">
+    <div class="essence-wrapper" @scroll="getMore" ref="container" @touchstart="routerGo($event)">
       <div class="essence-list">
-        <div v-for="img in imgList1" class="essence-item">
+        <div v-for="img in imgList1" class="essence-item" :key="img.id" :exhibit="img.id">
           <img :src="baseUrl+img.thumb">
           <div class="desc">{{img.title}}</div>
         </div>
@@ -34,22 +34,20 @@
         id: Number
       }
     },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        let hallId = to.query.hall_id
-        if (hallId) {
-          document.getElementsByTagName('title')[0].innerHTML = '展品列表'
-          vm.getInfo(true, hallId)
-          vm.check = true
-          vm.id = hallId
-        } else {
-          document.getElementsByTagName('title')[0].innerHTML = '精品列表'
-          let exhibitionId = to.query.exhibition_id
-          vm.getInfo(false, exhibitionId)
-          vm.check = false
-          vm.id = exhibitionId
-        }
-      })
+    created () {
+      let hallId = this.$route.query.hall_id
+      if (hallId) {
+        document.getElementsByTagName('title')[0].innerHTML = '展品列表'
+        this.getInfo(true, hallId)
+        this.check = true
+        this.id = hallId
+      } else {
+        document.getElementsByTagName('title')[0].innerHTML = '精品列表'
+        let exhibitionId = this.$route.query.exhibition_id
+        this.getInfo(false, exhibitionId)
+        this.check = false
+        this.id = exhibitionId
+      }
     },
     components: {
       'v-footer': footer
@@ -82,6 +80,15 @@
             this.getInfo(this.check, this.id)
             this.page++
           }
+        }
+      },
+      routerGo (e) {
+        let exhibitId = e.target.parentNode.getAttribute('exhibit')
+        if (exhibitId === undefined) {
+          exhibitId = e.target.getAttribute('exhibit')
+        }
+        if (exhibitId !== null) {
+          this.$router.push(`exhibit_detail?exhibit_id=${exhibitId}`)
         }
       }
     }

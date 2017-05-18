@@ -30,25 +30,34 @@
     created () {
       let id = this.$route.params.id
       let hallId = this.$route.query.hall_id
-      if (!hallId) {
-        if (!id) {
-          document.getElementsByTagName('title')[0].innerHTML = '参观指南'
-          let exhibitionId = this.$route.query.exhibition_id
-          this.$http.get(`Exhibition/getGuide?exhibition_id=${exhibitionId}`)
-            .then(res => {
-              this.content = encodeHtml(res.data.guideContent)
-            })
+      let exhibitId = this.$route.query.exhibit_id
+      if (exhibitId === undefined && exhibitId === null) {
+        if (hallId === undefined && hallId === null) {
+          if (id === undefined && id === null) {
+            document.getElementsByTagName('title')[0].innerHTML = '参观指南'
+            let exhibitionId = this.$route.query.exhibition_id
+            this.$http.get(`Exhibition/getGuide?exhibition_id=${exhibitionId}`)
+              .then(res => {
+                this.content = encodeHtml(res.data.guideContent)
+              })
+          } else {
+            document.getElementsByTagName('title')[0].innerHTML = '动态详情'
+            this.$http.get(`News/detail?news_id=${id}`)
+              .then(res => {
+                this.title = res.data.title
+                this.content = encodeHtml(res.data.content)
+              })
+          }
         } else {
-          document.getElementsByTagName('title')[0].innerHTML = '动态详情'
-          this.$http.get(`News/detail?news_id=${id}`)
+          document.getElementsByTagName('title')[0].innerHTML = '展厅详情'
+          this.$http.get(`Exhibition/hallDetail?hall_id=${hallId}`)
             .then(res => {
-              this.title = res.data.title
               this.content = encodeHtml(res.data.content)
             })
         }
       } else {
-        document.getElementsByTagName('title')[0].innerHTML = '展厅详情'
-        this.$http.get(`Exhibition/hallDetail?hall_id=${hallId}`)
+        document.getElementsByTagName('title')[0].innerHTML = '展品详情'
+        this.$http.get(`Exhibition/exhibitDetail?exhibit_id=${exhibitId}`)
           .then(res => {
             this.content = encodeHtml(res.data.content)
           })

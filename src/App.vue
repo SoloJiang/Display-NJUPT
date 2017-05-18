@@ -13,10 +13,8 @@
         baseUrl: this._Global.url
       }
     },
-    beforeRouteEnter (to, from, next) {
-      next((vm) => {
-        vm.background = vm.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
-      })
+    created () {
+      this.background = this.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
     }
   }
 </script>
