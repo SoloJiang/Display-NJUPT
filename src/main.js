@@ -54,9 +54,11 @@ router.beforeEach((to, from, next) => {
             instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
                 .then(res => {
                   window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+                  next()
                 })
+          } else {
+            next()
           }
-          next()
         })
     } else {
       to.query.exhibition_id = sessionStorage.getItem('exhibition_id')
