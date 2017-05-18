@@ -18,7 +18,8 @@
         banners: [],
         sections: [],
         baseUrl: this._Global.url,
-        background: ''
+        background: '',
+        title: ''
       }
     },
     components: {
@@ -43,13 +44,10 @@
         return this.$http.get(`Index/getMenu?exhibition_id=${exhibitionId}`)
       }
     },
-    beforeRouteEnter (to, from, next) {
-      next(() => {
-        let intro = JSON.parse(window.sessionStorage.getItem('intro'))
-        if (intro) {
-          document.getElementsByTagName('title')[0].innerHTML = intro.title
-        }
-      })
+    mounted () {
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this.title = intro.title
+      document.getElementsByTagName('title')[0].innerHTML = this.title
     }
   }
 </script>
