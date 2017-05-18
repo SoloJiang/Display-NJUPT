@@ -24,7 +24,8 @@
     },
     props: {
       banners: {
-        type: Array
+        type: Array,
+        default: []
       },
       baseUrl: {
         type: String

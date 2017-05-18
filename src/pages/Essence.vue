@@ -1,16 +1,16 @@
 <template>
   <div id="essence">
-    <div class="essence-wrapper">
+    <div class="essence-wrapper" @scroll="getMore" ref="container">
       <div class="essence-list">
         <div v-for="img in imgList1" class="essence-item">
-          <img :src="img">
-          <div class="desc">馆藏珍品</div>
+          <img :src="baseUrl+img.thumb">
+          <div class="desc">{{img.title}}</div>
         </div>
       </div>
       <div class="essence-list">
         <div v-for="img in imgList2" class="essence-item">
-          <img :src="img">
-          <div class="desc">馆藏珍品</div>
+          <img :src="baseUrl+img.thumb">
+          <div class="desc">{{img.title}}</div>
         </div>
       </div>
     </div>
@@ -25,36 +25,72 @@
     name: 'essence',
     data () {
       return {
-        imgs: [],
         imgList1: [],
-        imgList2: []
+        imgList2: [],
+        baseUrl: this._Global.url,
+        page: 1,
+        flag: true,
+        check: Boolean,
+        id: Number
       }
     },
-    created () {
-      document.getElementsByTagName('title')[0].innerHTML = '馆藏精品'
-      let img1 = require('assets/pageMuseum/exhibition-1.jpg')
-      let img2 = require('assets/pageMuseum/exhibition-2.jpg')
-      let img3 = require('assets/pageMuseum/exhibition-3.jpg')
-      let img4 = require('assets/pageMuseum/exhibition-4.jpg')
-      let img5 = require('assets/pageMuseum/exhibition-5.jpg')
-      this.imgs = [img1, img2, img3, img4, img5, img1, img2, img3, img4, img5, img1, img2, img3, img4, img5, img1, img2, img3, img4, img5]
-      for (let i = 0; i < this.imgs.length; i++) {
-        if (i % 2) {
-          this.imgList1.push(this.imgs[i])
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        let hallId = to.query.hall_id
+        if (hallId) {
+          document.getElementsByTagName('title')[0].innerHTML = '展品列表'
+          vm.getInfo(true, hallId)
+          vm.check = true
+          vm.id = hallId
         } else {
-          this.imgList2.push(this.imgs[i])
+          document.getElementsByTagName('title')[0].innerHTML = '精品列表'
+          let exhibitionId = to.query.exhibition_id
+          vm.getInfo(false, exhibitionId)
+          vm.check = false
+          vm.id = exhibitionId
         }
-      }
+      })
     },
     components: {
       'v-footer': footer
+    },
+    methods: {
+      getInfo (flag, id) {
+        let variable
+        if (flag) {
+          variable = `hall_id=${id}`
+        } else {
+          variable = `exhibition_id=${id}&type=1`
+        }
+        this.$http.get(`Exhibition/exhibitLists?${variable}&p=${this.page}&num=10`)
+          .then(res => {
+            for (let i = 0; i < res.data.length; i++) {
+              if (i % 2) {
+                this.imgList1.push(res.data[i])
+              } else {
+                this.imgList2.push(res.data[i])
+              }
+            }
+          })
+      },
+      getMore () {
+        let totalNum = window.sessionStorage.getItem('totalNum')
+        let container = this.$refs.container
+        if (container) {
+          let scrollMax = container.scrollHeight
+          if (this.flag && this.p * 10 < totalNum && scrollMax - container.scrollTop < 520) {
+            this.getInfo(this.check, this.id)
+            this.page++
+          }
+        }
+      }
     }
   }
 </script>
 
 <style lang="sass" scoped>
   #essence
-    margin: 1vh 1vh 0 0
+    margin: 0 1vh 0 0
     font-size: 0
     .essence-list
       float: left
@@ -64,6 +100,7 @@
         margin-bottom: 1vh
         img
           width: 100%
+          height: auto
         .desc
           font-size: 14px
           color: #fff

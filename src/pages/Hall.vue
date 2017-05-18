@@ -1,11 +1,11 @@
 <template>
-  <div id="hall" v-bind:style="{ backgroundImage: `url(${background})`}">
+  <div id="hall">
     <div class="hall-list">
       <div v-for="(item, index) in imgs" class="hall-item">
         <img :src="baseUrl+item.thumb">
         <div class="navbar">
           <div class="hall-select" @click="routerDetail(item.id)">{{item.title}}</div>
-          <div class="hall-essence" @click="">展品荟萃</div>
+          <div class="hall-essence" @click="routerItem(item.id)">展品荟萃</div>
         </div>
       </div>
     </div>
@@ -22,8 +22,7 @@
       return {
         imgs: [],
         p: 1,
-        baseUrl: this._Global.url,
-        backgound: ''
+        baseUrl: this._Global.url
       }
     },
     components: {
@@ -32,7 +31,6 @@
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '常设展览'
       let type = this.$route.query.type
-      this.background = this.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
       this.getInfo(type, 1, 6)
     },
     methods: {
@@ -47,7 +45,10 @@
           })
       },
       routerDetail (id) {
-        this.$router.push(`/exhibit_detail?exhibit_id=${id}`)
+        this.$router.push(`/hall_detail?hall_id=${id}`)
+      },
+      routerItem (id) {
+        this.$router.push(`/exhibit?hall_id=${id}`)
       }
     }
   }
@@ -55,8 +56,6 @@
 
 <style lang="sass" scoped>
   #hall
-    background-size: cover
-    min-height: 100vh
     .hall-list
       max-height: calc(100vh - 50px - 3vh)
       padding: 0 1vh

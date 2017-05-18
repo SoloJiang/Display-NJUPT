@@ -42,7 +42,7 @@ export default new Router({
       component: Guide
     },
     {
-      path: '/essence',
+      path: '/exhibit',
       component: Essence
     },
     {
@@ -62,7 +62,7 @@ export default new Router({
       component: Donate
     },
     {
-      path: '/hallselect',
+      path: '/checkExhibition',
       component: HallSelect
     },
     {
@@ -71,6 +71,14 @@ export default new Router({
     },
     {
       path: '/news_detail/:id',
+      component: Guide
+    },
+    {
+      path: '/exhibit_detail',
+      component: Guide
+    },
+    {
+      path: '/hall_detail',
       component: Guide
     }
   ],

@@ -109,12 +109,12 @@
       },
       rawSelectCity (city) {
         window.sessionStorage.setItem('city', city)
-        this.$router.push('/hallselect')
+        this.$router.push('/checkExhibition')
       },
       selectCity (city, event) {
         if (!event._constructed) return
         window.sessionStorage.setItem('city', city)
-        this.$router.push('/hallselect')
+        this.$router.push('/checkExhibition')
       }
     },
     computed: {

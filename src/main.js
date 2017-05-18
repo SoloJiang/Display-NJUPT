@@ -23,8 +23,7 @@ let instance = Axios.create({
   },
   transformResponse (data) {
     if (data.errcode === '1') {
-//      getOauthUrl()
-      console.log('getOauthUrl')
+      getOauthUrl()
     }
     data = JSON.parse(data)
     if (data.totalNum) {
@@ -40,47 +39,41 @@ Vue.prototype._Global = {
   url: 'http://exhibition.mobapp.cn'
 }
 router.beforeEach((to, from, next) => {
-  to.query.exhibition_id = 9
-  next()
-//   const token = sessionStorage.getItem('token')
-//   const code = to.query.code
-//   const exhibitionId = to.query.exhibition_id
-//   if ((token !== 'null' && token !== null) || (code !== undefined && code !== 'undefined') || (exhibitionId !== undefined && exhibitionId !== 'undefined')) {
-//     if (code !== undefined && code !== 'undefined') {
-//       instance.get(`Index/getToken?code=${code}`)
-//         .then(res => {
-//           if (res.data.errcode === '0') {
-//             sessionStorage.setItem('token', res.data.token)
-//             sessionStorage.setItem('exhibition_id', res.data.exhibition_id)
-//           }
-//         })
-//     }
-//     next()
-//   } else {
-//     getOauthUrl()
-//   }
+  const token = sessionStorage.getItem('token')
+  const code = to.query.code
+  const exhibitionId = to.query.exhibition_id
+  if ((token !== 'null' && token !== null) || (code !== undefined && code !== 'undefined') || (exhibitionId !== undefined && exhibitionId !== 'undefined')) {
+    if (code !== undefined && code !== 'undefined') {
+      instance.get(`Index/getToken?code=${code}`)
+        .then(res => {
+          sessionStorage.setItem('token', res.data.token)
+          sessionStorage.setItem('exhibition_id', res.data.token)
+          to.query.exhibition_id = res.data.exhibition_id
+          let intro = sessionStorage.getItem('intro')
+          if (!intro) {
+            instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
+                .then(res => {
+                  window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+                })
+          }
+          next()
+        })
+    } else {
+      to.query.exhibition_id = sessionStorage.getItem('exhibition_id')
+      next()
+    }
+  } else {
+    getOauthUrl()
+  }
 })
-//
-// let getOauthUrl = () => {
-//   let href = window.location.href
-//   instance.post('Index/getOauthUrl', {oauthRedirectUri: href})
-//       .then(res => {
-//         window.location = res.data.oauthUrl
-//       })
-// }
 
-Vue.filter('encodeHtml', str => {
-  let s = ''
-  if (str.length === 0) return ''
-  s = str.replace(/&amp;/g, '&')
-  s = s.replace(/&lt;/g, '<')
-  s = s.replace(/&gt;/g, '>')
-  s = s.replace(/&nbsp;/g, ' ')
-  s = s.replace(/&#39;/g, "\'")
-  s = s.replace(/&quot;/g, '"')
-  s = s.replace(/<br>/g, '\n')
-  return s
-})
+let getOauthUrl = () => {
+  let href = window.location.href
+  instance.post('Index/getOauthUrl', {oauthRedirectUri: href})
+      .then(res => {
+        window.location = res.data.oauthUrl
+      })
+}
 
 new Vue({
   el: '#app',

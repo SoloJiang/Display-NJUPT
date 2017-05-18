@@ -108,25 +108,29 @@
         this.$router.push(`/news_detail/${id}`)
       }
     },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        document.getElementsByTagName('title')[0].innerHTML = '旅游信息查询'
+        vm.getInfo(1, 6, 0)
+        let exhibitionId = this.$route.query.exhibition_id
+        vm.$http.get(`News/getCat?exhibition_id=${exhibitionId}`)
+          .then(res => {
+            if (res.data.length > 3) {
+              res.data = [res.data[0], res.data[1], res.data[2]]
+            }
+            vm.list = vm.list.concat(res.data)
+          })
+      })
+    },
+    components: {
+      'v-footer': footer
+    },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '旅游信息查询'
-      this.getInfo(1, 6, 0)
-      let exhibitionId = this.$route.query.exhibition_id
-      this.$http.get(`News/getCat?exhibition_id=${exhibitionId}`)
-        .then(res => {
-          if (res.data.length > 3) {
-            res.data = [res.data[0], res.data[1], res.data[2]]
-          }
-          this.list = this.list.concat(res.data)
-        })
       this.$nextTick(() => {
         this.scroll = new BScroll(this.$refs.infoWrapper, {
           click: true
         })
       })
-    },
-    components: {
-      'v-footer': footer
     }
   }
 </script>

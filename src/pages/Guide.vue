@@ -29,8 +29,8 @@
     },
     created () {
       let id = this.$route.params.id
-      let exhibitId = this.$route.query.exhibit_id
-      if (!exhibitId) {
+      let hallId = this.$route.query.hall_id
+      if (!hallId) {
         if (!id) {
           document.getElementsByTagName('title')[0].innerHTML = '参观指南'
           let exhibitionId = this.$route.query.exhibition_id
@@ -48,7 +48,7 @@
         }
       } else {
         document.getElementsByTagName('title')[0].innerHTML = '展厅详情'
-        this.$http.get(`Exhibition/hallDetail?hall_id=${exhibitId}`)
+        this.$http.get(`Exhibition/hallDetail?hall_id=${hallId}`)
           .then(res => {
             this.content = encodeHtml(res.data.content)
           })

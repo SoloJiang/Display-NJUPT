@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app"  v-bind:style="{ backgroundImage: `url(${background})`}">
     <router-view></router-view>
   </div>
 </template>
@@ -7,7 +7,17 @@
 <script>
   export default {
     name: 'app',
-    components: {}
+    data () {
+      return {
+        background: '',
+        baseUrl: this._Global.url
+      }
+    },
+    beforeRouteEnter (to, from, next) {
+      next((vm) => {
+        vm.background = vm.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
+      })
+    }
   }
 </script>
 
@@ -22,4 +32,7 @@
     font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
+    min-height: 100vh
+    background: #FDFEDB
+    background-size: cover
 </style>
