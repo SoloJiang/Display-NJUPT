@@ -61,19 +61,21 @@
 </template>
 
 <script>
+  /* eslint-disable no-unexpected-multiline,no-sequences */
+
   import footer from 'components/Footer'
   import CityResult from 'components/CityResult'
   import BScroll from 'better-scroll'
-  import cityData from 'assets/pageSelect/china-city-data.json'
-  import hotCityData from 'assets/pageSelect/hot-city-data.json'
-
+  import axios from 'axios'
+  import city from '../assets/pageSelect/china-city-data.json'
+  import hotCity from '../assets/pageSelect/hot-city-data.json'
   export default {
     name: 'citySelect',
     data () {
       return {
         currentCity: '南京',
-        city: cityData,
-        hotCity: hotCityData,
+        city: city,
+        hotCity: hotCity,
         heightList: [],
         scrollY: 0,
         cityInput: ''
@@ -134,6 +136,13 @@
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
+      axios.all([axios.get('http://exhibition.mobapp.cn/api/Index/getCity'), axios.get('http://exhibition.mobapp.cn/api/Index/getHotCity')])
+        .then(axios.spread((city, hotCity) => {
+          this.city = city.data
+          this.hotCity = hotCity.data
+          this._initScroll()
+          this._calculateHeight()
+        }))
       this.$nextTick(() => {
         this._initScroll()
         this._calculateHeight()
@@ -149,6 +158,8 @@
 <style lang="sass" scoped>
   #city-select
     margin-right: 22px
+    background: #fff
+    min-height: 100vh
     .searchbar
       position: relative
       padding-left: 10px

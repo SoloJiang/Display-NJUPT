@@ -17,7 +17,7 @@
       this.$nextTick(() => {
         setTimeout(() => {
           this.background = this.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
-        }, 100)
+        }, 200)
       })
     }
   }

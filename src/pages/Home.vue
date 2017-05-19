@@ -35,6 +35,9 @@
           this.banners = banners.data
           this.sections = sections.data
         }))
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this.title = intro.title
+      document.getElementsByTagName('title')[0].innerHTML = this.title
     },
     methods: {
       getBanners (exhibitionId) {

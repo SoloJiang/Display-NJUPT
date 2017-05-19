@@ -10,15 +10,15 @@
             <transition name="fold">
               <div class="select-hall" :class="{'active': hallSelect}">
                 <div class="current-hall" @click="showSelect">
-                  四季南邮
+                  {{currentHall.title}}
                   <img class="angle" src="../assets/pageSelect/angle2.png">
                 </div>
-                <div class="hall"><input type="text" v-model="hallInput" class="input"></div>
-                <div v-for="item in hallList" :key="item" class="hall">{{item.name}}</div>
+                <div class="hall" v-show="halls.length !== 0"><input type="text" v-model="hallInput" class="input"></div>
+                <div v-for="item in hallList" :key="item.id" class="hall" :data-id="item.id" @touchstart="chooseHall(item)">{{item.title}}</div>
               </div>
             </transition>
           </div>
-          <div class="advice-submit">提交</div>
+          <div class="advice-submit" @touchstart="submit">提交</div>
         </form>
       </div>
       <v-footer></v-footer>
@@ -28,27 +28,24 @@
 
 <script>
   import footer from 'components/Footer'
-  let getCity = require('../utils/getCity').getCity
   export default {
     name: 'hallSelect',
     data () {
       return {
-        city: '南京',
-        currentHall: '四季南邮',
-        halls: [
-          {name: '四季南邮'},
-          {name: '华为研究所'}
-        ],
+        city: '北京',
+        currentHall: {},
+        halls: [],
         hallInput: '',
         hallSelect: false,
-        title: ''
+        title: '',
+        flag: true
       }
     },
     computed: {
       hallList () {
         let vm = this
         return this.halls.filter((el) => {
-          return el.name.indexOf(vm.hallInput) !== -1
+          return el.title.indexOf(vm.hallInput) !== -1
         })
       }
     },
@@ -58,6 +55,22 @@
       },
       showSelect () {
         this.hallSelect = !this.hallSelect
+      },
+      submit () {
+        if (this.flag) {
+          this.flag = false
+          let token = window.sessionStorage.getItem('token')
+          let id = this.currentHall.id
+          this.$http.get(`checkExhibition?token=${token}&exhibition_id=${id}`)
+            .then(() => {
+              this.title = this.currentHall.title
+              this.flag = true
+            })
+        }
+      },
+      chooseHall (item) {
+        this.currentHall = item
+        this.hallSelect = !this.hallSelect
       }
     },
     created () {
@@ -65,7 +78,6 @@
 //      console.log(this.halls)
       let intro = window.sessionStorage.getItem('intro')
       this.title = JSON.parse(intro).title
-      getCity()
     },
     mounted () {
       if (window.sessionStorage.getItem('city')) {
@@ -74,6 +86,21 @@
     },
     components: {
       'v-footer': footer
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        let city = window.sessionStorage.getItem('city') || '北京'
+        vm.$http.get(`Exhibition/lists?city=${city}`)
+          .then(res => {
+            if (res.data) {
+              vm.halls = res.data
+              vm.currentHall = res.data[0]
+            } else {
+              vm.halls = []
+              vm.currentHall = {}
+            }
+          })
+      })
     }
   }
 </script>
