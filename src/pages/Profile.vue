@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="content">
-      <div v-for="item in items" :key="item.id">
+      <div v-for="item in items" :key="item.id" @touchstart="routerGo(item.path)">
         <span class="content-desc">{{ item.desc }}</span>
         <i class="icon-angle-right"></i>
       </div>
@@ -37,15 +37,13 @@
         items: [
           {
             id: 1,
-            desc: '意见建议'
+            desc: '意见建议',
+            path: '/feedback'
           },
           {
             id: 2,
-            desc: '捐赠'
-          },
-          {
-            id: 3,
-            desc: '预约'
+            desc: '捐赠',
+            path: '/donate'
           },
           {
             id: 4,
@@ -60,12 +58,21 @@
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '个人中心'
       this.avatarUrl = require('../assets/pageProfile/avatar.png')
+    },
+    methods: {
+      routerGo (path) {
+        if (path !== undefined) {
+          this.$router.push(path)
+        }
+      }
     }
   }
 </script>
 
 <style lang="sass" scoped>
   #profile
+    background: #fff
+    min-height: 100vh
     .header-wrapper
       width: 100%
       height: 30vh
@@ -82,6 +89,7 @@
           font-size: 18px
           color: rgb(255, 255, 255)
     .content
+      margin-top: 40px
       padding: 14px 20px 0 20px
       .content-desc
         display: inline-block
@@ -103,7 +111,7 @@
         &:last-child
           border-bottom: 1px solid rgba(7, 17, 27, 0.2)
     .logout
-      margin: 24px 20px 0 20px
+      margin: 60px 20px 0 20px
       line-height: 50px
       height: 50px
       font-size: 16px

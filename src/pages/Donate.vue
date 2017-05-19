@@ -1,25 +1,25 @@
 <template>
   <div id="museum-advice">
     <div class="reel">
-      <h2 class="title">四季南邮</h2>
+      <h2 class="title">{{tit}}</h2>
       <form action="#" class="form-donate">
         <label for="name">
-          捐赠人姓名<input type="text" class="input-name">
+          捐赠人姓名<input type="text" class="input-name" v-model="name">
         </label>
         <label for="contact">
-          联系方式<input type="tel" class="input-contact">
+          联系方式<input type="tel" class="input-contact" v-model="tel">
         </label>
         <label for="thing">
-          捐赠物品名称<input type="text" class="input-thing">
+          捐赠物品名称<input type="text" class="input-thing" v-model="title">
         </label>
         <label for="desc">
-          说明<textarea name="desc" class="input-desc" placeholder="请说明捐赠物品，并留下联系方式， 我们会及时跟您联系！"></textarea>
+          说明<textarea name="desc" class="input-desc" placeholder="请说明捐赠物品，并留下联系方式， 我们会及时跟您联系！" v-model="content"></textarea>
         </label>
         <div class="tel">
           <i class="icon-phone"></i>
-          4000211314
+          {{phone}}
         </div>
-        <div class="advice-submit">提交</div>
+        <div class="advice-submit" @touchstart="submit">提交</div>
       </form>
     </div>
     <v-footer></v-footer>
@@ -28,13 +28,59 @@
 
 <script>
   import footer from 'components/Footer'
+  import util from '../utils/encodeHtml'
   export default {
     name: 'museum-advice',
+    data () {
+      return {
+        phone: '',
+        tit: '',
+        name: '',
+        title: '',
+        tel: '',
+        content: '',
+        flag: true
+      }
+    },
     components: {
       'v-footer': footer
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '捐赠'
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      if (intro) {
+        this.tit = intro.title
+      }
+    },
+    methods: {
+      submit () {
+        if (this.name.length !== 0 && this.tel.length !== 0 && this.title.length !== 0 && this.content.length !== 0) {
+          let that = this
+          this.name = util.xssFilter(this.name)
+          this.tel = util.xssFilter(this.tel)
+          this.title = util.xssFilter(this.title)
+          this.content = util.xssFilter(this.content)
+          if (this.flag) {
+            this.flag = false
+            let exhibitonId = this.$route.query.exhibition_id
+            let token = window.sessionStorage.getItem('token')
+            this.$http.post(`User/donate?token=${token}&exhibition_id=${exhibitonId}`, {
+              name: that.name,
+              title: that.title,
+              tel: that.tel,
+              content: that.content
+            }).then(() => {
+              window.alert('提交成功')
+              this.name = ''
+              this.tel = ''
+              this.title = ''
+              this.content = ''
+            })
+          }
+        } else {
+          window.alert('信息不能留空')
+        }
+      }
     }
   }
 </script>

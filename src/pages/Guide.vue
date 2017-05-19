@@ -31,9 +31,9 @@
       let id = this.$route.params.id
       let hallId = this.$route.query.hall_id
       let exhibitId = this.$route.query.exhibit_id
-      if (exhibitId === undefined && exhibitId === null) {
-        if (hallId === undefined && hallId === null) {
-          if (id === undefined && id === null) {
+      if (exhibitId === undefined || exhibitId === null) {
+        if (hallId === undefined || hallId === null) {
+          if (id === undefined || id === null) {
             document.getElementsByTagName('title')[0].innerHTML = '参观指南'
             let exhibitionId = this.$route.query.exhibition_id
             this.$http.get(`Exhibition/getGuide?exhibition_id=${exhibitionId}`)

@@ -15,4 +15,10 @@ const encodeHtml = str => {
   return s
 }
 
+const xssFilter = str => {
+  if (str.length === 0) return ''
+  return str.replace(/<script.*?>.*?<\/script>/ig, '')
+}
+
 module.exports.encodeHtml = encodeHtml
+module.exports.xssFilter = xssFilter

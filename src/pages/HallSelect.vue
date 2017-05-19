@@ -2,7 +2,7 @@
   <transition name="fade">
     <div id="hall-select">
       <div class="reel">
-        <h2 class="title">四季南邮</h2>
+        <h2 class="title">{{title}}</h2>
         <form action="#" class="form-donate">
           <label>选择默认展览馆</label>
           <div class="flex-container">
@@ -28,7 +28,7 @@
 
 <script>
   import footer from 'components/Footer'
-
+  let getCity = require('../utils/getCity').getCity
   export default {
     name: 'hallSelect',
     data () {
@@ -40,7 +40,8 @@
           {name: '华为研究所'}
         ],
         hallInput: '',
-        hallSelect: false
+        hallSelect: false,
+        title: ''
       }
     },
     computed: {
@@ -62,6 +63,9 @@
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
 //      console.log(this.halls)
+      let intro = window.sessionStorage.getItem('intro')
+      this.title = JSON.parse(intro).title
+      getCity()
     },
     mounted () {
       if (window.sessionStorage.getItem('city')) {

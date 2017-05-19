@@ -1,15 +1,14 @@
 <template>
   <div id="museum-advice">
     <div class="reel">
-      <div class="title">四季南邮</div>
+      <div class="title">{{title}}</div>
       <div class="desc">您有什么意见或建议请告诉我们</div>
       <form action="#">
-        <textarea name="advice" class="advice-input" placeholder="您的宝贵意见，就是我们前进的动力"></textarea>
-        <div class="advice-submit">提交</div>
+        <textarea name="advice" class="advice-input" placeholder="您的宝贵意见，就是我们前进的动力" v-model="content"></textarea>
+        <div class="advice-submit" @touchstart="submit">提交</div>
       </form>
       <div class="tel">
         <i class="icon-phone"></i>
-        4000211314
       </div>
     </div>
     <v-footer></v-footer>
@@ -18,13 +17,45 @@
 
 <script>
   import footer from 'components/Footer'
+  import util from '../utils/encodeHtml'
   export default {
     name: 'museum-advice',
+    data () {
+      return {
+        content: '',
+        title: ''
+      }
+    },
     components: {
       'v-footer': footer
     },
     created () {
       document.getElementsByTagName('title')[0].innerHTML = '意见建议'
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      if (intro) {
+        this.title = intro.title
+      }
+    },
+    methods: {
+      submit () {
+        if (this.content.length !== 0) {
+          let that = this
+          this.content = util.xssFilter(this.content)
+          if (this.flag) {
+            this.flag = false
+            let exhibitonId = this.$route.query.exhibition_id
+            let token = window.sessionStorage.getItem('token')
+            this.$http.post(`User/feedback?token=${token}&exhibition_id=${exhibitonId}`, {
+              content: that.content
+            }).then(() => {
+              window.alert('提交成功')
+              this.content = ''
+            })
+          }
+        } else {
+          window.alert('信息不能留空')
+        }
+      }
     }
   }
 </script>
