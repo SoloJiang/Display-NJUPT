@@ -41,9 +41,14 @@ Vue.prototype._Global = {
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token')
   const code = to.query.code
-  const exhibitionId = from.query.exhibition_id || to.query.exhibition_id
-  if ((token === 'null' && token === null) || (code !== undefined && code !== 'undefined') || (exhibitionId !== undefined && exhibitionId !== 'undefined')) {
-    if (code !== undefined && code !== 'undefined') {
+//  const exhibitionId = window.sessionStorage.getItem('exhibition_id') || to.query.exhibition_id
+  let exhibitionId = window.sessionStorage.getItem('exhibition_id')
+  if (exhibitionId === '' || exhibitionId === null) {
+    window.sessionStorage.setItem('exhibition_id', to.query.exhibition_id)
+    exhibitionId = to.query.exhibition_id
+  }
+  if ((token !== 'null' && token !== null) || (exhibitionId !== undefined && exhibitionId !== 'undefined') || (code !== undefined && code !== 'undefined')) {
+    if (token === null && (code !== undefined && code !== 'undefined')) {
       instance.get(`Index/getToken?code=${code}`)
         .then(res => {
           sessionStorage.setItem('token', res.data.token)
@@ -61,7 +66,7 @@ router.beforeEach((to, from, next) => {
             next()
           }
         })
-    } else {
+    } else if (exhibitionId !== undefined || exhibitionId !== 'undefined') {
       instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
         .then(res => {
           window.sessionStorage.setItem('intro', JSON.stringify(res.data))
@@ -71,7 +76,7 @@ router.beforeEach((to, from, next) => {
         })
     }
   } else {
-    to.query.exhibition_id = sessionStorage.getItem('exhibition_id')
+    to.query.exhibition_id = exhibitionId
     getOauthUrl()
   }
   // 对线上情况依旧用测试id进行模拟
