@@ -14,11 +14,19 @@
       }
     },
     created () {
-      this.$nextTick(() => {
-        setTimeout(() => {
-          this.background = this.baseUrl + JSON.parse(window.sessionStorage.getItem('intro')).background
-        }, 200)
-      })
+      this.back()
+    },
+    methods: {
+      back () {
+        let intro = window.sessionStorage.getItem('intro')
+        if (!intro) {
+          setTimeout(() => {
+            this.back()
+          }, 100)
+        } else {
+          this.background = this.baseUrl + JSON.parse(intro).background
+        }
+      }
     }
   }
 </script>

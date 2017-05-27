@@ -36,7 +36,7 @@
           this.sections = sections.data
         }))
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
-      this.title = intro.title
+      this.title = intro.title || '展览馆'
       document.getElementsByTagName('title')[0].innerHTML = this.title
     },
     methods: {
@@ -49,7 +49,7 @@
     },
     mounted () {
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
-      this.title = intro.title
+      this.title = intro.title || '展览馆'
       document.getElementsByTagName('title')[0].innerHTML = this.title
     }
   }

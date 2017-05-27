@@ -1,4 +1,4 @@
-/* eslint-disable no-new,no-undef,eqeqeq,no-useless-escape */
+/* eslint-disable no-new,no-undef,eqeqeq,no-useless-escape,no-const-assign */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
@@ -39,42 +39,49 @@ Vue.prototype._Global = {
   url: 'http://exhibition.mobapp.cn'
 }
 router.beforeEach((to, from, next) => {
-  // const token = sessionStorage.getItem('token')
-  // const code = to.query.code
-  // const exhibitionId = to.query.exhibition_id
-  // if ((token !== 'null' && token !== null) || (code !== undefined && code !== 'undefined') || (exhibitionId !== undefined && exhibitionId !== 'undefined')) {
-  //   if (code !== undefined && code !== 'undefined') {
-  //     instance.get(`Index/getToken?code=${code}`)
-  //       .then(res => {
-  //         sessionStorage.setItem('token', res.data.token)
-  //         sessionStorage.setItem('exhibition_id', res.data.token)
-  //         to.query.exhibition_id = res.data.exhibition_id
-  //         let intro = sessionStorage.getItem('intro')
-  //         if (!intro) {
-  //           instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
-  //               .then(res => {
-  //                 window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-  //                 next()
-  //               })
-  //         } else {
-  //           next()
-  //         }
-  //       })
-  //   } else {
-  //     to.query.exhibition_id = sessionStorage.getItem('exhibition_id')
-  //     next()
-  //   }
-  // } else {
-  //   getOauthUrl()
-  // }
+  const token = sessionStorage.getItem('token')
+  const code = to.query.code
+  const exhibitionId = from.query.exhibition_id || to.query.exhibition_id
+  if ((token === 'null' && token === null) || (code !== undefined && code !== 'undefined') || (exhibitionId !== undefined && exhibitionId !== 'undefined')) {
+    if (code !== undefined && code !== 'undefined') {
+      instance.get(`Index/getToken?code=${code}`)
+        .then(res => {
+          sessionStorage.setItem('token', res.data.token)
+          sessionStorage.setItem('exhibition_id', res.data.exhibition_id)
+          from.query.exhibition_id = res.data.exhibition_id
+          to.query.exhibition_id = res.data.exhibition_id
+          let intro = sessionStorage.getItem('intro')
+          if (!intro) {
+            instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
+                .then(res => {
+                  window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+                  next()
+                })
+          } else {
+            next()
+          }
+        })
+    } else {
+      instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
+        .then(res => {
+          window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+          sessionStorage.setItem('exhibition_id', exhibitionId)
+          to.query.exhibition_id = exhibitionId
+          next()
+        })
+    }
+  } else {
+    to.query.exhibition_id = sessionStorage.getItem('exhibition_id')
+    getOauthUrl()
+  }
   // 对线上情况依旧用测试id进行模拟
-  let exhibitionId = 9
-  instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
-    .then(res => {
-      window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-      to.query.exhibition_id = exhibitionId
-      next()
-    })
+  // let exhibitionId = 9
+  // instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
+  //   .then(res => {
+  //     window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+  //     to.query.exhibition_id = exhibitionId
+  //     next()
+  //   })
 })
 
 let getOauthUrl = () => {
