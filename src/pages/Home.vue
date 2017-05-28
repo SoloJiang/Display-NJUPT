@@ -38,6 +38,7 @@
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this.title = intro.title || '展览馆'
       document.getElementsByTagName('title')[0].innerHTML = this.title
+      this._Global.ready(this.title, intro.desc, intro.thumb[0], window.location)
     },
     methods: {
       getBanners (exhibitionId) {

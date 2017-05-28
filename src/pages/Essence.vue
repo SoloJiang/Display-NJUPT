@@ -1,6 +1,6 @@
 <template>
   <div id="essence">
-    <div class="essence-wrapper" @scroll="getMore" ref="container" @touchstart="routerGo($event)">
+    <div class="essence-wrapper" @scroll="getMore" ref="container" @click="routerGo($event)">
       <div class="essence-list">
         <div v-for="img in imgList1" class="essence-item" :key="img.id" :exhibit="img.id">
           <img :src="baseUrl+img.thumb">

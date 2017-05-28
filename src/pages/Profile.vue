@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="content">
-      <div v-for="item in items" :key="item.id" @touchstart="routerGo(item.path)">
+      <div v-for="item in items" :key="item.id" @click="routerGo(item.path)">
         <span class="content-desc">{{ item.desc }}</span>
         <i class="icon-angle-right"></i>
       </div>

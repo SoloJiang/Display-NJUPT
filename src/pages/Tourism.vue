@@ -15,7 +15,7 @@
         v-on:leave="leave"
         class="fade-group"
       >
-        <li v-for="(item, index) in imgs" :key="item" :data-index="index" class="info-item" @touchstart="routerGo(item.id)">
+        <li v-for="(item, index) in imgs" :key="item" :data-index="index" class="info-item" @click="routerGo(item.id)">
           <img :src="baseUrl+item.thumb">
           <div class="text-wrapper">
             <p>{{item.title}}</p>

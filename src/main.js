@@ -36,7 +36,33 @@ let instance = Axios.create({
 Vue.prototype.$http = instance
 // 假设写死exhibition_id为9
 Vue.prototype._Global = {
-  url: 'http://exhibition.mobapp.cn'
+  url: 'http://exhibition.mobapp.cn',
+  share (title, desc, imgUrl, link) {
+    let str
+    let arr = link.href.split('?')
+    if (link.href.indexOf('?') > -1) {
+      str = `exhibition_id=${window.sessionStorage.getItem('exhibition_id')}`
+      let codeIndex = link.search.indexOf('code')
+      link = arr[0] + link.search.slice(0, codeIndex) + link.search.slice(codeIndex + 44)
+    } else {
+      link = arr[0]
+      str = `?exhibition_id=${window.sessionStorage.getItem('exhibition_id')}`
+    }
+    wx.onMenuShareAppMessage({
+      title: title || '',
+      desc: desc || '',
+      link: link + str,
+      imgUrl: this.url + imgUrl || ''
+    })
+  },
+  ready (title, desc, imgUrl, link) {
+      wx.ready(() => {
+        this.share(title, desc, imgUrl, link)
+      })
+      wx.error((res) => {
+        console.log(res)
+    })
+  }
 }
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token')
@@ -60,10 +86,10 @@ router.beforeEach((to, from, next) => {
             instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
                 .then(res => {
                   window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-                  next()
+                  getConfig(next)
                 })
           } else {
-            next()
+            getConfig(next)
           }
         })
     } else if (exhibitionId !== undefined || exhibitionId !== 'undefined') {
@@ -72,7 +98,7 @@ router.beforeEach((to, from, next) => {
           window.sessionStorage.setItem('intro', JSON.stringify(res.data))
           sessionStorage.setItem('exhibition_id', exhibitionId)
           to.query.exhibition_id = exhibitionId
-          next()
+          getConfig(next)
         })
     }
   } else {
@@ -95,6 +121,26 @@ let getOauthUrl = () => {
       .then(res => {
         window.location = res.data.oauthUrl
       })
+}
+
+let getConfig = (next) => {
+  let str = String(window.location.href)
+  instance.get('Index/getJsSdk', {
+    params: {
+      url: str
+    }
+  }).then(res => {
+      let config = res.data.signPackage
+      wx.config({
+        debug: true,
+        appId: config.appId,
+        timestamp: config.timestamp,
+        nonceStr: config.nonceStr,
+        signature: config.signature,
+        jsApiList: ['onMenuShareAppMessage']
+      })
+      next()
+    })
 }
 
 new Vue({

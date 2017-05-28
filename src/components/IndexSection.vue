@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <div  v-for="(item, index) in sections" :keys="item.id" class="href-body" @touchstart="routerGo(index)">
+    <div  v-for="(item, index) in sections" :keys="item.id" class="href-body" @click="routerGo(index)">
       <img :src="baseUrl+item.thumb" class="href-img">
       <div class="href-tip">{{item.title}}</div>
     </div>

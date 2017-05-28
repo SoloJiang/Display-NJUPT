@@ -14,7 +14,7 @@
                   <img class="angle" src="../assets/pageSelect/angle2.png">
                 </div>
                 <div class="hall" v-show="halls.length !== 0"><input type="text" v-model="hallInput" class="input"></div>
-                <div v-for="item in hallList" :key="item.id" class="hall" :data-id="item.id" @touchstart="chooseHall(item)">{{item.title}}</div>
+                <div v-for="item in hallList" :key="item.id" class="hall" :data-id="item.id" @click="chooseHall(item)">{{item.title}}</div>
               </div>
             </transition>
           </div>
