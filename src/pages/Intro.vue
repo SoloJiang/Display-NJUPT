@@ -62,9 +62,10 @@
     },
 // eslint-disable-next-line no-dupe-keys
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '展馆概况'
       this.clientWidth = document.body.clientWidth
       let exhibitionId = this.$route.query.exhibition_id
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
       Promise.all([this.$http.post(`Exhibition/getIntro?exhibition_id=${exhibitionId}`),
         this.$http.get(`Exhibition/getMediaViewLists?exhibition_id=${exhibitionId}`)])
         .then(resArr => {

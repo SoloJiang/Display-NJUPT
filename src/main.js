@@ -10,7 +10,7 @@ import 'babel-polyfill'
 Vue.config.productionTip = false
 let instance = Axios.create({
   baseURL: 'http://exhibition.mobapp.cn/api/',
-// 因为后端接受数据只能formdata，所以每次发送请求前做了一个拦截将数据转换成formdata
+    // 因为后端接受数据只能formdata，所以每次发送请求前做了一个拦截将数据转换成formdata
   transformRequest (data) {
     if (typeof data === 'object') {
       let form = new FormData()
@@ -25,28 +25,41 @@ let instance = Axios.create({
     if (data.errcode === '1') {
       getOauthUrl()
     }
-    data = JSON.parse(data)
+    if (typeof data === 'string' && data.length !== 0) {
+      data = JSON.parse(data)
+    }
     if (data.totalNum) {
       window.sessionStorage.setItem('totalNum', data.totalNum)
     }
-    return data.data
+    if (data.data) return data.data
+    return data
   }
 })
 
 Vue.prototype.$http = instance
-// 假设写死exhibition_id为9
+    // 假设写死exhibition_id为9
 Vue.prototype._Global = {
   url: 'http://exhibition.mobapp.cn',
   share (title, desc, imgUrl, link) {
-    let str
+    let str = ''
     let arr = link.href.split('?')
+    let exhibitionId = window.sessionStorage.getItem('exhibition_id')
     if (link.href.indexOf('?') > -1) {
-      str = `exhibition_id=${window.sessionStorage.getItem('exhibition_id')}`
-      let codeIndex = link.search.indexOf('code')
-      link = arr[0] + link.search.slice(0, codeIndex) + link.search.slice(codeIndex + 44)
+      let array = link.href.split('?')
+      if (array[1] !== '') {
+        str = `&exhibition_id=${exhibitionId}`
+      } else {
+        str = `exhibition_id=${exhibitionId}`
+      }
+      if (link.href.indexOf('code') > -1) {
+        link = link.href.split('code')
+        link = link[0] + link[1].slice(40)
+      } else {
+        link = link.href
+      }
     } else {
       link = arr[0]
-      str = `?exhibition_id=${window.sessionStorage.getItem('exhibition_id')}`
+      str = `?exhibition_id=${exhibitionId}`
     }
     wx.onMenuShareAppMessage({
       title: title || '',
@@ -56,93 +69,145 @@ Vue.prototype._Global = {
     })
   },
   ready (title, desc, imgUrl, link) {
-      wx.ready(() => {
-        this.share(title, desc, imgUrl, link)
-      })
-      wx.error((res) => {
-        console.log(res)
+    wx.ready(() => {
+      this.share(title, desc, imgUrl, link)
+    })
+    wx.error(res => {
+      console.log(res)
+    })
+  },
+  hideMenu () {
+    wx.hideMenuItems({
+      menuList: [] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
     })
   }
 }
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token')
   const code = to.query.code
-//  const exhibitionId = window.sessionStorage.getItem('exhibition_id') || to.query.exhibition_id
+        //  const exhibitionId = window.sessionStorage.getItem('exhibition_id') || to.query.exhibition_id
   let exhibitionId = window.sessionStorage.getItem('exhibition_id')
   if (exhibitionId === '' || exhibitionId === null) {
     window.sessionStorage.setItem('exhibition_id', to.query.exhibition_id)
     exhibitionId = to.query.exhibition_id
   }
-  if ((token !== 'null' && token !== null) || (exhibitionId !== undefined && exhibitionId !== 'undefined') || (code !== undefined && code !== 'undefined')) {
+  if (
+        (token !== 'null' && token !== null) ||
+        (exhibitionId !== undefined && exhibitionId !== 'undefined') ||
+        (code !== undefined && code !== 'undefined')
+    ) {
     if (token === null && (code !== undefined && code !== 'undefined')) {
-      instance.get(`Index/getToken?code=${code}`)
-        .then(res => {
-          sessionStorage.setItem('token', res.data.token)
-          sessionStorage.setItem('exhibition_id', res.data.exhibition_id)
-          from.query.exhibition_id = res.data.exhibition_id
-          to.query.exhibition_id = res.data.exhibition_id
-          let intro = sessionStorage.getItem('intro')
-          if (!intro) {
-            instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
-                .then(res => {
-                  window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-                  getConfig(next)
-                })
-          } else {
-            getConfig(next)
-          }
-        })
+      instance.get(`Index/getToken?code=${code}`).then(res => {
+        sessionStorage.setItem('token', res.data.token)
+        sessionStorage.setItem('exhibition_id', res.data.exhibition_id)
+        from.query.exhibition_id = res.data.exhibition_id
+        to.query.exhibition_id = res.data.exhibition_id
+        let intro = sessionStorage.getItem('intro')
+        if (!intro) {
+          instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
+                        .then(res => {
+                          window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+                          // getConfig(to, next)
+                          next()
+                        })
+        } else {
+          // getConfig(to, next)
+          next()
+        }
+      })
     } else if (exhibitionId !== undefined || exhibitionId !== 'undefined') {
       instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
-        .then(res => {
-          window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-          sessionStorage.setItem('exhibition_id', exhibitionId)
-          to.query.exhibition_id = exhibitionId
-          getConfig(next)
-        })
+                .then(res => {
+                  window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+                  sessionStorage.setItem('exhibition_id', exhibitionId)
+                  to.query.exhibition_id = exhibitionId
+                  // getConfig(to, next)
+                  next()
+                })
     }
   } else {
     to.query.exhibition_id = exhibitionId
     getOauthUrl()
   }
-  // 对线上情况依旧用测试id进行模拟
-  // let exhibitionId = 9
-  // instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
-  //   .then(res => {
-  //     window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-  //     to.query.exhibition_id = exhibitionId
-  //     next()
-  //   })
+    // 对线上情况依旧用测试id进行模拟
+    // let exhibitionId = 9
+    // instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
+    //   .then(res => {
+    //     window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+    //     to.query.exhibition_id = exhibitionId
+    //     next()
+    //   })
 })
 
 let getOauthUrl = () => {
   let href = window.location.href
-  instance.post('Index/getOauthUrl', {oauthRedirectUri: href})
-      .then(res => {
-        window.location = res.data.oauthUrl
-      })
+  instance.post('Index/getOauthUrl', { oauthRedirectUri: href }).then(res => {
+    window.location = res.data.oauthUrl
+  })
 }
 
-let getConfig = (next) => {
-  let str = String(window.location.href)
+// let getConfig = (to, next) => {
+//   let query = ''
+//   let path = ''
+//   if (typeof to.query === 'object') {
+//     Object.keys(to.query).forEach((item, index) => {
+//       if (index !== 0) {
+//         query = query + '&' + item + '=' + to.query[item]
+//       } else {
+//         query = query + item + '=' + to.query[item]
+//       }
+//     })
+//   }
+//   if (to.fullPath) {
+//     path = to.fullPath
+//   }
+//   let str = 'http://exhibition.mobapp.cn' + path + '?' + query
+//   str = encodeURIComponent(window.location.href)
+//   instance.get('Index/getJsSdk', {
+//     params: {
+//       url: str
+//     }
+//   }).then(res => {
+//     let config = res.data.signPackage
+//     wx.config({
+//       debug: true,
+//       appId: config.appId,
+//       timestamp: config.timestamp,
+//       nonceStr: config.nonceStr,
+//       signature: config.signature,
+//       jsApiList: ['onMenuShareAppMessage', 'hideMenuItems']
+//     })
+//     next()
+//   })
+// }
+
+router.afterEach(route => {
+  console.log(route)
+  console.log(window.location.href)
+  getConfig(route.fullPath)
+})
+
+let getConfig = (path) => {
+  if (!path) {
+    path = ''
+  }
+  let str = encodeURIComponent('http://exhibition.mobapp.cn' + path)
   instance.get('Index/getJsSdk', {
     params: {
       url: str
     }
   }).then(res => {
-      let config = res.data.signPackage
-      wx.config({
-        debug: true,
-        appId: config.appId,
-        timestamp: config.timestamp,
-        nonceStr: config.nonceStr,
-        signature: config.signature,
-        jsApiList: ['onMenuShareAppMessage']
-      })
-      next()
+    let config = res.data.signPackage
+    wx.config({
+      debug: false,
+      appId: config.appId,
+      timestamp: config.timestamp,
+      nonceStr: config.nonceStr,
+      signature: config.signature,
+      jsApiList: ['onMenuShareAppMessage', 'hideMenuItems']
     })
+  })
 }
-
 new Vue({
   el: '#app',
   router,

@@ -14,6 +14,7 @@ import Intro from 'pages/Intro'
 import Donate from 'pages/Donate'
 import HallSelect from 'pages/HallSelect'
 import CitySelect from 'pages/CitySelect'
+import Order from 'pages/Order'
 
 Vue.use(Router)
 
@@ -80,6 +81,14 @@ export default new Router({
     {
       path: '/hall_detail',
       component: Guide
+    },
+    {
+      path: '/QRCode',
+      component: Guide
+    },
+    {
+      path: '/Order',
+      component: Order
     }
   ],
   scrollBehavior () {

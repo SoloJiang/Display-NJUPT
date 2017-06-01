@@ -91,6 +91,9 @@
               this.p = this.p + 1
               this.flag = true
             }
+            this.scroll = new BScroll(this.$refs.infoWrapper, {
+              click: true
+            })
           })
       },
       getMore () {
@@ -112,9 +115,10 @@
       'v-footer': footer
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '旅游信息查询'
       this.getInfo(1, 6, 0)
       let exhibitionId = this.$route.query.exhibition_id
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
       this.$http.get(`News/getCat?exhibition_id=${exhibitionId}`)
         .then(res => {
           if (res.data.length > 3) {
@@ -122,11 +126,6 @@
           }
           this.list = this.list.concat(res.data)
         })
-      this.$nextTick(() => {
-        this.scroll = new BScroll(this.$refs.infoWrapper, {
-          click: true
-        })
-      })
     }
   }
 </script>

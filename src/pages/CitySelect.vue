@@ -7,12 +7,6 @@
       </div>
       <div class="current">
         <span class="pos">当前：{{currentCity}}</span>
-        <div class="county">
-          <select name="county">
-            <option value="">选择区县</option>
-            <option value="Qixia">栖霞区</option>
-          </select>
-        </div>
       </div>
       <div class="city">
         <div class="current-city">
@@ -135,7 +129,7 @@
       }
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
+      this._Global.hideMenu()
       axios.all([axios.get('http://exhibition.mobapp.cn/api/Index/getCity'), axios.get('http://exhibition.mobapp.cn/api/Index/getHotCity')])
         .then(axios.spread((city, hotCity) => {
           this.city = city.data
@@ -157,7 +151,6 @@
 
 <style lang="sass" scoped>
   #city-select
-    margin-right: 22px
     background: #fff
     min-height: 100vh
     .searchbar
@@ -170,9 +163,9 @@
         left: 19vh
         font-size: 20px
       .input-search
+        width: calc(65% - 22px)
         margin: 10px 0
         padding-left: 22vh
-        width: calc(100% - 22vh)
         height: 30px
         font-size: 12px
         border: 1px solid rgba(7, 17, 27, 0.5)
@@ -180,7 +173,6 @@
         background: rgb(244, 244, 244)
     .current
       font-size: 12px
-      border-bottom: 1px solid rgba(7, 17, 27, 0.2)
       .pos
         padding-left: 10px
         height: 40px
@@ -200,6 +192,7 @@
           background-size: 14%
     .city
       background: rgb(244, 244, 244)
+      width: calc(100% - 22px)
       .current-city
         padding-left: 10px
         .title

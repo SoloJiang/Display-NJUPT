@@ -29,7 +29,6 @@
       'v-footer': footer
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '常设展览'
       let type = this.$route.query.type
       this.getInfo(type, 1, 6)
     },

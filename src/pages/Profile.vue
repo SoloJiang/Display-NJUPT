@@ -12,7 +12,6 @@
         <i class="icon-angle-right"></i>
       </div>
     </div>
-    <div class="logout">退出当前账户</div>
     <v-footer></v-footer>
   </div>
 </template>
@@ -21,33 +20,36 @@
   import footer from 'components/Footer'
   export default {
     name: 'profile',
-    props: {
-      username: {
-        type: String,
-        default: '王杰'
-      },
-      currentHall: {
-        type: String,
-        default: '中山陵博物馆'
-      }
-    },
     data () {
       return {
+        username: '',
+        currentHall: '',
         avatarUrl: null,
         items: [
           {
             id: 1,
+            desc: '选择展览馆',
+            path: '/checkExhibition'
+          },
+          {
+            id: 2,
+            desc: '预约',
+            path: '/Order'
+          },
+          {
+            id: 3,
             desc: '意见建议',
             path: '/feedback'
           },
           {
-            id: 2,
+            id: 4,
             desc: '捐赠',
             path: '/donate'
           },
           {
-            id: 4,
-            desc: '二维码分享'
+            id: 5,
+            desc: '二维码分享',
+            path: '/QRCode'
           }
         ]
       }
@@ -56,8 +58,13 @@
       'v-footer': footer
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '个人中心'
-      this.avatarUrl = require('../assets/pageProfile/avatar.png')
+      this.$http.get(`User/getUserInfo?token=${window.sessionStorage.getItem('token')}`)
+        .then(res => {
+          this.username = res.data.nickname
+          this.avatarUrl = res.data.headimgurl
+        })
+      this.currentHall = JSON.parse(window.sessionStorage.getItem('intro')).title
+      this._Global.hideMenu()
     },
     methods: {
       routerGo (path) {
@@ -110,13 +117,4 @@
         border-top: 1px solid rgba(7, 17, 27, 0.2)
         &:last-child
           border-bottom: 1px solid rgba(7, 17, 27, 0.2)
-    .logout
-      margin: 60px 20px 0 20px
-      line-height: 50px
-      height: 50px
-      font-size: 16px
-      color: #fff
-      text-align: center
-      border-radius: 4px
-      background: rgb(130, 85, 62)
 </style>

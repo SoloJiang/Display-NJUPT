@@ -11,14 +11,15 @@
               <div class="select-hall" :class="{'active': hallSelect}">
                 <div class="current-hall" @click="showSelect">
                   {{currentHall.title}}
-                  <img class="angle" src="../assets/pageSelect/angle2.png">
+                  <span v-show="halls.length === 0">当前城市无展览馆</span>
+                  <img class="angle" src="../assets/pageSelect/angle2.png" v-show="halls.length !== 0">
                 </div>
                 <div class="hall" v-show="halls.length !== 0"><input type="text" v-model="hallInput" class="input"></div>
                 <div v-for="item in hallList" :key="item.id" class="hall" :data-id="item.id" @click="chooseHall(item)">{{item.title}}</div>
               </div>
             </transition>
           </div>
-          <div class="advice-submit" @touchstart="submit">提交</div>
+          <div class="advice-submit" @click="submit">{{result}}</div>
         </form>
       </div>
       <v-footer></v-footer>
@@ -38,7 +39,8 @@
         hallInput: '',
         hallSelect: false,
         title: '',
-        flag: true
+        flag: true,
+        result: '提交'
       }
     },
     computed: {
@@ -61,10 +63,14 @@
           this.flag = false
           let token = window.sessionStorage.getItem('token')
           let id = this.currentHall.id
-          this.$http.get(`checkExhibition?token=${token}&exhibition_id=${id}`)
-            .then(() => {
+          this.result = '正在提交...'
+          this.$http.get(`User/checkExhibition?token=${token}&exhibition_id=${id}`)
+            .then((res) => {
               this.title = this.currentHall.title
               this.flag = true
+              window.sessionStorage.setItem('exhibition_id', id)
+              window.sessionStorage.removeItem('intro')
+              this.$router.push(`/?exhibition_id=${id}`)
             })
         }
       },
@@ -74,9 +80,8 @@
       }
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '选择展览馆'
-//      console.log(this.halls)
       let intro = window.sessionStorage.getItem('intro')
+      this._Global.hideMenu()
       this.title = JSON.parse(intro).title
     },
     mounted () {
@@ -173,6 +178,8 @@
                 width: 10px
                 height: 8px
             .hall
+              position: relative
+              z-index: 1000
               border-left: 1px solid rgb(214, 214, 214)
               border-right: 1px solid rgb(214, 214, 214)
               background: #E1E5D0

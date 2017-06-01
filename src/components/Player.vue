@@ -2,7 +2,7 @@
   <div class="player">
     <div class="imgs" ref="imgList">
       <img v-for="(item, index) in banners" :key="index" :src="baseUrl+item.thumb" class="img"
-           @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()"/>
+           @touchstart="getClientX($event)" @touchmove="moveList($event)" @touchend="endMove()" @click = "routerGo(item.url)"/>
     </div>
     <ul class="img-btns" ref="ulList" @touchstart="changeIndex($event)" @click="changeIndex($event)">
       <li v-for="(item, index) in banners" :key="index" class="img-btn" :class="{active: index === activeIndex}"></li>
@@ -100,6 +100,11 @@
         let translateX = -this.activeIndex * this.clientWidth
         imgList.style.transform = `translate3d(${translateX}px, 0, 0)`
         this.timeCount()
+      },
+      routerGo (url) {
+        if (url.length !== 0) {
+          window.location = url
+        }
       }
     },
     created () {},

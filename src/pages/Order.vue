@@ -4,22 +4,21 @@
       <h2 class="title">{{tit}}</h2>
       <form action="#" class="form-donate">
         <label for="name">
-          捐赠人姓名<input type="text" class="input-name" v-model="name">
+          预约人姓名<input type="text" class="input-name" v-model="name">
         </label>
         <label for="contact">
           联系方式<input type="tel" class="input-contact" v-model="tel">
         </label>
         <label for="thing">
-          捐赠物品名称<input type="text" class="input-thing" v-model="title">
+          参观时间<input type="text" class="input-thing" v-model="title">
+        </label>
+        <label for="person">
+          参观人数<input type="text" class="input-person" v-model="person">
         </label>
         <label for="desc">
-          说明<textarea name="desc" class="input-desc" placeholder="请说明捐赠物品，并留下联系方式， 我们会及时跟您联系！" v-model="content"></textarea>
+          说明<textarea name="desc" class="input-desc" placeholder="请说明你参观的具体理由" v-model="content"></textarea>
         </label>
-        <div class="tel">
-          <i class="icon-phone"></i>
-          {{phone}}
-        </div>
-        <div class="advice-submit" @touchstart="submit">提交</div>
+        <div class="advice-submit" @click="submit">{{result}}</div>
       </form>
     </div>
     <v-footer></v-footer>
@@ -30,15 +29,16 @@
   import footer from 'components/Footer'
   import util from '../utils/encodeHtml'
   export default {
-    name: 'museum-advice',
+    name: 'museum-order',
     data () {
       return {
-        phone: '',
         tit: '',
         name: '',
         title: '',
         tel: '',
         content: '',
+        person: '',
+        result: '提交',
         flag: true
       }
     },
@@ -56,25 +56,30 @@
       submit () {
         if (this.name.length !== 0 && this.tel.length !== 0 && this.title.length !== 0 && this.content.length !== 0) {
           let that = this
+          this.result = '正在提交...'
           this.name = util.xssFilter(this.name)
           this.tel = util.xssFilter(this.tel)
           this.title = util.xssFilter(this.title)
+          this.person = util.xssFilter(this.person)
           this.content = util.xssFilter(this.content)
           if (this.flag) {
             this.flag = false
             let exhibitonId = this.$route.query.exhibition_id
             let token = window.sessionStorage.getItem('token')
-            this.$http.post(`User/donate?token=${token}&exhibition_id=${exhibitonId}`, {
+            this.$http.post(`User/order?token=${token}&exhibition_id=${exhibitonId}`, {
               name: that.name,
-              title: that.title,
+              visitTime: that.title,
               tel: that.tel,
+              visitNum: that.person,
               content: that.content
             }).then(() => {
               window.alert('提交成功')
+              this.result = '提交'
               this.name = ''
               this.tel = ''
               this.title = ''
               this.content = ''
+              this.person = ''
             })
           }
         } else {

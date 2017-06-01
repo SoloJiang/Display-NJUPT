@@ -30,8 +30,8 @@
       'v-footer': footer
     },
     created () {
-      document.getElementsByTagName('title')[0].innerHTML = '意见建议'
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.hideMenu()
       if (intro) {
         this.title = intro.title
       }

@@ -3,6 +3,7 @@
     <div class="reel">
       <div class="content">
         <div class="desc-wrapper" ref="descWrapper">
+          <img :src="src" class="img" v-show="src !== ''"/>
           <div class="title">{{title}}</div>
           <div class="desc" v-html="content">
           </div>
@@ -21,7 +22,8 @@
     data () {
       return {
         content: '',
-        title: ''
+        title: '',
+        src: ''
       }
     },
     components: {
@@ -34,14 +36,20 @@
       if (exhibitId === undefined || exhibitId === null) {
         if (hallId === undefined || hallId === null) {
           if (id === undefined || id === null) {
-            document.getElementsByTagName('title')[0].innerHTML = '参观指南'
             let exhibitionId = this.$route.query.exhibition_id
-            this.$http.get(`Exhibition/getGuide?exhibition_id=${exhibitionId}`)
-              .then(res => {
-                this.content = encodeHtml(res.data.guideContent)
-              })
+            let token = window.sessionStorage.getItem('token')
+            if (this.$route.path === '/QRCode') {
+              this.$http.get(`Exhibition/getQRCode?token=${token}&exhibition_id=${exhibitionId}`)
+                .then(res => {
+                  this.src = this._Global.url + res.data.QRCode
+                })
+            } else {
+              this.$http.get(`Exhibition/getGuide?exhibition_id=${exhibitionId}`)
+                .then(res => {
+                  this.content = encodeHtml(res.data.guideContent)
+                })
+            }
           } else {
-            document.getElementsByTagName('title')[0].innerHTML = '动态详情'
             this.$http.get(`News/detail?news_id=${id}`)
               .then(res => {
                 this.title = res.data.title
@@ -49,19 +57,19 @@
               })
           }
         } else {
-          document.getElementsByTagName('title')[0].innerHTML = '展厅详情'
           this.$http.get(`Exhibition/hallDetail?hall_id=${hallId}`)
             .then(res => {
               this.content = encodeHtml(res.data.content)
             })
         }
       } else {
-        document.getElementsByTagName('title')[0].innerHTML = '展品详情'
         this.$http.get(`Exhibition/exhibitDetail?exhibit_id=${exhibitId}`)
           .then(res => {
             this.content = encodeHtml(res.data.content)
           })
       }
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     }
   }
 </script>
@@ -70,8 +78,6 @@
   #museum-guide
     width: 100%
     min-height: 100vh
-    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
-    background-size: 300% 120%
     .reel
       padding: 0 10vh
       height: 92vh
@@ -88,4 +94,8 @@
   .title
     margin-bottom: 30px
     font-weight: bold
+  .img
+    width: 80%
+    height: auto
+    margin-left: 10%
 </style>

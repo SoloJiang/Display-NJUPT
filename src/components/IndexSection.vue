@@ -26,7 +26,12 @@
         if (name.indexOf('https://') > -1 || name.indexOf('http://') > -1) {
           window.location = name
         } else {
-          this.$router.push(name)
+          let exhibitionId = window.sessionStorage.getItem('exhibition_id')
+          if (name.indexOf('?') > -1) {
+            this.$router.push(`${name}&exhibition_id=${exhibitionId}`)
+          } else {
+            this.$router.push(`${name}?exhibition_id=${exhibitionId}`)
+          }
         }
       }
     }

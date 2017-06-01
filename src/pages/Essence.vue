@@ -37,17 +37,17 @@
     created () {
       let hallId = this.$route.query.hall_id
       if (hallId) {
-        document.getElementsByTagName('title')[0].innerHTML = '展品列表'
         this.getInfo(true, hallId)
         this.check = true
         this.id = hallId
       } else {
-        document.getElementsByTagName('title')[0].innerHTML = '精品列表'
         let exhibitionId = this.$route.query.exhibition_id
         this.getInfo(false, exhibitionId)
         this.check = false
         this.id = exhibitionId
       }
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     },
     components: {
       'v-footer': footer
