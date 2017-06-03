@@ -30,22 +30,11 @@
         baseUrl: this._Global.url,
         page: 1,
         flag: true,
-        check: Boolean,
         id: Number
       }
     },
     created () {
-      let hallId = this.$route.query.hall_id
-      if (hallId) {
-        this.getInfo(true, hallId)
-        this.check = true
-        this.id = hallId
-      } else {
-        let exhibitionId = this.$route.query.exhibition_id
-        this.getInfo(false, exhibitionId)
-        this.check = false
-        this.id = exhibitionId
-      }
+      this.getInfo()
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     },
@@ -53,14 +42,10 @@
       'v-footer': footer
     },
     methods: {
-      getInfo (flag, id) {
-        let variable
-        if (flag) {
-          variable = `hall_id=${id}`
-        } else {
-          variable = `exhibition_id=${id}&type=1`
-        }
-        this.$http.get(`Exhibition/exhibitLists?${variable}&p=${this.page}&num=10`)
+      getInfo () {
+        const exhibitionId = this.$route.query.exhibition_id
+        const key = this.$route.query.key
+        this.$http.get(`Exhibition/exhibitSearch?exhibition_id=${exhibitionId}&key=${key}&p=${this.page}&num=10`)
           .then(res => {
             for (let i = 0; i < res.data.length; i++) {
               if (i % 2) {
@@ -77,7 +62,7 @@
         if (container) {
           let scrollMax = container.scrollHeight
           if (this.flag && this.p * 10 < totalNum && scrollMax - container.scrollTop < 520) {
-            this.getInfo(this.check, this.id)
+            this.getInfo()
             this.page++
           }
         }

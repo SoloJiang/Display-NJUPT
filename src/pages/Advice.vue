@@ -5,7 +5,7 @@
       <div class="desc">您有什么意见或建议请告诉我们</div>
       <form action="#">
         <textarea name="advice" class="advice-input" placeholder="您的宝贵意见，就是我们前进的动力" v-model="content"></textarea>
-        <div class="advice-submit" @touchstart="submit">提交</div>
+        <div class="advice-submit" @touchstart="submit">{{result}}</div>
       </form>
       <div class="tel">
         <i class="icon-phone"></i>
@@ -23,7 +23,9 @@
     data () {
       return {
         content: '',
-        title: ''
+        title: '',
+        flag: true,
+        result: '提交'
       }
     },
     components: {
@@ -45,10 +47,13 @@
             this.flag = false
             let exhibitonId = this.$route.query.exhibition_id
             let token = window.sessionStorage.getItem('token')
+            this.result = '正在提交...'
             this.$http.post(`User/feedback?token=${token}&exhibition_id=${exhibitonId}`, {
               content: that.content
             }).then(() => {
               window.alert('提交成功')
+              this.result = '提交'
+              this.flag = true
               this.content = ''
             })
           }
@@ -64,7 +69,6 @@
   #museum-advice
     width: 100%
     min-height: 100vh
-    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
     background-size: 300% 120%
     .reel
       padding: 0 10vh

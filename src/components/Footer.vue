@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <div class="back-btn" @click="back">
+    <div class="back-btn" @click="back" v-if="show">
       <i class="icon-angle-left" :style="{color: iconColor}"></i>
     </div>
     <span class="rights" :style="{color: fontColor}">2017 &copy; 展览馆万事通</span>
@@ -19,6 +19,10 @@
       },
       iconColor: {
         type: String
+      },
+      show: {
+        type: Boolean,
+        default: true
       }
     },
     methods: {

@@ -15,7 +15,7 @@ import Donate from 'pages/Donate'
 import HallSelect from 'pages/HallSelect'
 import CitySelect from 'pages/CitySelect'
 import Order from 'pages/Order'
-
+import Search from 'pages/Search'
 Vue.use(Router)
 
 export default new Router({
@@ -89,6 +89,14 @@ export default new Router({
     {
       path: '/Order',
       component: Order
+    },
+    {
+      path: '/exhibit_lists',
+      component: Essence
+    },
+    {
+      path: '/exhibit_search',
+      component: Search
     }
   ],
   scrollBehavior () {

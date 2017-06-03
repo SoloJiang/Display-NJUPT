@@ -12,7 +12,7 @@
         <i class="icon-angle-right"></i>
       </div>
     </div>
-    <v-footer></v-footer>
+    <v-footer :show="false"></v-footer>
   </div>
 </template>
 

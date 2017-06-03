@@ -31,7 +31,6 @@
 
 <script>
   import footer from 'components/Footer'
-  import BScroll from 'better-scroll'
   import Velocity from 'velocity-animate'
   export default {
     name: 'tourism',
@@ -83,17 +82,19 @@
         let exhibitionId = this.$route.query.exhibition_id
         this.$http.get(`News/lists?exhibition_id=${exhibitionId}&cat_id=${catId}&p=${p}&num=${num}`)
           .then(res => {
-            this.totalnum = window.sessionStorage.getItem('totalNum')
-            if (!more) {
-              this.imgs = res.data
+            if (res.data.constructor === Array) {
+              this.totalnum = window.sessionStorage.getItem('totalNum')
+              if (!more) {
+                this.imgs = res.data
+              } else {
+                this.imgs = this.imgs.concat(res.data)
+                this.p = this.p + 1
+                this.flag = true
+              }
             } else {
-              this.imgs = this.imgs.concat(res.data)
-              this.p = this.p + 1
-              this.flag = true
+              this.totalnum = 0
+              this.imgs = []
             }
-            this.scroll = new BScroll(this.$refs.infoWrapper, {
-              click: true
-            })
           })
       },
       getMore () {
@@ -121,9 +122,6 @@
       this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
       this.$http.get(`News/getCat?exhibition_id=${exhibitionId}`)
         .then(res => {
-          if (res.data.length > 3) {
-            res.data = [res.data[0], res.data[1], res.data[2]]
-          }
           this.list = this.list.concat(res.data)
         })
     }
@@ -143,9 +141,15 @@
         display: flex
         justify-content: space-around
         align-items: center
+        width: 100%
+        flex-direction: column
+        flex-wrap: wrap
+        overflow-x: auto
+        height: 40px
+        -webkit-overflow-scrolling: touch
         .nav-item
           padding: 9px 0
-          width: calc(100% / 4)
+          width: 100px
           list-style-type: none
           color: rgb(125, 124, 122)
           text-align: center

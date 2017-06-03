@@ -68,6 +68,7 @@
             .then((res) => {
               this.title = this.currentHall.title
               this.flag = true
+              this.result = '提交'
               window.sessionStorage.setItem('exhibition_id', id)
               window.sessionStorage.removeItem('intro')
               this.$router.push(`/?exhibition_id=${id}`)

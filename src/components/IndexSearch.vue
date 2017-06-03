@@ -6,7 +6,7 @@
         <input type="text" class="search-input" placeholder="展品搜索" v-model="searchInput">
       </label>
       <div class="cancel-box">
-        <div class="search-cancel">搜索</div>
+        <div class="search-cancel" @click="search">搜索</div>
       </div>
     </div>
   </div>
@@ -18,13 +18,15 @@
   export default {
     data () {
       return {
-        searchInput: '',
-        cities: []
+        searchInput: ''
       }
     },
     methods: {
-      searchInput () {
+      search () {
         //发送搜索请求
+        if (this.searchInput !== '') {
+          this.$router.push(`/exhibit_search?exhibition_id=${window.sessionStorage.getItem('exhibiton_id')}&key=${this.searchInput}`)
+        }
       }
     }
   }

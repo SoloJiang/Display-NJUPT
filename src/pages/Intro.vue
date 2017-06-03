@@ -17,7 +17,7 @@
       <div class="card card-list" v-for="(card, index) in cards" :key="card.id" @click="showContent(index)">
         <div class="box">
           <div class="smallTitle">{{card.title}}</div>
-          <div class="smallIntro">{{intro}}</div>
+          <div class="smallIntro">{{card.intro}}</div>
         </div>
         <img class="smallImg" :src="baseUrl+card.thumb"/>
       </div>
@@ -70,9 +70,6 @@
         this.$http.get(`Exhibition/getMediaViewLists?exhibition_id=${exhibitionId}`)])
         .then(resArr => {
           this.background = this._Global.url + resArr[0].data.background
-          if (this.background === '') {
-            this.background = require('../assets/pageMuseum/reel-background.png')
-          }
           this.intro = resArr[0].data.intro
           this.title = resArr[0].data.title
           this.temple = resArr[0].data.title
@@ -80,6 +77,7 @@
             item.content = encodeHtml(item.content)
           })
           this.cards = resArr[1].data
+          console.log(this.cards)
         })
     },
     methods: {
@@ -239,14 +237,16 @@
   .smallIntro
     width: 180px
     display: inline-block
-    position: relative
-    top: -114px
+    position: absolute
+    height: 120px
+    overflow: scroll
+    margin-top: 4px
   .smallImg
     height: 172px
     width: 240px
     position: relative
-    right: -72px
-    top: -22px
+    left: 254px
+    top: -20px
   #mask
     position: absolute
     top: 0
