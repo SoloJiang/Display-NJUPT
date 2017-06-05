@@ -85,7 +85,6 @@ Vue.prototype._Global = {
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token')
   const code = to.query.code
-        //  const exhibitionId = window.sessionStorage.getItem('exhibition_id') || to.query.exhibition_id
   let exhibitionId = window.sessionStorage.getItem('exhibition_id')
   if (exhibitionId === '' || exhibitionId === null) {
     window.sessionStorage.setItem('exhibition_id', to.query.exhibition_id)
@@ -129,14 +128,6 @@ router.beforeEach((to, from, next) => {
     to.query.exhibition_id = exhibitionId
     getOauthUrl()
   }
-    // 对线上情况依旧用测试id进行模拟
-    // let exhibitionId = 9
-    // instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
-    //   .then(res => {
-    //     window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-    //     to.query.exhibition_id = exhibitionId
-    //     next()
-    //   })
 })
 
 let getOauthUrl = () => {
@@ -146,44 +137,7 @@ let getOauthUrl = () => {
   })
 }
 
-// let getConfig = (to, next) => {
-//   let query = ''
-//   let path = ''
-//   if (typeof to.query === 'object') {
-//     Object.keys(to.query).forEach((item, index) => {
-//       if (index !== 0) {
-//         query = query + '&' + item + '=' + to.query[item]
-//       } else {
-//         query = query + item + '=' + to.query[item]
-//       }
-//     })
-//   }
-//   if (to.fullPath) {
-//     path = to.fullPath
-//   }
-//   let str = 'http://exhibition.mobapp.cn' + path + '?' + query
-//   str = encodeURIComponent(window.location.href)
-//   instance.get('Index/getJsSdk', {
-//     params: {
-//       url: str
-//     }
-//   }).then(res => {
-//     let config = res.data.signPackage
-//     wx.config({
-//       debug: true,
-//       appId: config.appId,
-//       timestamp: config.timestamp,
-//       nonceStr: config.nonceStr,
-//       signature: config.signature,
-//       jsApiList: ['onMenuShareAppMessage', 'hideMenuItems']
-//     })
-//     next()
-//   })
-// }
-
 router.afterEach(route => {
-  console.log(route)
-  console.log(window.location.href)
   getConfig(route.fullPath)
 })
 

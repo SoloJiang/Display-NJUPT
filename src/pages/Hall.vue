@@ -37,10 +37,12 @@
         let id = this.$route.query.exhibition_id
         this.$http.get(`Exhibition/hallLists?exhibition_id=${id}&type=${type}&p=${p}&num=${num}`)
           .then(res => {
-            this.imgs = res.data
-            this.imgs.forEach(item => {
-              item.title = encodeHtml(item.title)
-            })
+            if (res.data.constructor === Array) {
+              this.imgs = res.data
+              this.imgs.forEach(item => {
+                item.title = encodeHtml(item.title)
+              })
+            }
           })
       },
       routerDetail (id) {

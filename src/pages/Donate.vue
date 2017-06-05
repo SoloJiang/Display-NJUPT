@@ -93,7 +93,7 @@
     background-size: 300% 120%
     .reel
       padding: 0 10vh
-      height: 92vh
+      height: 105vh
       background: url("../assets/pageMuseum/reel.png") 50% no-repeat
       background-size: 95% 95%
       color: rgb(130, 86, 65)

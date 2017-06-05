@@ -151,7 +151,7 @@
             background: url("../assets/pageSelect/angle1.png") no-repeat scroll 90% center transparent
             background-size: 16% 14%
           .select-hall
-            z-index: 5
+            z-index: 1000
             margin: 7px 0 0 5px
             height: 36px
             line-height: 34px
@@ -161,6 +161,7 @@
             color: rgb(7, 17, 27)
             text-align: center
             background: transparent
+            position: relative
             &.active
               height: 300px
               .current-hall
@@ -194,7 +195,7 @@
                 border-bottom-right-radius: 5px
       .advice-submit
         position: absolute
-        top: 116px
+        top: 200px
         line-height: 34px
         width: 100%
         height: 34px
@@ -204,6 +205,7 @@
         letter-spacing: 10px
         background: rgb(130, 86, 65)
         border-radius: 3px
+        z-index: auto
     .fade-enter-active, .fade-leave-active
       transition: all .5s
       opacity: 1

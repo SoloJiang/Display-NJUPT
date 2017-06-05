@@ -116,13 +116,19 @@
       'v-footer': footer
     },
     created () {
-      this.getInfo(1, 6, 0)
       let exhibitionId = this.$route.query.exhibition_id
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
       this.$http.get(`News/getCat?exhibition_id=${exhibitionId}`)
         .then(res => {
           this.list = this.list.concat(res.data)
+          let catid = this.$route.query.catid
+          this.list.forEach((item, index) => {
+            if (item.id === catid) {
+              this.activeId = index
+            }
+          })
+          this.getInfo(1, 6, catid)
         })
     }
   }
