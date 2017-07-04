@@ -3,7 +3,7 @@
     <player :banners="banners" :baseUrl="baseUrl"></player>
     <index-search></index-search>
     <index-section :sections="sections"></index-section>
-    <div class="footer">2017&copy;展览馆万事通</div>
+    <div class="footer"><a :href="href" class="copyRight">2017&copy;{{footerTitle}}</a></div>
   </div>
 </template>
 
@@ -19,7 +19,8 @@
         sections: [],
         baseUrl: this._Global.url,
         background: '',
-        title: ''
+        title: '',
+        footerTitle: ''
       }
     },
     components: {
@@ -29,11 +30,12 @@
     },
     created () {
       let exhibitionId = this.$route.query.exhibition_id
-      axios.all([this.getBanners(exhibitionId), this.getSections(exhibitionId)])
-        .then(axios.spread((banners, sections) => {
+      axios.all([this.getBanners(exhibitionId), this.getSections(exhibitionId), this.getCopyright()])
+        .then(axios.spread((banners, sections, copyRight) => {
           // Both requests are now complete
           this.banners = banners.data
           this.sections = sections.data
+          this.footerTitle = copyRight.data.title
         }))
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this.title = intro.title || '展览馆'
@@ -46,6 +48,9 @@
       },
       getSections (exhibitionId) {
         return this.$http.get(`Index/getMenu?exhibition_id=${exhibitionId}`)
+      },
+      getCopyright () {
+        return this.$http.post('Index/getCopyright')
       }
     },
     mounted () {
@@ -60,8 +65,10 @@
   .footer {
     margin-top: -36px;
     line-height: 36px;
+    text-align: center;
+  }
+  .copyRight {
     font-size: 14px;
     color: #B3B3B2;
-    text-align: center;
   }
 </style>

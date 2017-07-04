@@ -27,6 +27,9 @@
           this.background = this.baseUrl + JSON.parse(intro).background
         }
       }
+    },
+    beforeRouteEnter: (to, from, next) => {
+      this.back()
     }
   }
 </script>

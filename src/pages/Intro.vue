@@ -23,8 +23,15 @@
       </div>
       <div class="space"></div>
     </div>
-    <v-footer></v-footer>
-    <div id="mask" v-show="flag" @click="flag = !flag" v-html="detail"></div>
+    <v-footer :display="display"></v-footer>
+    <div id="mask" v-show="flag">
+      <div  v-html="detail"></div>
+      <div class="footer">
+        <div class="back-btn" @click="flag = !flag">
+          <i class="icon-angle-left"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,12 +56,13 @@
         src: null,
         voice: '语音',
         flag: false,
-        detail: null
+        detail: null,
+        display: true
       }
     },
     computed: {
       voiceShow () {
-        return this.src !== null
+        return this.src !== null || this.src !== ''
       }
     },
     components: {
@@ -77,7 +85,6 @@
             item.content = encodeHtml(item.content)
           })
           this.cards = resArr[1].data
-          console.log(this.cards)
         })
     },
     methods: {
@@ -88,7 +95,7 @@
           this.src = null
         } else {
           let num = parseInt((translateX - 300) / 520)
-          if (this.src !== this.cards[num].voice) {
+          if (this.title !== this.cards[num].title) {
             this.title = this.cards[num].title
             this.src = this.cards[num].voice
             this.voice = '语音'
@@ -111,6 +118,7 @@
       },
       showContent (index) {
         this.flag = !this.flag
+        this.display = !this.display
         this.detail = this.cards[index].content
       }
     }
@@ -256,4 +264,22 @@
     width: 80%
     background: #fff
     padding: 10%
+  .footer
+    position: fixed
+    bottom: 0
+    left: 0
+    width: 100%
+    height: 50px
+    text-align: center
+    background: rgba(255, 255, 255, 0.8)
+    z-index: 1000
+    .back-btn
+      position: absolute
+      top: 0
+      left: 16px
+      padding: 10px 20px
+      .icon-angle-left
+        font-size: 26px
+        color: rgb(128, 128, 128)
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7)
 </style>

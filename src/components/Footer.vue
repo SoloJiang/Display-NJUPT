@@ -1,9 +1,9 @@
 <template>
-  <div class="footer">
+  <div class="footer" v-show="display">
     <div class="back-btn" @click="back" v-if="show">
       <i class="icon-angle-left" :style="{color: iconColor}"></i>
     </div>
-    <span class="rights" :style="{color: fontColor}">2017 &copy; 展览馆万事通</span>
+    <a class="rights" :href="href" :style="{color: fontColor}">2017 &copy; {{title}}</a>
     <div class="home-btn" @click="home">
       <i class="icon-home" :style="{color: iconColor}"></i>
     </div>
@@ -13,6 +13,12 @@
 <script>
   export default {
     name: 'footer',
+    data () {
+      return {
+        title: '',
+        href: ''
+      }
+    },
     props: {
       fontColor: {
         type: String
@@ -21,6 +27,10 @@
         type: String
       },
       show: {
+        type: Boolean,
+        default: true
+      },
+      display: {
         type: Boolean,
         default: true
       }
@@ -32,6 +42,13 @@
       home () {
         this.$router.push('/')
       }
+    },
+    mounted () {
+      this.$http.post('Index/getCopyright')
+        .then(res => {
+          this.title = res.data.title
+          this.href = res.data.href
+        })
     }
   }
 </script>
@@ -45,6 +62,7 @@
     height: 50px
     text-align: center
     background: rgba(255, 255, 255, 0.8)
+    z-index: 1000
     .back-btn
       position: absolute
       top: 0

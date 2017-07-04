@@ -1,8 +1,8 @@
 <template>
-  <div id="hall">
+  <div id="hall" @scroll="getMore"  ref="infoWrapper">
     <div class="hall-list">
       <div v-for="(item, index) in imgs" class="hall-item">
-        <img :src="baseUrl+item.thumb">
+        <img :src="baseUrl+item.thumb" @click="routerDetail(item.id)">
         <div class="navbar">
           <div class="hall-select" @click="routerDetail(item.id)">{{item.title}}</div>
           <div class="hall-essence" @click="routerItem(item.id)">展品荟萃</div>
@@ -22,26 +22,38 @@
       return {
         imgs: [],
         p: 1,
-        baseUrl: this._Global.url
+        baseUrl: this._Global.url,
+        flag: true,
+        totalnum: 0
       }
     },
     components: {
       'v-footer': footer
     },
     created () {
-      let type = this.$route.query.type
-      this.getInfo(type, 1, 6)
+      this.getInfo(1, 6, false)
     },
     methods: {
-      getInfo (type, p, num) {
+      getInfo (p, num, more) {
+        let type = this.$route.query.type
         let id = this.$route.query.exhibition_id
         this.$http.get(`Exhibition/hallLists?exhibition_id=${id}&type=${type}&p=${p}&num=${num}`)
           .then(res => {
             if (res.data.constructor === Array) {
-              this.imgs = res.data
-              this.imgs.forEach(item => {
+              this.totalnum = window.sessionStorage.getItem('totalNum')
+              res.data.forEach(item => {
                 item.title = encodeHtml(item.title)
               })
+              if (!more) {
+                this.imgs = res.data
+              } else {
+                this.imgs = this.imgs.concat(res.data)
+                this.p = this.p + 1
+                this.flag = true
+              }
+            } else {
+              this.totalnum = 0
+              this.imgs = []
             }
           })
       },
@@ -50,6 +62,15 @@
       },
       routerItem (id) {
         this.$router.push(`/exhibit?hall_id=${id}`)
+      },
+      getMore () {
+        let that = this
+        let container = this.$refs.infoWrapper
+        let scrollMax = container.scrollHeight
+        if (that.flag && that.p * 6 < that.totalnum && scrollMax - container.scrollTop < 800) {
+          this.flag = false
+          this.getInfo(that.p, 6, true)
+        }
       }
     }
   }
@@ -57,9 +78,11 @@
 
 <style lang="sass" scoped>
   #hall
+    height: 100vh
+    overflow: scroll
     .hall-list
-      max-height: calc(100vh - 50px - 3vh)
       padding: 0 1vh
+      margin-bottom: 50px
       .hall-item
         position: relative
         height: calc((100vh - 50px - 3vh) / 3)

@@ -9,8 +9,8 @@ import 'babel-polyfill'
 
 Vue.config.productionTip = false
 let instance = Axios.create({
-  baseURL: 'http://exhibition.mobapp.cn/api/',
-    // 因为后端接受数据只能formdata，所以每次发送请求前做了一个拦截将数据转换成formdata
+  baseURL: '/api/',
+  // 因为后端接受数据只能formdata，所以每次发送请求前做了一个拦截将数据转换成formdata
   transformRequest (data) {
     if (typeof data === 'object') {
       let form = new FormData()
@@ -37,9 +37,9 @@ let instance = Axios.create({
 })
 
 Vue.prototype.$http = instance
-    // 假设写死exhibition_id为9
+// 假设写死exhibition_id为9
 Vue.prototype._Global = {
-  url: 'http://exhibition.mobapp.cn',
+  url: '',
   share (title, desc, imgUrl, link) {
     let str = ''
     let arr = link.href.split('?')
@@ -65,7 +65,7 @@ Vue.prototype._Global = {
       title: title || '',
       desc: desc || '',
       link: link + str,
-      imgUrl: this.url + imgUrl || ''
+      imgUrl: window.location.origin + imgUrl || ''
     })
   },
   ready (title, desc, imgUrl, link) {
@@ -80,6 +80,12 @@ Vue.prototype._Global = {
     wx.hideMenuItems({
       menuList: [] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
     })
+  },
+  getLocation (cb) {
+    let geoc = new BMap.LocalCity()
+    geoc.get(res => {
+      cb && cb(res.name.substring(0, res.name.length - 1))
+    })
   }
 }
 router.beforeEach((to, from, next) => {
@@ -91,10 +97,10 @@ router.beforeEach((to, from, next) => {
     exhibitionId = to.query.exhibition_id
   }
   if (
-        (token !== 'null' && token !== null) ||
-        (exhibitionId !== undefined && exhibitionId !== 'undefined') ||
-        (code !== undefined && code !== 'undefined')
-    ) {
+    (token !== 'null' && token !== null) ||
+    (exhibitionId !== undefined && exhibitionId !== 'undefined') ||
+    (code !== undefined && code !== 'undefined')
+  ) {
     if (token === null && (code !== undefined && code !== 'undefined')) {
       instance.get(`Index/getToken?code=${code}`).then(res => {
         sessionStorage.setItem('token', res.data.token)
@@ -103,26 +109,28 @@ router.beforeEach((to, from, next) => {
         to.query.exhibition_id = res.data.exhibition_id
         let intro = sessionStorage.getItem('intro')
         if (!intro) {
-          instance.get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
-                        .then(res => {
-                          window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-                          // getConfig(to, next)
-                          next()
-                        })
+          instance
+            .get(`Exhibition/getIntro?exhibition_id=${res.data.exhibition_id}`)
+            .then(res => {
+              window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+              // getConfig(to, next)
+              next()
+            })
         } else {
           // getConfig(to, next)
           next()
         }
       })
     } else if (exhibitionId !== undefined || exhibitionId !== 'undefined') {
-      instance.get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
-                .then(res => {
-                  window.sessionStorage.setItem('intro', JSON.stringify(res.data))
-                  sessionStorage.setItem('exhibition_id', exhibitionId)
-                  to.query.exhibition_id = exhibitionId
-                  // getConfig(to, next)
-                  next()
-                })
+      instance
+        .get(`Exhibition/getIntro?exhibition_id=${exhibitionId}`)
+        .then(res => {
+          window.sessionStorage.setItem('intro', JSON.stringify(res.data))
+          sessionStorage.setItem('exhibition_id', exhibitionId)
+          to.query.exhibition_id = exhibitionId
+          // getConfig(to, next)
+          next()
+        })
     }
   } else {
     to.query.exhibition_id = exhibitionId
@@ -138,29 +146,29 @@ let getOauthUrl = () => {
 }
 
 router.afterEach(route => {
-  getConfig(route.fullPath)
+  getConfig()
 })
 
-let getConfig = (path) => {
-  if (!path) {
-    path = ''
-  }
-  let str = encodeURIComponent('http://exhibition.mobapp.cn' + path)
-  instance.get('Index/getJsSdk', {
-    params: {
-      url: str
-    }
-  }).then(res => {
-    let config = res.data.signPackage
-    wx.config({
-      debug: false,
-      appId: config.appId,
-      timestamp: config.timestamp,
-      nonceStr: config.nonceStr,
-      signature: config.signature,
-      jsApiList: ['onMenuShareAppMessage', 'hideMenuItems']
+let getConfig = cb => {
+  let url = window.location.href
+  instance
+    .get('Index/getJsSdk', {
+      params: {
+        url: url
+      }
     })
-  })
+    .then(res => {
+      let config = res.data.signPackage
+      wx.config({
+        debug: false,
+        appId: config.appId,
+        timestamp: config.timestamp,
+        nonceStr: config.nonceStr,
+        signature: config.signature,
+        jsApiList: ['onMenuShareAppMessage', 'hideMenuItems', 'getLocation']
+      })
+      cb && cb()
+    })
 }
 new Vue({
   el: '#app',

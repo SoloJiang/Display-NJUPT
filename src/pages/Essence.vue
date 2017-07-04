@@ -76,7 +76,7 @@
         let container = this.$refs.container
         if (container) {
           let scrollMax = container.scrollHeight
-          if (this.flag && this.p * 10 < totalNum && scrollMax - container.scrollTop < 520) {
+          if (this.flag && this.p * 10 < totalNum && scrollMax - container.scrollTop < 720) {
             this.getInfo(this.check, this.id)
             this.page++
           }
@@ -100,6 +100,8 @@
       float: left
       margin-left: 1vh
       width: calc(50% - 1vh)
+      height: 100vh
+      overflow: scroll
       margin-bottom: 50px
       .essence-item
         margin-bottom: 1vh

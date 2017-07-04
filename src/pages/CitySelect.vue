@@ -18,6 +18,10 @@
         <div class="hot-city">
           <div class="title">热门城市</div>
           <div class="hot-city-list">
+          <div @click="rawSelectCity('全部')"
+                 class="city-item">
+              全部
+            </div>
             <div v-for="item in hotCity['hot']"
                  @click="rawSelectCity(item.name)"
                  class="city-item">
@@ -61,21 +65,23 @@
   import CityResult from 'components/CityResult'
   import BScroll from 'better-scroll'
   import axios from 'axios'
-  import city from '../assets/pageSelect/china-city-data.json'
-  import hotCity from '../assets/pageSelect/hot-city-data.json'
+
   export default {
     name: 'citySelect',
     data () {
       return {
-        currentCity: '南京',
-        city: city,
-        hotCity: hotCity,
+        currentCity: '',
+        city: '',
+        hotCity: '',
         heightList: [],
         scrollY: 0,
         cityInput: ''
       }
     },
     methods: {
+      getCity (city) {
+        this.currentCity = city
+      },
       _initScroll () {
         this.scroll = new BScroll(this.$refs.cityWrapper, {
           probeType: 3,
@@ -130,7 +136,8 @@
     },
     created () {
       this._Global.hideMenu()
-      axios.all([axios.get('http://exhibition.mobapp.cn/api/Index/getCity'), axios.get('http://exhibition.mobapp.cn/api/Index/getHotCity')])
+      this._Global.getLocation(this.getCity)
+      axios.all([axios.get('/api/Index/getCity'), axios.get('/api/Index/getHotCity')])
         .then(axios.spread((city, hotCity) => {
           this.city = city.data
           this.hotCity = hotCity.data

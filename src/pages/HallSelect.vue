@@ -9,13 +9,15 @@
             <div @click="selectCity" class="select-city">{{city}}</div>
             <transition name="fold">
               <div class="select-hall" :class="{'active': hallSelect}">
-                <div class="current-hall" @click="showSelect">
+                <div class="current-hall"  @click="showSelect">
                   {{currentHall.title}}
                   <span v-show="halls.length === 0">当前城市无展览馆</span>
                   <img class="angle" src="../assets/pageSelect/angle2.png" v-show="halls.length !== 0">
                 </div>
-                <div class="hall" v-show="halls.length !== 0"><input type="text" v-model="hallInput" class="input"></div>
-                <div v-for="item in hallList" :key="item.id" class="hall" :data-id="item.id" @click="chooseHall(item)">{{item.title}}</div>
+                <div class="close" :class="{'open': hallSelect}">
+                  <div class="hall" v-show="halls.length !== 0"><input type="text" v-model="hallInput" class="input"></div>
+                  <div v-for="item in hallList" :key="item.id" class="hall" :data-id="item.id" @click="chooseHall(item)">{{item.title}}</div>
+                </div>
               </div>
             </transition>
           </div>
@@ -33,7 +35,7 @@
     name: 'hallSelect',
     data () {
       return {
-        city: '北京',
+        city: '全部',
         currentHall: {},
         halls: [],
         hallInput: '',
@@ -57,6 +59,7 @@
       },
       showSelect () {
         this.hallSelect = !this.hallSelect
+        console.log(this.hallSelect)
       },
       submit () {
         if (this.flag) {
@@ -77,7 +80,7 @@
       },
       chooseHall (item) {
         this.currentHall = item
-        this.hallSelect = !this.hallSelect
+        this.hallSelect = false
       }
     },
     created () {
@@ -95,7 +98,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        let city = window.sessionStorage.getItem('city') || '北京'
+        let city = window.sessionStorage.getItem('city') || '全部'
         vm.$http.get(`Exhibition/lists?city=${city}`)
           .then(res => {
             if (res.data) {
@@ -115,8 +118,6 @@
   #hall-select
     width: 100%
     min-height: 100vh
-    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
-    background-size: 300% 120%
     .reel
       padding: 0 10vh
       height: 92vh
@@ -155,15 +156,13 @@
             margin: 7px 0 0 5px
             height: 36px
             line-height: 34px
-            flex: 1
-            overflow: hidden
+            width: 150px
             font-size: 14px
             color: rgb(7, 17, 27)
             text-align: center
             background: transparent
             position: relative
             &.active
-              height: 300px
               .current-hall
                 border-bottom: none
                 border-bottom-left-radius: 0
@@ -176,7 +175,7 @@
               .angle
                 position: absolute
                 top: 13px
-                right: 10px
+                right: 0
                 width: 10px
                 height: 8px
             .hall
@@ -185,6 +184,7 @@
               border-left: 1px solid rgb(214, 214, 214)
               border-right: 1px solid rgb(214, 214, 214)
               background: #E1E5D0
+              width: 150px
               input
                 height: 26px
                 border-radius: 5px
@@ -211,4 +211,10 @@
       opacity: 1
     .fade-enter, .fade-leave-to
       opacity: 0
+  .open
+    height: 300px
+    overflow: scroll
+    display: inline-block!important
+  .close
+    display: none
 </style>

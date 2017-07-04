@@ -63,7 +63,9 @@
           this.username = res.data.nickname
           this.avatarUrl = res.data.headimgurl
         })
-      this.currentHall = JSON.parse(window.sessionStorage.getItem('intro')).title
+      let title = JSON.parse(window.sessionStorage.getItem('intro')).title
+      this.currentHall = title
+      document.getElementsByTagName('title')[0].innerHTML = title
       this._Global.hideMenu()
     },
     methods: {

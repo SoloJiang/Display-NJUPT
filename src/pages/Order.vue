@@ -14,7 +14,7 @@
             参观时间<input type="datetime-local" class="input-thing" v-model="title">
           </label>
           <label for="person">
-            参观人数<input type="text" class="input-person" v-model="person">
+            参观人数<input type="number" class="input-person" v-model="person">
           </label>
           <label for="desc">
             说明<textarea name="desc" class="input-desc" placeholder="请说明你参观的具体理由" v-model="content"></textarea>
@@ -58,31 +58,37 @@
       submit () {
         if (this.name.length !== 0 && this.tel.length !== 0 && this.title.length !== 0 && this.content.length !== 0) {
           let that = this
-          this.result = '正在提交...'
-          this.name = util.xssFilter(this.name)
-          this.tel = util.xssFilter(this.tel)
-          this.title = util.xssFilter(this.title)
-          this.person = util.xssFilter(this.person)
-          this.content = util.xssFilter(this.content)
-          if (this.flag) {
-            this.flag = false
-            let exhibitonId = this.$route.query.exhibition_id
-            let token = window.sessionStorage.getItem('token')
-            this.$http.post(`User/order?token=${token}&exhibition_id=${exhibitonId}`, {
-              name: that.name,
-              visitTime: that.title,
-              tel: that.tel,
-              visitNum: that.person,
-              content: that.content
-            }).then(() => {
-              window.alert('提交成功')
-              this.result = '提交'
-              this.name = ''
-              this.tel = ''
-              this.title = ''
-              this.content = ''
-              this.person = ''
-            })
+          let num = Number(this.person)
+          console.log(num)
+          if (isNaN(num) || num < 0) {
+            window.alert('参观人数为正整数')
+          } else {
+            this.result = '正在提交...'
+            this.name = util.xssFilter(this.name)
+            this.tel = util.xssFilter(this.tel)
+            this.title = util.xssFilter(this.title)
+            this.person = util.xssFilter(this.person)
+            this.content = util.xssFilter(this.content)
+            if (this.flag) {
+              this.flag = false
+              let exhibitonId = this.$route.query.exhibition_id
+              let token = window.sessionStorage.getItem('token')
+              this.$http.post(`User/order?token=${token}&exhibition_id=${exhibitonId}`, {
+                name: that.name,
+                visitTime: that.title,
+                tel: that.tel,
+                visitNum: that.person,
+                content: that.content
+              }).then(() => {
+                window.alert('提交成功')
+                this.result = '提交'
+                this.name = ''
+                this.tel = ''
+                this.title = ''
+                this.content = ''
+                this.person = ''
+              })
+            }
           }
         } else {
           window.alert('信息不能留空')
@@ -96,8 +102,6 @@
   #museum-advice
     width: 100%
     min-height: 120vh
-    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
-    background-size: 300% 120%
     .reel
       padding: 0 10vh
       height: 110vh
