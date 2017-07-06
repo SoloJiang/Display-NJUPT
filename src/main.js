@@ -77,16 +77,34 @@ Vue.prototype._Global = {
     })
   },
   hideMenu () {
-    wx.hideMenuItems({
+    getConfig(() => wx.hideMenuItems({
       menuList: [] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-    })
+    }))
   },
   getLocation (cb) {
-    let geoc = new BMap.LocalCity()
-    geoc.get(res => {
-      cb && cb(res.name.substring(0, res.name.length - 1))
+    getConfig(() => {
+      wx.getLocation({
+        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+        success: function (res) {
+          var latitude = res.latitude // 纬度，浮点数，范围为90 ~ -90
+          var longitude = res.longitude // 经度，浮点数，范围为180 ~ -180。
+          let geoc = new BMap.Geocoder()
+          let point = new BMap.Point(longitude, latitude)
+          geoc.getLocation(point, res => {
+            let city = res.addressComponents.city
+            city = city.substring(0, city.length - 1)
+            let title = JSON.parse(window.sessionStorage.getItem('intro')).title
+            document.getElementsByTagName('title')[0].innerHTML = title
+            cb && cb(city)
+          })
+        },
+        fail: function (res) {
+          window.location.reload()
+        }
+      })
     })
-  }
+  },
+  background: ''
 }
 router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token')
@@ -146,11 +164,13 @@ let getOauthUrl = () => {
 }
 
 router.afterEach(route => {
-  getConfig()
+  if (route.fullPath !== '/cityselect') {
+    getConfig()
+  }
 })
 
 let getConfig = cb => {
-  let url = window.location.href
+  let url = window.location.origin + encodeURIComponent(window.location.pathname + window.location.search)
   instance
     .get('Index/getJsSdk', {
       params: {

@@ -12,13 +12,13 @@
   import IndexSearch from 'components/IndexSearch'
   import IndexSection from 'components/IndexSection'
   import axios from 'axios'
+
   export default {
     data () {
       return {
         banners: [],
         sections: [],
         baseUrl: this._Global.url,
-        background: '',
         title: '',
         footerTitle: ''
       }
@@ -38,6 +38,7 @@
           this.footerTitle = copyRight.data.title
         }))
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this.$set(this.$parent._data, 'background', intro.background)
       this.title = intro.title || '展览馆'
       document.getElementsByTagName('title')[0].innerHTML = this.title
       this._Global.ready(this.title, intro.desc, intro.thumb[0], window.location)

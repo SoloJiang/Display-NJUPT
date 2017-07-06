@@ -47,7 +47,7 @@
       this.$http.post('Index/getCopyright')
         .then(res => {
           this.title = res.data.title
-          this.href = res.data.href
+          this.href = res.data.url
         })
     }
   }

@@ -138,8 +138,6 @@
   #tourism
     width: 100%
     min-height: 100vh
-    background: url("../assets/pageMuseum/reel-background.png") 60% no-repeat fixed
-    background-size: 300% 120%
     .navbar
       height: 40px
       background: rgb(235, 215, 185)

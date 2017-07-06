@@ -23,7 +23,7 @@
       </div>
       <div class="space"></div>
     </div>
-    <v-footer :display="display"></v-footer>
+    <v-footer :display="!flag"></v-footer>
     <div id="mask" v-show="flag">
       <div  v-html="detail"></div>
       <div class="footer">
@@ -56,8 +56,7 @@
         src: null,
         voice: '语音',
         flag: false,
-        detail: null,
-        display: true
+        detail: null
       }
     },
     computed: {

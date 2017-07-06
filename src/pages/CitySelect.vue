@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="navbar">
-        <ul>
+        <ul style="margin-bottom: 50px">
           <li v-for="(item, index) in city"
               @click="selectAlpha(index)"
               :class="{'active': currentIndex === convertAlpha(index)}"
@@ -65,14 +65,15 @@
   import CityResult from 'components/CityResult'
   import BScroll from 'better-scroll'
   import axios from 'axios'
-
+  import city from '../assets/pageSelect/china-city-data.json'
+  import hotCity from '../assets/pageSelect/hot-city-data.json'
   export default {
     name: 'citySelect',
     data () {
       return {
-        currentCity: '',
-        city: '',
-        hotCity: '',
+        currentCity: '定位中',
+        city: city,
+        hotCity: hotCity,
         heightList: [],
         scrollY: 0,
         cityInput: ''
@@ -135,7 +136,6 @@
       }
     },
     created () {
-      this._Global.hideMenu()
       this._Global.getLocation(this.getCity)
       axios.all([axios.get('/api/Index/getCity'), axios.get('/api/Index/getHotCity')])
         .then(axios.spread((city, hotCity) => {
@@ -200,6 +200,7 @@
     .city
       background: rgb(244, 244, 244)
       width: calc(100% - 22px)
+      margin-bottom: 50px
       .current-city
         padding-left: 10px
         .title
