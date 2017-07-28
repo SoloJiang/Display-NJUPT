@@ -16,6 +16,7 @@ import HallSelect from 'pages/HallSelect'
 import CitySelect from 'pages/CitySelect'
 import Order from 'pages/Order'
 import Search from 'pages/Search'
+import Overview from 'pages/Overview'
 Vue.use(Router)
 
 export default new Router({
@@ -97,6 +98,10 @@ export default new Router({
     {
       path: '/exhibit_search',
       component: Search
+    },
+    {
+      path: '/overview',
+      component: Overview
     }
   ],
   scrollBehavior () {
