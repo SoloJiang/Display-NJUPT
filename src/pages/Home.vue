@@ -20,7 +20,8 @@
         sections: [],
         baseUrl: this._Global.url,
         title: '',
-        footerTitle: ''
+        footerTitle: '',
+        href: ''
       }
     },
     components: {
@@ -36,6 +37,7 @@
           this.banners = banners.data
           this.sections = sections.data
           this.footerTitle = copyRight.data.title
+          this.href = copyRight.data.url
         }))
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this.$set(this.$parent._data, 'background', intro.background)
@@ -67,6 +69,8 @@
     margin-top: -36px;
     line-height: 36px;
     text-align: center;
+    position: relative;
+    z-index: 1000
   }
   .copyRight {
     font-size: 14px;
