@@ -100,7 +100,7 @@ export default new Router({
       component: Search
     },
     {
-      path: '/overview',
+      path: '/global_news',
       component: Overview
     }
   ],

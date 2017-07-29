@@ -29,6 +29,10 @@
           let exhibitionId = window.sessionStorage.getItem('exhibition_id')
           if (name.indexOf('?') > -1) {
             this.$router.push(`${name}&exhibition_id=${exhibitionId}`)
+          } else if (name === 'global_news') {
+            let title = this.sections[index].title
+            window.sessionStorage.setItem('page_title', title)
+            this.$router.push(name)
           } else {
             this.$router.push(`${name}?exhibition_id=${exhibitionId}`)
           }

@@ -182,6 +182,7 @@
           margin-left: 1vh
           height: 92%
           width: 180px
+          min-width: 180px
         .text-wrapper
           margin-left: 1.5vh
           color: #fff
