@@ -1,6 +1,6 @@
 <template>
-  <div id="essence">
-    <div class="essence-wrapper" @scroll="getMore" ref="container">
+  <div id="essence" @scroll="getMore" ref="container">
+    <div class="essence-wrapper">
       <div class="essence-list">
         <div v-for="img in imgList1" @click="routerGo(img.id)" class="essence-item" :key="img.id">
           <img :src="baseUrl+img.thumb">
@@ -55,6 +55,7 @@
     methods: {
       getInfo (flag, id) {
         let variable
+        this.flag = false
         if (flag) {
           variable = `hall_id=${id}`
         } else {
@@ -69,6 +70,8 @@
                 this.imgList1.push(res.data[i])
               }
             }
+            this.page++
+            this.flag = true
           })
       },
       getMore () {
@@ -76,9 +79,8 @@
         let container = this.$refs.container
         if (container) {
           let scrollMax = container.scrollHeight
-          if (this.flag && this.p * 10 < totalNum && scrollMax - container.scrollTop < 720) {
+          if (this.flag && (this.page - 1) * 10 < totalNum && scrollMax - container.scrollTop < 720) {
             this.getInfo(this.check, this.id)
-            this.page++
           }
         }
       },
@@ -96,12 +98,12 @@
   #essence
     margin: 0 1vh 0 0
     font-size: 0
+    max-height: 100vh
+    overflow: scroll
     .essence-list
       float: left
       margin-left: 1vh
       width: calc(50% - 1vh)
-      height: 100vh
-      overflow: scroll
       margin-bottom: 50px
       .essence-item
         margin-bottom: 1vh
