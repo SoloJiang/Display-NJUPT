@@ -88,13 +88,13 @@
                 this.imgs = res.data
               } else {
                 this.imgs = this.imgs.concat(res.data)
-                this.p = this.p + 1
-                this.flag = true
               }
             } else {
               this.totalnum = 0
               this.imgs = []
             }
+            this.p = this.p + 1
+            this.flag = true
           })
       },
       getMore () {
@@ -102,7 +102,7 @@
         let container = this.$refs.infoWrapper
         if (container) {
           let scrollMax = container.scrollHeight
-          if (that.flag && that.p * 6 < that.totalnum && scrollMax - container.scrollTop < 520) {
+          if (that.flag && (that.p - 1) * 6 < that.totalnum && scrollMax - container.scrollTop < 620) {
             this.flag = false
             this.getInfo(that.p, 6, this.list[this.activeId].id, true)
           }
