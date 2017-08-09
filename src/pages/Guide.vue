@@ -89,6 +89,7 @@
           max-height: 70vh
           overflow: scroll
           .desc
+            line-height: 1.5
             font-size: 14px
             text-indent: 2em
   .title
