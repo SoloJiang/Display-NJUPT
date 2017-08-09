@@ -69,11 +69,13 @@ Vue.prototype._Global = {
     })
   },
   ready (title, desc, imgUrl, link) {
-    wx.ready(() => {
-      this.share(title, desc, imgUrl, link)
-    })
-    wx.error(res => {
-      console.log(res)
+    getConfig(() => {
+      wx.ready(() => {
+        this.share(title, desc, imgUrl, link)
+      })
+      wx.error(res => {
+        console.log(res)
+      })
     })
   },
   hideMenu () {
@@ -146,7 +148,7 @@ router.beforeEach((to, from, next) => {
           window.sessionStorage.setItem('intro', JSON.stringify(res.data))
           sessionStorage.setItem('exhibition_id', exhibitionId)
           to.query.exhibition_id = exhibitionId
-          // getConfig(to, next)
+          document.getElementsByTagName('title')[0].innerHTML = res.data.title
           next()
         })
     }
@@ -162,12 +164,6 @@ let getOauthUrl = () => {
     window.location = res.data.oauthUrl
   })
 }
-
-router.afterEach(route => {
-  if (route.fullPath !== '/cityselect') {
-    getConfig()
-  }
-})
 
 let getConfig = cb => {
   let url = window.location.origin + encodeURIComponent(window.location.pathname + window.location.search)
