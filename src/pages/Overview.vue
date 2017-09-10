@@ -34,7 +34,8 @@
     },
     methods: {
       getInfo (p, num = 6, more) {
-        this.$http.get(`News/globalNewsLists?token=${window.sessionStorage.getItem('token')}&p=${p}&num=${num}`)
+//        this.$http.get(`News/globalNewsLists?token=${window.sessionStorage.getItem('token')}&p=${p}&num=${num}`)
+        this.$http.get(`News/globalNewsLists?p=${p}&num=${num}`)
           .then(res => {
             if (res.data.constructor === Array) {
               this.totalnum = window.sessionStorage.getItem('totalNum')
@@ -57,7 +58,7 @@
         let container = this.$refs.infoWrapper
         if (container) {
           let scrollMax = container.scrollHeight
-          if (that.flag && that.p * 6 <= that.totalnum && scrollMax - container.scrollTop < 650) {
+          if (that.flag && (that.p - 1) * 6 <= that.totalnum && scrollMax - container.scrollTop < 770) {
             // flag 用于判断获取信息是否成功的状态
             // totalNum 用于判断是否还有未获取信息
             this.flag = false
