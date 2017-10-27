@@ -4,7 +4,7 @@
       <div class="reel">
         <h2 class="title">{{title}}</h2>
         <form action="#" class="form-donate">
-          <label>选择默认展览馆</label>
+          <label>选择...</label>
           <div class="flex-container">
             <div @click="selectCity" class="select-city">{{city}}</div>
             <transition name="fold">
@@ -103,7 +103,8 @@
           .then(res => {
             if (res.data) {
               vm.halls = res.data
-              vm.currentHall = res.data[0]
+              const exhibitionId = window.sessionStorage.getItem(`exhibition_id`)
+              vm.currentHall = res.data.filter(obj => obj.id === exhibitionId)[0] || res.data[0]
             } else {
               vm.halls = []
               vm.currentHall = {}
