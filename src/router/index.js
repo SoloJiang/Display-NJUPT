@@ -17,6 +17,7 @@ import CitySelect from 'pages/CitySelect'
 import Order from 'pages/Order'
 import Search from 'pages/Search'
 import Overview from 'pages/Overview'
+import ShopOrder from 'pages/ShopOrder'
 Vue.use(Router)
 
 export default new Router({
@@ -102,6 +103,10 @@ export default new Router({
     {
       path: '/global_news',
       component: Overview
+    },
+    {
+      path: '/shoporder',
+      component: ShopOrder
     }
   ],
   scrollBehavior () {
