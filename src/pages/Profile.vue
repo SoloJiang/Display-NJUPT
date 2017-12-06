@@ -57,7 +57,11 @@ export default {
   methods: {
     routerGo (path) {
       if (path !== undefined) {
-        this.$router.push(path)
+        if (path.startsWith('/')) {
+          this.$router.push(`${path}`)
+        } else {
+          this.$router.push(`/${path}`)
+        }
       }
     }
   }
