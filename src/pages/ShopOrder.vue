@@ -3,7 +3,7 @@
     <div class="reel">
       <div class="order-list">
 
-        <div class="order-item" v-for="order in orders" :key="order.id">
+        <div class="order-item" v-for="order in orders" :key="order.id" @click="handleClickOnOrderItem(order.detail)">
           <div class="left">
             <div class="pay-logo">
               <img src="../assets/pageShopOrder/dem.png" width="40" height="40" alt="pay item">
@@ -24,7 +24,6 @@
           </div>
 
         </div>
-
       </div>
     </div>
     <v-footer></v-footer>
@@ -38,99 +37,35 @@
     name: 'shop-order',
     data() {
       return {
-//        desc: '',
-//        timestamp: '',
-//        price: ''
-        orders: [
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: true
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: true
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: true
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          },
-          {
-            desc: '展览馆费用',
-            timestamp: '2017年2月2日 17:00',
-            price: '8.00',
-            paid: false
-          }
-        ]
+        orders: []
       }
     },
     components: {
       'v-footer': footer
     },
+    methods: {
+      handleClickOnOrderItem(detail) {
+        window.sessionStorage.setItem('order.detail', detail)
+        this.$router.push('/order_detail')
+      },
+      timeConvert(date) {
+        date = new Date(date)
+        return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}`
+      }
+    },
     created() {
       this.$http.get(`ShopOrder/lists?token=${window.sessionStorage.getItem('token')}`)
         .then(response => {
-          this.timestamp = response.data.data.pay_time
-          this.price = response.data.data.goods_price
+          this.orders = response.data.map(item => {
+            const order = {}
+            order.timestamp = this.timeConvert(item.add_time)
+            order.id = item.order_sn
+            order.desc = item.goods_name
+            order.price = item.goods_price
+            order.paid = item.pay_status === '1'
+            order.detail = JSON.stringify(item)
+            return order
+          })
         })
         .catch(e => {
           console.log(e)

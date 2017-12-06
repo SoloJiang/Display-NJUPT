@@ -18,6 +18,7 @@ import Order from 'pages/Order'
 import Search from 'pages/Search'
 import Overview from 'pages/Overview'
 import ShopOrder from 'pages/ShopOrder'
+import OrderDetail from 'pages/OrderDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -107,6 +108,10 @@ export default new Router({
     {
       path: '/shoporder',
       component: ShopOrder
+    },
+    {
+      path: '/order_detail',
+      component: OrderDetail
     }
   ],
   scrollBehavior () {
