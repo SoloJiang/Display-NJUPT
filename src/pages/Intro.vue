@@ -61,7 +61,7 @@
     },
     computed: {
       voiceShow () {
-        return this.src !== null || this.src !== ''
+        return this.src !== null && this.src !== ''
       }
     },
     components: {
