@@ -86,6 +86,8 @@ export default {
     .content
       margin-top: 40px
       padding: 14px 20px 0 20px
+      max-height: 50vh
+      overflow: scroll
       .content-desc
         display: inline-block
         line-height: 50px
