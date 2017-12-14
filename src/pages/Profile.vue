@@ -53,11 +53,15 @@ export default {
     this.currentHall = title
     document.getElementsByTagName('title')[0].innerHTML = title
     this._Global.hideMenu()
+    let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+    this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
   },
   methods: {
     routerGo (path) {
       if (path !== undefined) {
-        if (path.startsWith('/')) {
+        if (path.startsWith('http://') || path.startsWith('https://')) {
+          window.location.href = path
+        } else if (path.startsWith('/')) {
           this.$router.push(`${path}`)
         } else {
           this.$router.push(`/${path}`)

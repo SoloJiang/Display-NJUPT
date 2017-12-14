@@ -51,6 +51,7 @@
       if (intro) {
         this.tit = intro.title
       }
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     },
     methods: {
       submit () {

@@ -3,9 +3,12 @@
     <div class="reel">
       <div class="content">
         <div class="desc-wrapper" ref="descWrapper">
-          <img v-if="src" :src="src" class="img"/>
+          <div class="desc top">{{descTop}}</div>
+          <img :src="src" class="img" v-show="src !== ''"/>
+          <div class="desc bottom">{{descBottom}}</div>
+
           <div v-if="title" class="title">{{title}}</div>
-          <div v-if="content" class="desc" v-html="content" ref="contentWrapper">
+          <div v-if="desc" class="desc" v-html="content">
           </div>
         </div>
       </div>
@@ -23,31 +26,26 @@
       return {
         content: '',
         title: '',
-        src: ''
+        src: '',
+        descTop: '',
+        descBottom: ''
       }
     },
     components: {
       'v-footer': footer
     },
     created () {
-      let id = this.$route.params.id
       let hallId = this.$route.query.hall_id
       let exhibitId = this.$route.query.exhibit_id
       if (exhibitId === undefined || exhibitId === null) {
         if (hallId === undefined || hallId === null) {
-          if (id === undefined || id === null) {
-            let exhibitionId = this.$route.query.exhibition_id
-            this.$http.get(`Exhibition/getGuide?exhibition_id=${exhibitionId}`)
-              .then(res => {
-                this.content = encodeHtml(res.data.guideContent)
-              })
-          } else {
-            this.$http.get(`News/detail?news_id=${id}`)
-              .then(res => {
-                this.title = res.data.title
-                this.content = encodeHtml(res.data.content)
-              })
-          }
+          let exhibitionId = this.$route.query.exhibition_id
+          this.$http.get(`Exhibition/getQRCode?exhibition_id=${exhibitionId}`)
+            .then(res => {
+              this.src = this._Global.url + res.data.QRCode
+              this.descTop = res.data.desc_top
+              this.descBottom = res.data.desc_bottom
+            })
         } else {
           this.$http.get(`Exhibition/hallDetail?hall_id=${hallId}`)
             .then(res => {
@@ -62,13 +60,6 @@
       }
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
-    },
-    mounted () {
-      const content = this.$refs.contentWrapper
-      const imgList = content.getElementsByTagName('img')
-      const imgUrls = imgList.reduce((acc, x) => acc.concat(x.src), [])
-      console.log(imgList)
-      console.log(imgUrls)
     }
   }
 </script>
@@ -83,21 +74,36 @@
       background: url("../assets/pageMuseum/reel.png") 50% no-repeat
       background-size: 95% 95%
       .content
-        padding-top: 10vh
+        display: flex
+        padding: 10vh 0
+        height: calc(100% - 20vh)
+        align-items: center
         .desc-wrapper
-          max-height: 70vh
+          display: flex
+          margin: 0 auto
+          width: 60vw
+          height: 60vw
+          text-align: center
           overflow: scroll
+          flex-direction: column
+          justify-content: space-around
+          background: linear-gradient(180deg, rgba(115, 101, 63,.8), rgba(115, 101, 63,.8) 50%, rgba(255, 255, 255, .8) 50%, rgba(255, 255, 255, .8))
           .desc
             line-height: 1.5
-            font-size: 14px
-            text-indent: 2em
+            font-size: 16px
+            &.top
+              padding-top: 20px
+              color: #fff
+            &.bottom
+              padding-bottom: 20px
   .title
     margin-bottom: 30px
     font-weight: bold
   .img
-    width: 80%
+    display: block
+    margin: 0 auto
+    width: 40%
     height: auto
-    margin-left: 10%
   img
     max-width: 100%
     height: auto

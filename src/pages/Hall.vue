@@ -32,6 +32,8 @@
     },
     created () {
       this.getInfo(1, 6, false)
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     },
     methods: {
       getInfo (p, num, more) {

@@ -7,6 +7,7 @@ import Home from 'pages/Home'
 import Profile from 'pages/Profile'
 import Advice from 'pages/Advice'
 import Guide from 'pages/Guide'
+import QRCode from 'pages/QRCode'
 import Essence from 'pages/Essence'
 import Hall from 'pages/Hall'
 import Tourism from 'pages/Tourism'
@@ -87,7 +88,7 @@ export default new Router({
     },
     {
       path: '/QRCode',
-      component: Guide
+      component: QRCode
     },
     {
       path: '/Order',

@@ -65,7 +65,29 @@ Vue.prototype._Global = {
       title: title || '',
       desc: desc || '',
       link: link + str,
-      imgUrl: window.location.origin + imgUrl || ''
+      imgUrl: window.location.origin + imgUrl || '',
+      success: function () {
+        // 用户确认分享后执行的回调函数
+        alert('分享给朋友成功')
+      },
+      cancel: function () {
+        // 用户取消分享后执行的回调函数
+        alert('分享给朋友失败')
+      }
+    })
+    wx.onMenuShareTimeline({
+      title: title || '', // 分享标题
+      desc: desc || '', // 分享描述
+      link: link + str, // 分享链接
+      imgUrl: window.location.origin + imgUrl || '', // 分享图标
+      success: function () {
+        // 用户确认分享后执行的回调函数
+        alert('分享到朋友圈成功')
+      },
+      cancel: function () {
+        // 用户取消分享后执行的回调函数
+        alert('分享到朋友圈失败')
+      }
     })
   },
   ready (title, desc, imgUrl, link) {
@@ -181,7 +203,7 @@ let getConfig = cb => {
         timestamp: config.timestamp,
         nonceStr: config.nonceStr,
         signature: config.signature,
-        jsApiList: ['onMenuShareAppMessage', 'hideMenuItems', 'getLocation']
+        jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline', 'hideMenuItems', 'getLocation']
       })
       cb && cb()
     })

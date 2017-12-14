@@ -59,7 +59,6 @@
       },
       showSelect () {
         this.hallSelect = !this.hallSelect
-        console.log(this.hallSelect)
       },
       submit () {
         if (this.flag) {
@@ -85,6 +84,7 @@
     },
     created () {
       let intro = window.sessionStorage.getItem('intro')
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
       this._Global.hideMenu()
       this.title = JSON.parse(intro).title
     },

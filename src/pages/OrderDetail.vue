@@ -54,6 +54,8 @@
     created() {
       this.order = JSON.parse(window.sessionStorage.getItem('order.detail'))
       this.handleAllTimestampConvert()
+      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     }
   }
 </script>

@@ -53,13 +53,13 @@
       if (intro) {
         this.tit = intro.title
       }
+      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     },
     methods: {
       submit () {
         if (this.name.length !== 0 && this.tel.length !== 0 && this.title.length !== 0 && this.content.length !== 0) {
           let that = this
           let num = Number(this.person)
-          console.log(num)
           if (isNaN(num) || num < 0) {
             window.alert('参观人数为正整数')
           } else {
