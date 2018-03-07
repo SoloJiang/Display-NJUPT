@@ -83,8 +83,7 @@
         }
       }
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #museum-advice

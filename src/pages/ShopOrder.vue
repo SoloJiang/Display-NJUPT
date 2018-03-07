@@ -73,8 +73,7 @@
       let intro = JSON.parse(window.sessionStorage.getItem('intro'))
       this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #shop-order

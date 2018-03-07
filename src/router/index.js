@@ -1,121 +1,121 @@
 /**
  * Created by solojiang on 2017/4/30.
  */
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from 'pages/Home'
-import Profile from 'pages/Profile'
-import Advice from 'pages/Advice'
-import Guide from 'pages/Guide'
-import QRCode from 'pages/QRCode'
-import Essence from 'pages/Essence'
-import Hall from 'pages/Hall'
-import Tourism from 'pages/Tourism'
-import Intro from 'pages/Intro'
-import Donate from 'pages/Donate'
-import HallSelect from 'pages/HallSelect'
-import CitySelect from 'pages/CitySelect'
-import Order from 'pages/Order'
-import Search from 'pages/Search'
-import Overview from 'pages/Overview'
-import ShopOrder from 'pages/ShopOrder'
-import OrderDetail from 'pages/OrderDetail'
-Vue.use(Router)
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "pages/Home";
+import Profile from "pages/Profile";
+import Advice from "pages/Advice";
+import Guide from "pages/Guide";
+import QRCode from "pages/QRCode";
+import Essence from "pages/Essence";
+import Hall from "pages/Hall";
+import Tourism from "pages/Tourism";
+import Intro from "pages/Intro";
+import Donate from "pages/Donate";
+import HallSelect from "pages/HallSelect";
+import CitySelect from "pages/CitySelect";
+import Order from "pages/Order";
+import Search from "pages/Search";
+import Overview from "pages/Overview";
+import ShopOrder from "pages/ShopOrder";
+import OrderDetail from "pages/OrderDetail";
+Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: "history",
   base: __dirname,
   routes: [
     {
-      path: '/',
+      path: "/",
       component: Home
     },
     {
-      path: '/index',
+      path: "/index",
       component: Home
     },
     {
-      path: '/profile',
+      path: "/profile",
       component: Profile
     },
     {
-      path: '/feedback',
+      path: "/feedback",
       component: Advice
     },
     {
-      path: '/guide',
+      path: "/guide",
       component: Guide
     },
     {
-      path: '/exhibit',
+      path: "/exhibit",
       component: Essence
     },
     {
-      path: '/hall_lists',
+      path: "/hall_lists",
       component: Hall
     },
     {
-      path: '/news',
+      path: "/news",
       component: Tourism
     },
     {
-      path: '/intro',
+      path: "/intro",
       component: Intro
     },
     {
-      path: '/donate',
+      path: "/donate",
       component: Donate
     },
     {
-      path: '/checkExhibition',
+      path: "/checkExhibition",
       component: HallSelect
     },
     {
-      path: '/cityselect',
+      path: "/cityselect",
       component: CitySelect
     },
     {
-      path: '/news_detail/:id',
+      path: "/news_detail/:id",
       component: Guide
     },
     {
-      path: '/exhibit_detail',
+      path: "/exhibit_detail",
       component: Guide
     },
     {
-      path: '/hall_detail',
+      path: "/hall_detail",
       component: Guide
     },
     {
-      path: '/QRCode',
+      path: "/QRCode",
       component: QRCode
     },
     {
-      path: '/Order',
+      path: "/Order",
       component: Order
     },
     {
-      path: '/exhibit_lists',
+      path: "/exhibit_lists",
       component: Essence
     },
     {
-      path: '/exhibit_search',
+      path: "/exhibit_search",
       component: Search
     },
     {
-      path: '/global_news',
+      path: "/global_news",
       component: Overview
     },
     {
-      path: '/shoporder',
+      path: "/shoporder",
       component: ShopOrder
     },
     {
-      path: '/order_detail',
+      path: "/order_detail",
       component: OrderDetail
     }
   ],
-  scrollBehavior () {
-    return { x: 0, y: 0 }
+  scrollBehavior() {
+    return { x: 0, y: 0 };
   }
-})
+});

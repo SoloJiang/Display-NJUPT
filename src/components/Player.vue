@@ -112,8 +112,7 @@
       this.clientWidth = this.$refs.imgList.clientWidth
       this.timeCount()
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   .player

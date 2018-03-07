@@ -112,8 +112,7 @@
           })
       })
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #hall-select

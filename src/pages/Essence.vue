@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="essence-list">
-        <div v-for="img in imgList2"  @click="routerGo(img.id)" class="essence-item" :exhibit="img.id">
+        <div v-for="(img, index) in imgList2"  @click="routerGo(img.id)" class="essence-item" :exhibit="img.id" :key="index">
           <img :src="baseUrl+img.thumb">
           <div class="desc">{{img.title}}</div>
         </div>
@@ -91,8 +91,7 @@
         }
       }
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #essence

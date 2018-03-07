@@ -50,8 +50,7 @@
           this.href = res.data.url
         })
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   .footer

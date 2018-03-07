@@ -69,8 +69,7 @@ export default {
       }
     }
   }
-}
-</script>
+}</script>
 
 <style lang="sass" scoped>
   #profile

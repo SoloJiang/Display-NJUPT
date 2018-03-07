@@ -1,7 +1,7 @@
 <template>
   <div id="hall" @scroll="getMore"  ref="infoWrapper">
     <div class="hall-list">
-      <div v-for="(item, index) in imgs" class="hall-item">
+      <div v-for="(item, index) in imgs" :key="index" class="hall-item">
         <img :src="baseUrl+item.thumb" @click="routerDetail(item.id)">
         <div class="navbar">
           <div class="hall-select" @click="routerDetail(item.id)">{{item.title}}</div>
@@ -14,69 +14,87 @@
 </template>
 
 <script>
-  import footer from 'components/Footer'
-  let encodeHtml = require('../utils/encodeHtml').encodeHtml
-  export default {
-    name: 'hall',
-    data () {
-      return {
-        imgs: [],
-        p: 1,
-        baseUrl: this._Global.url,
-        flag: true,
-        totalnum: 0
+import footer from "components/Footer";
+let encodeHtml = require("../utils/encodeHtml").encodeHtml;
+export default {
+  name: "hall",
+  data() {
+    return {
+      imgs: [],
+      p: 1,
+      baseUrl: this._Global.url,
+      flag: true,
+      totalnum: 0
+    };
+  },
+  components: {
+    "v-footer": footer
+  },
+  created() {
+    this.getInfo(1, 6, false);
+    let intro = JSON.parse(window.sessionStorage.getItem("intro"));
+    this._Global.ready(
+      intro.title,
+      intro.desc,
+      intro.thumb[0],
+      window.location
+    );
+  },
+  methods: {
+    async getInfo(p, num, more) {
+      // type -> hall type
+      let type = this.$route.query.type;
+      let id = this.$route.query.exhibition_id;
+      const { data } = await this.$http.get(`Exhibition/hallLists`, {
+        params: {
+          exhibition_id: id,
+          type,
+          p,
+          num
+        }
+      });
+
+      if (data.constructor === Array) {
+        this.totalnum = window.sessionStorage.getItem("totalNum");
+        data.forEach(item => {
+          item.title = encodeHtml(item.title);
+        });
+        if (!more) {
+          this.imgs = data;
+          this.p++;
+        } else {
+          this.imgs = this.imgs.concat(data);
+          this.p++;
+          this.flag = true;
+        }
+      } else {
+        this.totalnum = 0;
+        this.imgs = [];
       }
     },
-    components: {
-      'v-footer': footer
+    routerDetail(id) {
+      this.$router.push(`/hall_detail?hall_id=${id}`);
     },
-    created () {
-      this.getInfo(1, 6, false)
-      let intro = JSON.parse(window.sessionStorage.getItem('intro'))
-      this._Global.ready(intro.title, intro.desc, intro.thumb[0], window.location)
+    routerItem(id) {
+      this.$router.push(`/exhibit?hall_id=${id}`);
     },
-    methods: {
-      getInfo (p, num, more) {
-        let type = this.$route.query.type
-        let id = this.$route.query.exhibition_id
-        this.$http.get(`Exhibition/hallLists?exhibition_id=${id}&type=${type}&p=${p}&num=${num}`)
-          .then(res => {
-            if (res.data.constructor === Array) {
-              this.totalnum = window.sessionStorage.getItem('totalNum')
-              res.data.forEach(item => {
-                item.title = encodeHtml(item.title)
-              })
-              if (!more) {
-                this.imgs = res.data
-              } else {
-                this.imgs = this.imgs.concat(res.data)
-                this.p = this.p + 1
-                this.flag = true
-              }
-            } else {
-              this.totalnum = 0
-              this.imgs = []
-            }
-          })
-      },
-      routerDetail (id) {
-        this.$router.push(`/hall_detail?hall_id=${id}`)
-      },
-      routerItem (id) {
-        this.$router.push(`/exhibit?hall_id=${id}`)
-      },
-      getMore () {
-        let that = this
-        let container = this.$refs.infoWrapper
-        let scrollMax = container.scrollHeight
-        if (that.flag && that.p * 6 < that.totalnum && scrollMax - container.scrollTop < 800) {
-          this.flag = false
-          this.getInfo(that.p, 6, true)
-        }
+    getMore() {
+      let that = this;
+      let container = this.$refs.infoWrapper;
+      let scrollMax = container.scrollHeight;
+      if (
+        that.flag &&
+        (that.p - 1) * 6 < that.totalnum &&
+        scrollMax - container.scrollTop < 770
+      ) {
+        // flag 用于判断获取信息是否成功的状态
+        // totalNum 用于判断是否还有未获取信息
+        this.flag = false;
+        this.getInfo(that.p, 6, true);
       }
     }
   }
-</script>
+};</script>
 
 <style lang="sass" scoped>
   #hall

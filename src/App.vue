@@ -5,34 +5,33 @@
 </template>
 
 <script>
-  export default {
-    name: 'app',
-    data () {
-      return {
-        background: '',
-        baseUrl: this._Global.url
+export default {
+  name: "app",
+  data() {
+    return {
+      background: "",
+      baseUrl: this._Global.url
+    };
+  },
+  created() {
+    this.back();
+  },
+  methods: {
+    back() {
+      let intro = window.sessionStorage.getItem("intro");
+      if (!intro) {
+        setTimeout(() => {
+          this.back();
+        }, 100);
+      } else {
+        this.background = this.baseUrl + JSON.parse(intro).background;
       }
-    },
-    created () {
-      this.back()
-    },
-    methods: {
-      back () {
-        let intro = window.sessionStorage.getItem('intro')
-        if (!intro) {
-          setTimeout(() => {
-            this.back()
-          }, 100)
-        } else {
-          this.background = this.baseUrl + JSON.parse(intro).background
-        }
-      }
-    },
-    beforeRouteEnter: (to, from, next) => {
-      this.back()
     }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    this.back();
   }
-</script>
+};</script>
 
 <style lang="sass">
   @import "./assets/fonts/icon"

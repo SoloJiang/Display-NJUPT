@@ -155,8 +155,7 @@
       'v-footer': footer,
       'result': CityResult
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #city-select

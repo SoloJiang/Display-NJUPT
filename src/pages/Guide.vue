@@ -70,8 +70,7 @@
       console.log(imgList)
       console.log(imgUrls)
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #museum-guide

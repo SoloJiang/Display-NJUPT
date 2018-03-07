@@ -54,8 +54,7 @@
         })
       })
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #city-result

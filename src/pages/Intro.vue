@@ -121,8 +121,7 @@
         this.detail = this.cards[index].content
       }
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #intro

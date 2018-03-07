@@ -39,8 +39,7 @@
         }
       }
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   .section

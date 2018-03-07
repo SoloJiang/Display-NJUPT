@@ -61,8 +61,7 @@
       this.title = intro.title || '展览馆'
       document.getElementsByTagName('title')[0].innerHTML = this.title
     }
-  }
-</script>
+  }</script>
 
 <style scoped>
   .footer {

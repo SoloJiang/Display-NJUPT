@@ -131,8 +131,7 @@
           this.getInfo(1, 6, catid)
         })
     }
-  }
-</script>
+  }</script>
 
 <style lang="sass" scoped>
   #tourism
